@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Same mark as src/components/Logo.tsx, on the app's primary (zinc-900) tile. -->
+  <rect width="32" height="32" rx="7" fill="#18181b"/>
+  <g transform="translate(4 4)" fill="none" stroke="#fafafa" stroke-width="1.75" stroke-linecap="round">
+    <rect x="2.5" y="4.5" width="19" height="15" rx="3"/>
+    <path d="M6.5 9.5h5M6.5 12h3.5M6.5 14.5h4.5"/>
+    <circle cx="16.5" cy="12" r="2.5"/>
+  </g>
+</svg>

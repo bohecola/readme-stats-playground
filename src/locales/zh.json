@@ -1,0 +1,152 @@
+{
+  "app": {
+    "baseUrl": "部署域名",
+    "resetBaseUrl": "恢复默认域名",
+    "upstreamRepo": "github-readme-stats 仓库",
+    "footerBuiltOn": "基于 <link>github-readme-stats</link> 构建的可视化调参工具",
+    "footerTagline": "调整参数、实时预览，复制代码即可用在 README 中"
+  },
+  "language": {
+    "switchTo": "切换到中文",
+    "target": "中文"
+  },
+  "theme": {
+    "toggle": "切换主题",
+    "toLight": "切换到浅色",
+    "toDark": "切换到深色"
+  },
+  "form": {
+    "cardParams": "卡片参数",
+    "commonStyle": "通用样式",
+    "setCount": "已设置 {{count}} 项",
+    "reset": "重置",
+    "resetTitle": "恢复这张卡片的初始参数",
+    "on": "开启",
+    "off": "关闭",
+    "select": "选择…",
+    "auto": "自动",
+    "defaultValue": "默认 {{value}}",
+    "paramSet": "已设置，会写入 URL",
+    "increase": "增加",
+    "decrease": "减少"
+  },
+  "units": {
+    "px": "px",
+    "seconds": "秒"
+  },
+  "preview": {
+    "title": "预览",
+    "bgDark": "深色背景",
+    "bgLight": "浅色背景",
+    "bgTransparent": "透明背景",
+    "refresh": "刷新（绕过缓存）",
+    "refreshLabel": "刷新预览",
+    "openInNewTab": "在新标签页打开",
+    "missingRequired": "请先填写必填项：{{fields}}",
+    "missingRequiredShort": "请先填写必填项",
+    "listSeparator": "、",
+    "loadFailed": "加载失败，请检查部署域名和参数",
+    "staleError": "最新参数加载失败，显示的是上一次的结果",
+    "alt": "卡片预览",
+    "live": "实时预览",
+    "tapToView": "点击查看大图",
+    "copy": "复制",
+    "copied": "已复制",
+    "copyFormat": "复制 {{format}}"
+  },
+  "color": {
+    "open": "打开取色器",
+    "clear": "清除颜色",
+    "followTheme": "跟随主题",
+    "followThemeOrGradient": "跟随主题，或渐变 90,2f80ed,a855f7",
+    "solid": "纯色",
+    "gradient": "渐变",
+    "recent": "最近使用",
+    "presets": "预设",
+    "format": "颜色格式",
+    "alpha": "透明度",
+    "stop": "色标 {{n}}：#{{hex}}",
+    "removeStop": "删除色标 {{n}}",
+    "addStop": "添加色标",
+    "angle": "角度"
+  },
+  "cards": {
+    "stats": {
+      "name": "Stats 统计卡",
+      "description": "GitHub 综合统计卡片（stars / commits / PR / issues）。"
+    },
+    "top-langs": {
+      "name": "Top Languages 语言卡",
+      "description": "最常用编程语言卡片，支持多种布局。"
+    },
+    "pin": {
+      "name": "Pin 仓库卡",
+      "description": "置顶/展示某个仓库的卡片。"
+    },
+    "wakatime": {
+      "name": "WakaTime 卡",
+      "description": "WakaTime 编码时长统计卡片。"
+    },
+    "gist": {
+      "name": "Gist 卡",
+      "description": "展示某个 Gist 的卡片。"
+    }
+  },
+  "params": {
+    "theme": { "label": "主题", "hint": "预设配色；下方单独设置的颜色会覆盖它" },
+    "title_color": { "label": "标题颜色" },
+    "text_color": { "label": "正文颜色" },
+    "icon_color": { "label": "图标颜色" },
+    "bg_color": { "label": "背景色", "hint": "支持渐变，格式：角度,颜色1,颜色2" },
+    "border_color": { "label": "边框颜色" },
+    "hide_border": { "label": "隐藏边框" },
+    "border_radius": { "label": "圆角" },
+    "cache_seconds": { "label": "缓存时间", "hint": "最小 21600，即 6 小时" },
+    "locale": { "label": "语言", "placeholder": "默认 en", "hint": "卡片文字语言，如 cn / ja / es" },
+    "username": { "label": "用户名", "placeholder": "GitHub 用户名" },
+    "custom_title": { "label": "自定义标题" },
+    "hide": { "label": "隐藏语言", "placeholder": "如 javascript,html", "hint": "多个用逗号分隔" },
+    "show": { "label": "额外统计项" },
+    "show_icons": { "label": "显示图标" },
+    "hide_title": { "label": "隐藏标题" },
+    "hide_rank": { "label": "隐藏等级" },
+    "include_all_commits": { "label": "统计全部提交", "hint": "统计所有年份的提交，而不只是今年" },
+    "count_private": { "label": "计入私有贡献" },
+    "text_bold": { "label": "文字加粗" },
+    "disable_animations": { "label": "关闭动画" },
+    "rank_icon": { "label": "等级图标" },
+    "number_format": { "label": "数字格式", "hint": "short：1.2k；long：1234" },
+    "line_height": { "label": "行高" },
+    "card_width": { "label": "卡片宽度" },
+    "ring_color": { "label": "等级圆环颜色" },
+    "layout": { "label": "布局" },
+    "exclude_repo": { "label": "排除仓库", "placeholder": "如 repo1,repo2", "hint": "多个用逗号分隔" },
+    "langs_count": { "label": "语言数量", "hint": "1–20" },
+    "hide_progress": { "label": "隐藏进度条" },
+    "size_weight": { "label": "代码量权重", "hint": "按代码量排序的权重" },
+    "count_weight": { "label": "仓库数权重", "hint": "按仓库数量排序的权重" },
+    "repo": { "label": "仓库名", "placeholder": "如 github-readme-stats" },
+    "show_owner": { "label": "显示所有者" },
+    "description_lines_count": { "label": "描述行数", "hint": "1–3" },
+    "display_format": { "label": "显示格式", "hint": "time：时长；percent：百分比" },
+    "api_domain": { "label": "API 域名", "placeholder": "默认 wakatime.com", "hint": "自建 WakaTime 实例的域名" },
+    "id": { "label": "Gist ID", "placeholder": "Gist ID" }
+  },
+  "cardParams": {
+    "stats": {
+      "custom_title": { "placeholder": "默认 <名字>'s GitHub Stats" },
+      "hide": { "label": "隐藏统计项", "placeholder": "", "hint": "" }
+    },
+    "top-langs": {
+      "custom_title": { "placeholder": "默认 Most Used Languages" }
+    },
+    "pin": {
+      "username": { "placeholder": "仓库所有者" }
+    },
+    "wakatime": {
+      "username": { "label": "WakaTime 用户名", "placeholder": "WakaTime 用户名" },
+      "custom_title": { "placeholder": "默认 WakaTime Stats" },
+      "hide": { "placeholder": "如 javascript,yaml" }
+    }
+  }
+}

@@ -1,0 +1,148 @@
+export type ParamType =
+  | "text"
+  | "number"
+  | "boolean"
+  | "select"
+  | "multiselect"
+  | "color"
+
+export interface ParamDef {
+  /** URL query key. Label / hint / placeholder text live in src/locales (see lib/paramText). */
+  key: string
+  type: ParamType
+  /** Default value used by github-readme-stats; omitted from the URL when unchanged. */
+  default?: string | number | boolean
+  /** Options for `select`. */
+  options?: string[]
+  /** Choices for `multiselect` (values are comma-joined in the URL). */
+  choices?: string[]
+  required?: boolean
+  /** `color` only: also accept the `angle,c1,c2,...` gradient syntax. */
+  gradient?: boolean
+  /** `number` only: bounds, step size (↑/↓ and stepper buttons) and a display unit. */
+  min?: number
+  max?: number
+  step?: number
+  unit?: "px" | "seconds"
+}
+
+export type CardId = "stats" | "top-langs" | "pin" | "wakatime" | "gist"
+
+export interface EndpointDef {
+  /** Also the i18n key for the card's name and description (`cards.<id>`). */
+  id: CardId
+  /** Path appended to the base URL, e.g. "/api" or "/api/top-langs". */
+  path: string
+  /** Endpoint-specific parameters (common style params are appended separately). */
+  params: ParamDef[]
+}
+
+/** Shared style parameters available on every card. */
+export const COMMON_PARAMS: ParamDef[] = [
+  { key: "theme", type: "select", options: [], default: "default" },
+  { key: "title_color", type: "color" },
+  { key: "text_color", type: "color" },
+  { key: "icon_color", type: "color" },
+  { key: "bg_color", type: "color", gradient: true },
+  { key: "border_color", type: "color" },
+  { key: "hide_border", type: "boolean", default: false },
+  { key: "border_radius", type: "number", default: 4.5, min: 0, step: 0.5, unit: "px" },
+  { key: "cache_seconds", type: "number", min: 21600, step: 3600, unit: "seconds" },
+  { key: "locale", type: "text" },
+]
+
+export const ENDPOINTS: EndpointDef[] = [
+  {
+    id: "stats",
+    path: "/api",
+    params: [
+      { key: "username", type: "text", required: true },
+      { key: "custom_title", type: "text" },
+      {
+        key: "hide",
+        type: "multiselect",
+        choices: ["stars", "commits", "prs", "issues", "contribs"],
+      },
+      {
+        key: "show",
+        type: "multiselect",
+        choices: [
+          "reviews",
+          "discussions_started",
+          "discussions_answered",
+          "prs_merged",
+          "prs_merged_percentage",
+        ],
+      },
+      { key: "show_icons", type: "boolean", default: false },
+      { key: "hide_title", type: "boolean", default: false },
+      { key: "hide_rank", type: "boolean", default: false },
+      { key: "include_all_commits", type: "boolean", default: false },
+      { key: "count_private", type: "boolean", default: false },
+      { key: "text_bold", type: "boolean", default: true },
+      { key: "disable_animations", type: "boolean", default: false },
+      { key: "rank_icon", type: "select", options: ["default", "github", "percentile"], default: "default" },
+      { key: "number_format", type: "select", options: ["short", "long"], default: "short" },
+      { key: "line_height", type: "number", default: 25, min: 1, unit: "px" },
+      { key: "card_width", type: "number", min: 0, step: 10, unit: "px" },
+      { key: "ring_color", type: "color" },
+    ],
+  },
+  {
+    id: "top-langs",
+    path: "/api/top-langs",
+    params: [
+      { key: "username", type: "text", required: true },
+      { key: "custom_title", type: "text" },
+      {
+        key: "layout",
+        type: "select",
+        options: ["normal", "compact", "donut", "donut-vertical", "pie"],
+        default: "normal",
+      },
+      { key: "hide", type: "text" },
+      { key: "exclude_repo", type: "text" },
+      { key: "langs_count", type: "number", default: 5, min: 1, max: 20 },
+      { key: "hide_title", type: "boolean", default: false },
+      { key: "hide_progress", type: "boolean", default: false },
+      { key: "disable_animations", type: "boolean", default: false },
+      { key: "card_width", type: "number", default: 300, min: 0, step: 10, unit: "px" },
+      { key: "size_weight", type: "number", default: 1, min: 0, step: 0.1 },
+      { key: "count_weight", type: "number", default: 0, min: 0, step: 0.1 },
+    ],
+  },
+  {
+    id: "pin",
+    path: "/api/pin",
+    params: [
+      { key: "username", type: "text", required: true },
+      { key: "repo", type: "text", required: true },
+      { key: "show_owner", type: "boolean", default: false },
+      { key: "description_lines_count", type: "number", min: 1, max: 3 },
+    ],
+  },
+  {
+    id: "wakatime",
+    path: "/api/wakatime",
+    params: [
+      { key: "username", type: "text", required: true },
+      { key: "custom_title", type: "text" },
+      { key: "layout", type: "select", options: ["default", "compact"], default: "default" },
+      { key: "display_format", type: "select", options: ["time", "percent"], default: "time" },
+      { key: "hide", type: "text" },
+      { key: "langs_count", type: "number", min: 1, max: 20 },
+      { key: "hide_title", type: "boolean", default: false },
+      { key: "hide_progress", type: "boolean", default: false },
+      { key: "disable_animations", type: "boolean", default: false },
+      { key: "api_domain", type: "text" },
+    ],
+  },
+  {
+    id: "gist",
+    path: "/api/gist",
+    params: [
+      { key: "id", type: "text", required: true },
+      { key: "show_owner", type: "boolean", default: false },
+    ],
+  },
+]
