@@ -1,7 +1,7 @@
 {
   "app": {
     "baseUrl": "Instance",
-    "baseUrlHint": "Cards are rendered by a github-readme-stats-compatible instance: the public GitHub Stats Extended one, your own deployment, or any compatible service.",
+    "baseUrlHint": "Cards are rendered by a GitHub Readme Stats-compatible instance: the public GitHub Stats Extended one, your own deployment, or any compatible service.",
     "resetBaseUrl": "Reset to the default instance",
     "noInstance": "No instance set",
     "instancePlaceholder": "https://your-instance.vercel.app",
@@ -25,7 +25,7 @@
     "setCount": "{{count}} set",
     "reset": "Reset",
     "resetTitle": "Restore this card's starting parameters",
-    "extendedOnly": "Only GitHub Stats Extended supports this; github-readme-stats ignores it",
+    "extendedOnly": "Only GitHub Stats Extended supports this; GitHub Readme Stats ignores it",
     "ownStyleBadge": "This card only",
     "sharedStyleNote": "Applies to every card; changes sync to all of them.",
     "ownStyleNote": "Applies to this card only; the others keep the shared style.",
@@ -57,8 +57,8 @@
     "openInNewTab": "Open in new tab",
     "missingRequired": "Fill in the required fields first: {{fields}}",
     "missingRequiredShort": "Fill in the required fields first",
-    "noInstance": "Previews need a github-readme-stats-compatible instance. The original public one is no longer maintained; use the public instance of its successor, GitHub Stats Extended, or enter your own deployment.",
-    "noInstanceShort": "Set a github-readme-stats instance first",
+    "noInstance": "Previews need a GitHub Readme Stats-compatible instance. The original public one is no longer maintained; use the public instance of its successor, GitHub Stats Extended, or enter your own deployment.",
+    "noInstanceShort": "Set a GitHub Readme Stats instance first",
     "setupInstance": "Enter your own instance",
     "useSuggestedInstance": "Use the GitHub Stats Extended public instance",
     "deployGuide": "How to deploy your own",

@@ -1,7 +1,7 @@
 {
   "app": {
     "baseUrl": "部署域名",
-    "baseUrlHint": "卡片由 github-readme-stats 兼容实例渲染：可以是后继项目 GitHub Stats Extended 的公共实例、你自己部署的实例，或任何兼容的服务。",
+    "baseUrlHint": "卡片由 GitHub Readme Stats 兼容实例渲染：可以是后继项目 GitHub Stats Extended 的公共实例、你自己部署的实例，或任何兼容的服务。",
     "resetBaseUrl": "恢复默认域名",
     "noInstance": "未设置实例",
     "instancePlaceholder": "https://your-instance.vercel.app",
@@ -25,7 +25,7 @@
     "setCount": "已设置 {{count}} 项",
     "reset": "重置",
     "resetTitle": "恢复这张卡片的初始参数",
-    "extendedOnly": "仅 GitHub Stats Extended 支持，github-readme-stats 会忽略",
+    "extendedOnly": "仅 GitHub Stats Extended 支持，GitHub Readme Stats 会忽略",
     "ownStyleBadge": "仅此卡",
     "sharedStyleNote": "对所有卡片生效，改动会同步到每张卡。",
     "ownStyleNote": "仅对这张卡生效，其他卡片仍使用共用样式。",
@@ -57,8 +57,8 @@
     "openInNewTab": "在新标签页打开",
     "missingRequired": "请先填写必填项：{{fields}}",
     "missingRequiredShort": "请先填写必填项",
-    "noInstance": "预览需要一个 github-readme-stats 兼容实例。原公共实例已停止维护，可以使用后继项目 GitHub Stats Extended 的公共实例，或填写你自己部署的实例。",
-    "noInstanceShort": "请先填写 github-readme-stats 实例",
+    "noInstance": "预览需要一个 GitHub Readme Stats 兼容实例。原公共实例已停止维护，可以使用后继项目 GitHub Stats Extended 的公共实例，或填写你自己部署的实例。",
+    "noInstanceShort": "请先填写 GitHub Readme Stats 实例",
     "setupInstance": "填写自己的实例",
     "useSuggestedInstance": "使用 GitHub Stats Extended 公共实例",
     "deployGuide": "如何部署自己的实例",

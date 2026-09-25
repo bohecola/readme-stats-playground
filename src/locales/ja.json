@@ -1,7 +1,7 @@
 {
   "app": {
     "baseUrl": "インスタンス",
-    "baseUrlHint": "カードは github-readme-stats 互換のインスタンスで描画されます。GitHub Stats Extended の公開インスタンス、自分でデプロイしたもの、または互換サービスを指定できます。",
+    "baseUrlHint": "カードは GitHub Readme Stats 互換のインスタンスで描画されます。GitHub Stats Extended の公開インスタンス、自分でデプロイしたもの、または互換サービスを指定できます。",
     "resetBaseUrl": "既定のインスタンスに戻す",
     "noInstance": "インスタンス未設定",
     "instancePlaceholder": "https://your-instance.vercel.app",
@@ -25,7 +25,7 @@
     "setCount": "{{count}} 件設定済み",
     "reset": "リセット",
     "resetTitle": "このカードの初期パラメータに戻す",
-    "extendedOnly": "GitHub Stats Extended のみ対応。github-readme-stats では無視されます",
+    "extendedOnly": "GitHub Stats Extended のみ対応。GitHub Readme Stats では無視されます",
     "ownStyleBadge": "このカードのみ",
     "sharedStyleNote": "すべてのカードに適用され、変更は全カードに同期されます。",
     "ownStyleNote": "このカードにのみ適用されます。他のカードは共通スタイルのままです。",
@@ -57,8 +57,8 @@
     "openInNewTab": "新しいタブで開く",
     "missingRequired": "先に必須項目を入力してください：{{fields}}",
     "missingRequiredShort": "先に必須項目を入力してください",
-    "noInstance": "プレビューには github-readme-stats 互換のインスタンスが必要です。元の公開インスタンスはメンテナンスされていないため、後継プロジェクト GitHub Stats Extended の公開インスタンスを使うか、自分でデプロイしたインスタンスを入力してください。",
-    "noInstanceShort": "先に github-readme-stats インスタンスを設定してください",
+    "noInstance": "プレビューには GitHub Readme Stats 互換のインスタンスが必要です。元の公開インスタンスはメンテナンスされていないため、後継プロジェクト GitHub Stats Extended の公開インスタンスを使うか、自分でデプロイしたインスタンスを入力してください。",
+    "noInstanceShort": "先に GitHub Readme Stats インスタンスを設定してください",
     "setupInstance": "自分のインスタンスを入力",
     "useSuggestedInstance": "GitHub Stats Extended の公開インスタンスを使う",
     "deployGuide": "自分でデプロイする方法",
