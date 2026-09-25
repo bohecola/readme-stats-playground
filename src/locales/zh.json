@@ -8,7 +8,7 @@
     "editBaseUrl": "修改部署域名",
     "saveBaseUrl": "保存",
     "projectRepo": "在 GitHub 上查看源码",
-    "footerBuiltOn": "<repo>github-readme-stats</repo> / <extended>GitHub Stats Extended</extended> 可视化调参工具",
+    "footerBuiltOn": "<repo>github-readme-stats</repo> / <extended>github-stats-extended</extended> 可视化调参工具",
     "footerTagline": "调整参数、实时预览，复制代码即可用在 README 中"
   },
   "language": {
