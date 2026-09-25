@@ -96,8 +96,9 @@ export function Preview({ url, markdown, html, missingRequired }: PreviewProps) 
     return () => io.disconnect()
   }, [])
 
+  // gap, not space-y: the fixed mobile bar below is a child and must not add spacing.
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       {/* The card is self-explanatory; keep the heading for screen readers only. */}
       <h2 className="sr-only">{t("preview.title")}</h2>
       <div className="flex items-center justify-between gap-2">
