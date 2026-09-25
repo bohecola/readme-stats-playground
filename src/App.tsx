@@ -265,7 +265,7 @@ export default function App() {
                 </Button>
               </div>
             </div>
-            <CardContent className="px-4 pt-4 sm:px-6">
+            <CardContent className="px-4 pt-4 pb-6 sm:px-6">
               <CardForm
                 endpoint={endpoint}
                 values={values}
