@@ -97,6 +97,11 @@
     --ring: 240 4.9% 83.9%;
   }
 
+  /* Tailwind 4 preflight makes buttons cursor: default; keep the pointer. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
   /* Tailwind 4 defaults border-color to currentColor; keep the theme border. */
   *,
   ::before,
