@@ -63,6 +63,7 @@
     "listSeparator": ", ",
     "loadFailed": "Failed to load. Check the instance URL and parameters.",
     "staleError": "The latest parameters failed to load; showing the previous result",
+    "retry": "Retry",
     "alt": "Card preview",
     "live": "Live preview",
     "tapToView": "Tap to view full size",

@@ -36,6 +36,8 @@ const LS_FORMAT = "rsp:outputFormat"
 
 /** Wait for edits to settle before hitting the instance (typing = many URLs). */
 const PREVIEW_DEBOUNCE_MS = 400
+/** One silent retry before reporting a failed load; transport blips are common. */
+const RETRY_DELAY_MS = 1500
 
 function loadChoice<T extends string>(key: string, allowed: readonly T[], fallback: T): T {
   try {
@@ -208,6 +210,13 @@ export function Preview({
         ) : card.error && !card.shown ? (
           <PreviewMessage backdrop={backdrop} icon={<ImageOff className="h-5 w-5" />}>
             {t("preview.loadFailed")}
+            <button
+              type="button"
+              onClick={() => setNonce((n) => n + 1)}
+              className="font-medium underline underline-offset-4 hover:opacity-80"
+            >
+              {t("preview.retry")}
+            </button>
           </PreviewMessage>
         ) : card.shown ? (
           <img
@@ -228,8 +237,15 @@ export function Preview({
         )}
 
         {ready && card.shown && card.error && (
-          <span className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-md bg-destructive px-2 py-1 text-xs text-destructive-foreground shadow-sm">
+          <span className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-md bg-destructive px-2 py-1 text-xs text-destructive-foreground shadow-sm">
             {t("preview.staleError")}
+            <button
+              type="button"
+              onClick={() => setNonce((n) => n + 1)}
+              className="shrink-0 rounded border border-current/50 px-1.5 py-0.5 font-medium hover:bg-white/10"
+            >
+              {t("preview.retry")}
+            </button>
           </span>
         )}
       </div>
@@ -322,20 +338,35 @@ function useCardImage(src: string) {
   useEffect(() => {
     if (!src) return
     let cancelled = false
+    let img: HTMLImageElement | undefined
+    let retry: ReturnType<typeof setTimeout> | undefined
     setState({ src, status: "loading" })
-    const img = new Image()
-    img.onload = () => {
-      if (cancelled) return
-      setShown(src)
-      setState({ src, status: "ok" })
+
+    const load = (attempt: number) => {
+      img = new Image()
+      img.onload = () => {
+        if (cancelled) return
+        setShown(src)
+        setState({ src, status: "ok" })
+      }
+      img.onerror = () => {
+        if (cancelled) return
+        // Instances answer errors with a 200 SVG, so a load failure is the
+        // transport (network blip, platform error): try once more, quietly.
+        if (attempt === 0) {
+          retry = setTimeout(() => load(1), RETRY_DELAY_MS)
+          return
+        }
+        setState({ src, status: "error" })
+      }
+      img.src = attempt ? `${src}&_retry=${attempt}` : src
     }
-    img.onerror = () => {
-      if (!cancelled) setState({ src, status: "error" })
-    }
-    img.src = src
+    load(0)
+
     return () => {
       cancelled = true
-      img.onload = img.onerror = null
+      clearTimeout(retry)
+      if (img) img.onload = img.onerror = null
     }
   }, [src])
 

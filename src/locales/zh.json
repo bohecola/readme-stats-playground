@@ -63,6 +63,7 @@
     "listSeparator": "、",
     "loadFailed": "加载失败，请检查部署域名和参数",
     "staleError": "最新参数加载失败，显示的是上一次的结果",
+    "retry": "重试",
     "alt": "卡片预览",
     "live": "实时预览",
     "tapToView": "点击查看大图",
