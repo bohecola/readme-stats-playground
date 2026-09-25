@@ -34,6 +34,8 @@ interface ParamControlProps {
   isSet?: boolean
   /** Card id (or "common") for per-card text overrides. */
   scope: ParamScope
+  /** Text fields only: focus on mount. */
+  autoFocus?: boolean
 }
 
 export function ParamControl({
@@ -43,6 +45,7 @@ export function ParamControl({
   toggleLayout = "row",
   isSet = false,
   scope,
+  autoFocus,
 }: ParamControlProps) {
   const { t } = useTranslation()
   const text = useParamText()
@@ -167,6 +170,7 @@ export function ParamControl({
           id={id}
           value={(value as string) ?? ""}
           placeholder={placeholder}
+          autoFocus={autoFocus}
           onChange={(e) => set(e.target.value)}
         />
       )}

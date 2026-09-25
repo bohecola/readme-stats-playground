@@ -74,23 +74,23 @@
   },
   "cards": {
     "stats": {
-      "name": "Stats 统计卡",
+      "name": "Stats",
       "description": "stars、commits、PR、issues 等综合数据"
     },
     "top-langs": {
-      "name": "Top Languages 语言卡",
+      "name": "Top Languages",
       "description": "最常用的编程语言，支持多种布局"
     },
     "pin": {
-      "name": "Pin 仓库卡",
+      "name": "Pin",
       "description": "展示单个仓库的简介、stars 和 forks"
     },
     "wakatime": {
-      "name": "WakaTime 卡",
+      "name": "WakaTime",
       "description": "来自 WakaTime 的编码时长统计"
     },
     "gist": {
-      "name": "Gist 卡",
+      "name": "Gist",
       "description": "展示单个 Gist 的简介和 stars"
     }
   },
