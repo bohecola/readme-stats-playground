@@ -373,14 +373,14 @@ function BaseUrlField({
   return (
     <div className={cn("flex min-h-11 items-center gap-2 text-xs", className)}>
       <div className="flex shrink-0 items-center gap-1.5 text-muted-foreground">
-        <label htmlFor={editing ? "base-url" : undefined}>{t("app.baseUrl")}</label>
-        <HintTip text={t("app.baseUrlHint")} />
+        <HintTip text={t("app.baseUrlHint")}>{t("app.baseUrl")}</HintTip>
       </div>
 
       {editing ? (
         <>
           <input
             id="base-url"
+            aria-label={t("app.baseUrl")}
             autoFocus
             value={draft}
             spellCheck={false}
