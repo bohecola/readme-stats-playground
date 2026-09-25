@@ -7,8 +7,7 @@
     "footerTagline": "调整参数、实时预览，复制代码即可用在 README 中"
   },
   "language": {
-    "switchTo": "切换到中文",
-    "target": "中文"
+    "label": "语言"
   },
   "theme": {
     "toggle": "切换主题",
