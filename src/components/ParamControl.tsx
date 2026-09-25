@@ -73,7 +73,7 @@ export function ParamControl({
         {labelNode}
         <label
           htmlFor={id}
-          className="flex h-9 cursor-pointer items-center justify-between rounded-md border border-input px-3 shadow-sm transition-colors hover:bg-accent/40"
+          className="flex h-9 cursor-pointer items-center justify-between rounded-md border border-input px-3 shadow-xs transition-colors hover:bg-accent/40"
         >
           <span className="text-sm text-muted-foreground">{checked ? t("form.on") : t("form.off")}</span>
           <Switch id={id} checked={checked} onCheckedChange={(c) => set(c)} />
@@ -87,7 +87,7 @@ export function ParamControl({
     return (
       <label
         htmlFor={id}
-        className="flex min-h-[3rem] cursor-pointer items-center justify-between gap-3 px-3 py-2"
+        className="flex min-h-12 cursor-pointer items-center justify-between gap-3 px-3 py-2"
       >
         <span className="min-w-0">
           <span className="flex items-center gap-1 text-sm font-medium">
@@ -114,7 +114,8 @@ export function ParamControl({
           value={(value as string) ?? param.default ?? ""}
           onValueChange={(v) => set(v)}
         >
-          <SelectTrigger id={id}>
+          {/* The regenerated trigger defaults to w-fit; form fields fill their column. */}
+          <SelectTrigger id={id} className="w-full">
             <SelectValue placeholder={t("form.select")} />
           </SelectTrigger>
           <SelectContent>

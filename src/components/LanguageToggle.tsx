@@ -29,7 +29,7 @@ export function LanguageToggle() {
         aria-label={t("language.label")}
         onPointerDown={() => (openedByPointer.current = true)}
         onKeyDown={() => (openedByPointer.current = false)}
-        className="h-9 w-auto gap-1.5 border-0 px-2.5 text-xs font-medium shadow-none transition-colors hover:bg-accent hover:text-accent-foreground focus:ring-0 focus-visible:ring-1"
+        className="h-9 w-auto gap-1.5 border-0 bg-transparent px-2.5 text-xs font-medium shadow-none transition-colors hover:bg-accent hover:text-accent-foreground focus:ring-0 focus-visible:ring-1 dark:bg-transparent dark:hover:bg-accent"
       >
         <Languages className="h-4 w-4" />
         <span lang={LANGUAGE_NAMES[current].tag}>{LANGUAGE_NAMES[current].short}</span>

@@ -22,7 +22,7 @@ const BACKDROP_CLASS: Record<Backdrop, string> = {
   dark: "bg-zinc-900",
   light: "bg-white",
   checker:
-    "bg-white bg-[conic-gradient(#e5e5e5_90deg,transparent_90deg_180deg,#e5e5e5_180deg_270deg,transparent_270deg)] [background-size:20px_20px]",
+    "bg-white bg-[conic-gradient(#e5e5e5_90deg,transparent_90deg_180deg,#e5e5e5_180deg_270deg,transparent_270deg)] bg-size-[20px_20px]",
 }
 
 const FORMAT_LABEL: Record<Format, string> = { markdown: "Markdown", html: "HTML", url: "URL" }
@@ -181,7 +181,7 @@ export function Preview({ url, markdown, html, missingRequired }: PreviewProps) 
         )}
 
         {ready && card.shown && card.error && (
-          <span className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-md bg-destructive px-2 py-1 text-xs text-destructive-foreground shadow">
+          <span className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-md bg-destructive px-2 py-1 text-xs text-destructive-foreground shadow-sm">
             {t("preview.staleError")}
           </span>
         )}
@@ -217,7 +217,7 @@ export function Preview({ url, markdown, html, missingRequired }: PreviewProps) 
       {/* `invisible` rides the transition, so it hides only after sliding out. */}
       <div
         className={cn(
-          "fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-6px_12px_-8px_rgb(0_0_0/0.15)] backdrop-blur transition-[transform,visibility] duration-200 supports-[backdrop-filter]:bg-background/90 lg:hidden",
+          "fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-6px_12px_-8px_rgb(0_0_0/0.15)] backdrop-blur-sm transition-[transform,visibility] duration-200 supports-backdrop-filter:bg-background/90 lg:hidden",
           frameVisible && "invisible translate-y-full",
         )}
       >
@@ -343,7 +343,7 @@ function Segmented<T extends string>({
             className={cn(
               "flex h-7 items-center justify-center rounded px-2.5 text-xs font-medium transition-colors",
               active
-                ? "bg-background text-foreground shadow-sm"
+                ? "bg-background text-foreground shadow-xs"
                 : "text-muted-foreground hover:text-foreground",
             )}
           >

@@ -1,4 +1,5 @@
 import path from "node:path"
+import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
 import AutoImport from "unplugin-auto-import/vite"
 import { defineConfig } from "vite"
@@ -6,6 +7,7 @@ import { defineConfig } from "vite"
 export default defineConfig({
   plugins: [
     react(),
+    tailwindcss(),
     // React hooks (useState, useEffect, …) are available without importing.
     // src/auto-imports.d.ts is generated from this and is committed.
     AutoImport({
