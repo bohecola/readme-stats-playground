@@ -53,7 +53,7 @@ export function NumberInput({
     onChange(String(Number(next.toFixed(decimals))))
   }
 
-  const hold = useRef<ReturnType<typeof setTimeout>>()
+  const hold = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const stopHold = () => {
     clearTimeout(hold.current)
     clearInterval(hold.current)
