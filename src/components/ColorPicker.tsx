@@ -280,7 +280,7 @@ function ColorInputs({ value, onCommit }: { value: string; onCommit: (hex: strin
         <SelectTrigger aria-label={t("color.format")} size="sm" className="w-[66px] shrink-0 px-2 text-xs">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent position="popper">
           <SelectItem value="hex" className="text-xs">HEX</SelectItem>
           <SelectItem value="rgb" className="text-xs">RGB</SelectItem>
           <SelectItem value="hsl" className="text-xs">HSL</SelectItem>
