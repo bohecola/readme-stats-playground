@@ -24,7 +24,7 @@
 
 ## はじめに
 
-Node.js 20 以上と pnpm 11 が必要です（`corepack enable` で `package.json` に固定されたバージョンが入ります）。
+Node.js 20.19 以上（または 22.12 以上）と pnpm 11 が必要です（`corepack enable` で `package.json` に固定されたバージョンが入ります）。
 
 ```bash
 pnpm install

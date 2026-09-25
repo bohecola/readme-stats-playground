@@ -24,7 +24,7 @@ A visual playground for [github-readme-stats](https://github.com/anuraghazra/git
 
 ## Getting started
 
-Requires Node.js 20+ and pnpm 11 (`corepack enable` installs the version pinned in `package.json`).
+Requires Node.js 20.19+ (or 22.12+) and pnpm 11 (`corepack enable` installs the version pinned in `package.json`).
 
 ```bash
 pnpm install

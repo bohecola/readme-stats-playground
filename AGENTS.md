@@ -10,11 +10,11 @@ A static single-page app (Vite + React) that builds card URLs for [github-readme
 
 | Command | What it does |
 | --- | --- |
-| `pnpm install` | Node 20+, pnpm 11 (pinned in `package.json`) |
+| `pnpm install` | Node 20.19+ (or 22.12+), pnpm 11 (pinned in `package.json`) |
 | `pnpm dev` | dev server at http://localhost:5173 |
 | `pnpm lint` | `tsc --noEmit` for `src/` and `vite.config.ts` — the only static check; must pass on every commit |
 | `pnpm test` | Vitest unit tests for the pure helpers in `src/lib/*.test.ts` (URL building, URL state, colors) |
-| `pnpm build` | type-check + production build into `dist/` (CI runs `lint` and `build`) |
+| `pnpm build` | type-check + production build into `dist/` (CI runs `lint`, `test` and `build`) |
 
 ## Conventions
 

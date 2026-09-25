@@ -24,7 +24,7 @@
 
 ## 快速开始
 
-需要 Node.js 20+ 和 pnpm 11（推荐用 `corepack enable` 自动安装 `package.json` 中指定的版本）。
+需要 Node.js 20.19+（或 22.12+）和 pnpm 11（推荐用 `corepack enable` 自动安装 `package.json` 中指定的版本）。
 
 ```bash
 pnpm install
