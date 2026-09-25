@@ -1,8 +1,10 @@
 {
   "app": {
     "baseUrl": "インスタンス",
-    "baseUrlHint": "カードはこの github-readme-stats インスタンスで描画されます。公開インスタンスは GitHub のレート制限にかかりやすいため、自前のデプロイをおすすめします。",
+    "baseUrlHint": "カードは github-readme-stats インスタンスで描画されます。公開インスタンスは現在停止中で使えないため、自分でデプロイしたインスタンスを入力してください。",
     "resetBaseUrl": "既定のインスタンスに戻す",
+    "noInstance": "インスタンス未設定",
+    "instancePlaceholder": "https://your-instance.vercel.app",
     "editBaseUrl": "インスタンス URL を編集",
     "saveBaseUrl": "保存",
     "projectRepo": "GitHub でソースを見る",
@@ -52,6 +54,10 @@
     "openInNewTab": "新しいタブで開く",
     "missingRequired": "先に必須項目を入力してください：{{fields}}",
     "missingRequiredShort": "先に必須項目を入力してください",
+    "noInstance": "プレビューには github-readme-stats インスタンスが必要です。公開インスタンスは利用できないため、自分でデプロイしたインスタンスの URL を入力してください。",
+    "noInstanceShort": "先に github-readme-stats インスタンスを設定してください",
+    "setupInstance": "インスタンス URL を入力",
+    "deployGuide": "自分でデプロイする方法",
     "listSeparator": "、",
     "loadFailed": "読み込みに失敗しました。インスタンス URL とパラメータを確認してください。",
     "staleError": "最新のパラメータで読み込めなかったため、前回の結果を表示しています",

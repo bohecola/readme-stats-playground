@@ -18,7 +18,7 @@
 - 实时预览，一键复制 URL / Markdown / HTML
 - 可分享链接：地址栏始终对应当前卡片的参数（`?card=stats&username=octocat&theme=dark`），一条 URL 就能把配置交给别人
 - 通用样式对所有卡片共用，单张卡片也可以单独设置
-- 可指向任意自建实例；所有数据只保存在浏览器本地
+- 通过你自己的 github-readme-stats 实例渲染；所有数据只保存在浏览器本地
 
 ## 快速开始
 
@@ -37,11 +37,11 @@ pnpm preview    # 本地预览生产构建
 
 | 变量 | 说明 | 默认值 |
 | --- | --- | --- |
-| `VITE_DEFAULT_BASE_URL` | 默认使用的 github-readme-stats 实例 | `https://github-readme-stats.vercel.app` |
+| `VITE_DEFAULT_BASE_URL` | 访客填写自己的实例之前默认使用的 github-readme-stats 实例 | 空——由访客填写自己的实例 |
 | `VITE_DEFAULT_USERNAME` | 首次打开时预填的 GitHub 用户名 | 空 |
 | `VITE_SITE_URL` | 站点的公开地址；设置后构建会生成 canonical 链接、Open Graph 图片和 JSON-LD，便于搜索引擎和 AI 爬虫识别 | 空 |
 
-> 公共实例由所有人共享，经常触发 GitHub API 限流。建议按照 [官方文档](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own) 部署自己的实例，再填到 `VITE_DEFAULT_BASE_URL`。
+> 渲染卡片需要一个 github-readme-stats 实例。公共实例（`github-readme-stats.vercel.app`）不可靠且目前已被暂停，所以默认由每位访客填写自己的实例——没有的话按 [官方文档](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own) 部署一个。如果你是给自己部署这个 Playground，把 `VITE_DEFAULT_BASE_URL` 设成你的实例，打开就是填好的。
 
 ## 部署
 

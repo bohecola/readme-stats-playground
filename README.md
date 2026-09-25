@@ -18,7 +18,7 @@ A visual playground for [github-readme-stats](https://github.com/anuraghazra/git
 - Live preview and one-click copy as URL / Markdown / HTML
 - Shareable links: the address bar always mirrors the current card (`?card=stats&username=octocat&theme=dark`), so a configuration can be handed over as a URL
 - Common style shared across cards, with per-card overrides when you want them
-- Works with any self-hosted instance; everything stays in your browser
+- Renders through your own github-readme-stats instance; everything stays in your browser
 
 ## Getting started
 
@@ -37,11 +37,11 @@ Defaults are set with build-time env vars. Copy `.env.example` to `.env.local` (
 
 | Variable | Description | Default |
 | --- | --- | --- |
-| `VITE_DEFAULT_BASE_URL` | github-readme-stats instance to use by default | `https://github-readme-stats.vercel.app` |
+| `VITE_DEFAULT_BASE_URL` | github-readme-stats instance used until a visitor enters their own | empty — visitors enter their instance |
 | `VITE_DEFAULT_USERNAME` | GitHub username pre-filled on first visit | empty |
 | `VITE_SITE_URL` | Public URL of the deployment; when set, the build emits the canonical link, Open Graph image and JSON-LD for search engines and AI crawlers | empty |
 
-> The public instance is shared by everyone and frequently hits GitHub API rate limits. Consider [deploying your own](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own) and setting it as `VITE_DEFAULT_BASE_URL`.
+> The playground needs a github-readme-stats instance to render cards. The public one (`github-readme-stats.vercel.app`) is unreliable and currently paused, so by default each visitor enters their own — [deploy one](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own) if you don't have it. When self-hosting the playground for yourself, set `VITE_DEFAULT_BASE_URL` to your instance so it's pre-filled.
 
 ## Deployment
 
