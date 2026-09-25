@@ -98,8 +98,9 @@ export function Preview({ url, markdown, html, missingRequired }: PreviewProps) 
 
   return (
     <div className="space-y-4">
+      {/* The card is self-explanatory; keep the heading for screen readers only. */}
+      <h2 className="sr-only">{t("preview.title")}</h2>
       <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-medium">{t("preview.title")}</span>
         <div className="flex items-center gap-1">
           <Segmented
             value={backdrop}
@@ -186,8 +187,9 @@ export function Preview({ url, markdown, html, missingRequired }: PreviewProps) 
         )}
       </div>
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between gap-2">
+      {/* One code block: format tabs and copy live in its header bar. */}
+      <div className="overflow-hidden rounded-lg border">
+        <div className="flex items-center justify-between gap-2 border-b bg-muted/40 p-1">
           <Segmented
             value={format}
             onChange={(f) => {
@@ -200,9 +202,14 @@ export function Preview({ url, markdown, html, missingRequired }: PreviewProps) 
               { value: "url", label: "URL" },
             ]}
           />
-          <CopyButton text={output} disabled={!ready} />
+          <CopyButton
+            text={output}
+            disabled={!ready}
+            variant="ghost"
+            className="h-7 min-w-[68px] px-2.5 text-xs text-muted-foreground hover:text-foreground"
+          />
         </div>
-        <pre className="max-h-40 overflow-auto whitespace-pre-wrap break-all rounded-md border bg-muted/40 px-3 py-2.5 font-mono text-xs leading-relaxed text-foreground/90">
+        <pre className="max-h-40 overflow-auto whitespace-pre-wrap break-all px-3 py-2.5 font-mono text-xs leading-relaxed text-foreground/90">
           {output}
         </pre>
       </div>

@@ -2,17 +2,18 @@ import { useEffect, useRef, useState } from "react"
 import { Check, Copy } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
-import { Button } from "@/components/ui/button"
+import { Button, type ButtonProps } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 interface CopyButtonProps {
   text: string
   label?: string
   disabled?: boolean
+  variant?: ButtonProps["variant"]
   className?: string
 }
 
-export function CopyButton({ text, label, disabled, className }: CopyButtonProps) {
+export function CopyButton({ text, label, disabled, variant, className }: CopyButtonProps) {
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>()
@@ -42,6 +43,7 @@ export function CopyButton({ text, label, disabled, className }: CopyButtonProps
     <Button
       type="button"
       size="sm"
+      variant={variant}
       onClick={copy}
       disabled={disabled}
       className={cn("h-8 min-w-[76px] gap-1.5", className)}
