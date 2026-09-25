@@ -12,7 +12,7 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { DEFAULT_BASE_URL, DEFAULT_USERNAME, UPSTREAM_REPO_URL } from "@/lib/config"
-import { ENDPOINTS } from "@/lib/endpoints"
+import { COMMON_PARAMS, ENDPOINTS } from "@/lib/endpoints"
 import { useParamText } from "@/lib/paramText"
 import { cn } from "@/lib/utils"
 import {
@@ -25,6 +25,38 @@ import {
 
 const LS_BASE = "rsp:baseUrl"
 const LS_VALUES = "rsp:values"
+const LS_COMMON = "rsp:common"
+const LS_OWN_STYLE = "rsp:ownStyle"
+
+const COMMON_KEYS = new Set(COMMON_PARAMS.map((p) => p.key))
+const isCommonKey = (key: string) => COMMON_KEYS.has(key)
+
+/** Separates a card's own params from common-style ones. */
+function splitCommon(values: ParamValues): { own: ParamValues; common: ParamValues } {
+  const own: ParamValues = {}
+  const common: ParamValues = {}
+  for (const [key, value] of Object.entries(values)) {
+    ;(isCommonKey(key) ? common : own)[key] = value
+  }
+  return { own, common }
+}
+
+/** Equal once unset entries (undefined / empty) are ignored. */
+function sameValues(a: ParamValues, b: ParamValues): boolean {
+  const compact = (v: ParamValues) =>
+    Object.entries(v).filter(([, x]) => x !== undefined && x !== null && x !== "")
+  const ea = compact(a)
+  const eb = new Map(compact(b))
+  return ea.length === eb.size && ea.every(([k, v]) => JSON.stringify(eb.get(k)) === JSON.stringify(v))
+}
+
+interface StoredState {
+  values: Record<string, ParamValues>
+  /** Common style shared by every card that hasn't opted out. */
+  common: ParamValues
+  /** Cards keeping their own common style instead of the shared one. */
+  ownStyle: Record<string, boolean>
+}
 
 /** Sensible starting values so the preview renders something immediately. */
 function seedValues(): Record<string, ParamValues> {
@@ -37,14 +69,34 @@ function seedValues(): Record<string, ParamValues> {
   }
 }
 
-function loadValues(): Record<string, ParamValues> {
+function readJson<T>(key: string): T | null {
   try {
-    const raw = localStorage.getItem(LS_VALUES)
-    if (raw) return { ...seedValues(), ...JSON.parse(raw) }
+    const raw = localStorage.getItem(key)
+    return raw ? (JSON.parse(raw) as T) : null
   } catch {
-    /* ignore */
+    return null
   }
-  return seedValues()
+}
+
+function loadState(): StoredState {
+  const values = { ...seedValues(), ...readJson<Record<string, ParamValues>>(LS_VALUES) }
+  const common = readJson<ParamValues>(LS_COMMON)
+  if (common) {
+    return { values, common, ownStyle: readJson<Record<string, boolean>>(LS_OWN_STYLE) ?? {} }
+  }
+  // First run with the shared model. Older saves kept common style per card:
+  // promote the first card's to shared, and let any card that differs keep its own.
+  const shared =
+    ENDPOINTS.map((e) => splitCommon(values[e.id] ?? {}).common).find(
+      (c) => Object.keys(c).length > 0,
+    ) ?? {}
+  const ownStyle: Record<string, boolean> = {}
+  for (const e of ENDPOINTS) {
+    const { own, common: cardCommon } = splitCommon(values[e.id] ?? {})
+    if (sameValues(cardCommon, shared)) values[e.id] = own
+    else ownStyle[e.id] = true
+  }
+  return { values, common: shared, ownStyle }
 }
 
 export default function App() {
@@ -54,23 +106,47 @@ export default function App() {
     () => localStorage.getItem(LS_BASE) ?? DEFAULT_BASE_URL,
   )
   const [activeId, setActiveId] = useState(ENDPOINTS[0].id)
-  const [allValues, setAllValues] =
-    useState<Record<string, ParamValues>>(loadValues)
+  const [state, setState] = useState<StoredState>(loadState)
+  const { values: allValues, common, ownStyle } = state
 
   const endpoint = ENDPOINTS.find((e) => e.id === activeId)!
-  const values = allValues[activeId] ?? {}
+  const cardValues = allValues[activeId] ?? {}
+  const ownStyleActive = ownStyle[activeId] === true
+  // What the card renders with: its own params plus the shared style, unless it opted out.
+  const values = useMemo(
+    () => (ownStyleActive ? cardValues : { ...splitCommon(cardValues).own, ...common }),
+    [ownStyleActive, cardValues, common],
+  )
 
-  const persist = (next: Record<string, ParamValues>) => {
-    setAllValues(next)
+  const persist = (patch: Partial<StoredState>) => {
+    const next = { ...state, ...patch }
+    setState(next)
     try {
-      localStorage.setItem(LS_VALUES, JSON.stringify(next))
+      localStorage.setItem(LS_VALUES, JSON.stringify(next.values))
+      localStorage.setItem(LS_COMMON, JSON.stringify(next.common))
+      localStorage.setItem(LS_OWN_STYLE, JSON.stringify(next.ownStyle))
     } catch {
       /* ignore */
     }
   }
 
   const handleChange = (key: string, value: ParamValue) => {
-    persist({ ...allValues, [activeId]: { ...values, [key]: value } })
+    if (isCommonKey(key) && !ownStyleActive) {
+      persist({ common: { ...common, [key]: value } })
+    } else {
+      persist({ values: { ...allValues, [activeId]: { ...cardValues, [key]: value } } })
+    }
+  }
+
+  // Opting out starts from the shared look; opting back in drops the card's own copy.
+  const setOwnStyle = (own: boolean) => {
+    persist({
+      values: {
+        ...allValues,
+        [activeId]: own ? { ...cardValues, ...common } : splitCommon(cardValues).own,
+      },
+      ownStyle: { ...ownStyle, [activeId]: own },
+    })
   }
 
   const updateBase = (v: string) => {
@@ -88,8 +164,12 @@ export default function App() {
     formScrollRef.current?.scrollTo({ top: 0 })
   }, [activeId])
 
+  // Back to the card's starting params and the shared style; the shared style itself is kept.
   const resetActive = () => {
-    persist({ ...allValues, [activeId]: seedValues()[activeId] ?? {} })
+    persist({
+      values: { ...allValues, [activeId]: seedValues()[activeId] ?? {} },
+      ownStyle: { ...ownStyle, [activeId]: false },
+    })
   }
 
   // Publish the (responsive) header height so sticky elements can sit below it.
@@ -114,8 +194,10 @@ export default function App() {
   const setKeys = useMemo(() => new Set(built.pairs.map(([key]) => key)), [built])
   // Nothing to reset when the URL already matches this card's starting values.
   const pristine = useMemo(
-    () => buildUrl(baseUrl, endpoint, seedValues()[activeId] ?? {}).url === built.url,
-    [baseUrl, endpoint, activeId, built],
+    () =>
+      !ownStyleActive &&
+      buildUrl(baseUrl, endpoint, { ...seedValues()[activeId], ...common }).url === built.url,
+    [baseUrl, endpoint, activeId, built, common, ownStyleActive],
   )
 
   return (
@@ -190,6 +272,8 @@ export default function App() {
                 values={values}
                 onChange={handleChange}
                 setKeys={setKeys}
+                ownStyle={ownStyleActive}
+                onOwnStyleChange={setOwnStyle}
               />
             </CardContent>
           </div>
