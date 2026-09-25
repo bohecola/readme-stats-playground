@@ -61,7 +61,7 @@ export function ParamControl({
         {param.required && <span className="text-destructive">*</span>}
       </Label>
       {hint && <HintTip text={hint} />}
-      <ParamKey className="ml-auto" name={param.key} active={isSet} />
+      <ParamKey className="ml-auto" name={param.key} active={isSet} extended={param.extended} />
     </div>
   )
 
@@ -94,7 +94,7 @@ export function ParamControl({
             {label}
             {hint && <HintTip text={hint} />}
           </span>
-          <ParamKey className="mt-0.5" name={param.key} active={isSet} />
+          <ParamKey className="mt-0.5" name={param.key} active={isSet} extended={param.extended} />
         </span>
         <Switch
           id={id}
@@ -130,7 +130,8 @@ export function ParamControl({
 
       {param.type === "multiselect" && (
         <MultiSelect
-          choices={param.choices ?? []}
+          choices={[...(param.choices ?? []), ...(param.extendedChoices ?? [])]}
+          extendedChoices={param.extendedChoices}
           value={(value as string[]) ?? []}
           onChange={(arr) => set(arr)}
         />
@@ -181,13 +182,17 @@ export function ParamControl({
 
 function MultiSelect({
   choices,
+  extendedChoices,
   value,
   onChange,
 }: {
   choices: string[]
+  /** Subset of `choices` only GitHub Stats Extended understands; marked in the UI. */
+  extendedChoices?: string[]
   value: string[]
   onChange: (v: string[]) => void
 }) {
+  const { t } = useTranslation()
   const toggle = (choice: string) => {
     onChange(
       value.includes(choice)
@@ -199,11 +204,13 @@ function MultiSelect({
     <div className="flex flex-wrap gap-1.5">
       {choices.map((choice) => {
         const active = value.includes(choice)
+        const extended = extendedChoices?.includes(choice)
         return (
           <button
             key={choice}
             type="button"
             onClick={() => toggle(choice)}
+            title={extended ? t("form.extendedOnly") : undefined}
             className={cn(
               "inline-flex items-center gap-1 rounded-md border px-2 py-1 font-mono text-xs transition-colors",
               active
@@ -213,6 +220,7 @@ function MultiSelect({
           >
             {active && <Check className="h-3 w-3" />}
             {choice}
+            {extended && <ExtMark />}
           </button>
         )
       })}
@@ -227,10 +235,13 @@ function MultiSelect({
 function ParamKey({
   name,
   active,
+  extended,
   className,
 }: {
   name: string
   active: boolean
+  /** Only GitHub Stats Extended supports it; shows an "ext" mark. */
+  extended?: boolean
   className?: string
 }) {
   const { t } = useTranslation()
@@ -245,6 +256,19 @@ function ParamKey({
     >
       {active && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />}
       <span className="truncate">{name}</span>
+      {extended && <ExtMark title={t("form.extendedOnly")} />}
     </code>
+  )
+}
+
+/** "ext" tag for params and choices that only GitHub Stats Extended supports. */
+function ExtMark({ title }: { title?: string }) {
+  return (
+    <span
+      title={title}
+      className="shrink-0 rounded-sm border border-current/40 px-1 text-[9px] leading-[14px] font-sans uppercase tracking-wide opacity-70"
+    >
+      ext
+    </span>
   )
 }

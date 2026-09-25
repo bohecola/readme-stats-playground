@@ -24,7 +24,8 @@ function parse(param: ParamDef, text: string): ParamValue {
       return text === "true" ? true : text === "false" ? false : undefined
     case "multiselect": {
       const picked = text.split(",").map((s) => s.trim())
-      const known = param.choices ? picked.filter((s) => param.choices!.includes(s)) : picked
+      const allowed = [...(param.choices ?? []), ...(param.extendedChoices ?? [])]
+      const known = allowed.length ? picked.filter((s) => allowed.includes(s)) : picked
       return known.length ? known : undefined
     }
     case "select":

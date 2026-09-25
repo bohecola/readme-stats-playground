@@ -25,6 +25,7 @@
     "setCount": "已设置 {{count}} 项",
     "reset": "重置",
     "resetTitle": "恢复这张卡片的初始参数",
+    "extendedOnly": "仅 GitHub Stats Extended 支持，github-readme-stats 会忽略",
     "ownStyleBadge": "仅此卡",
     "sharedStyleNote": "对所有卡片生效，改动会同步到每张卡。",
     "ownStyleNote": "仅对这张卡生效，其他卡片仍使用共用样式。",
@@ -147,13 +148,20 @@
     "description_lines_count": { "label": "描述行数", "hint": "1–3" },
     "display_format": { "label": "显示格式", "hint": "time：时长；percent：百分比" },
     "api_domain": { "label": "API 域名", "placeholder": "默认 wakatime.com", "hint": "自建 WakaTime 实例的域名" },
+    "owner": {"label":"仅统计这些所有者","placeholder":"如 octocat,github","hint":"只影响 prs_authored / prs_commented / prs_reviewed / issues_authored / issues_commented，多个用逗号分隔"},
+    "role": {"label":"仓库角色","hint":"按你在仓库中的角色筛选：OWNER（默认）、ORGANIZATION_MEMBER、COLLABORATOR"},
+    "contribs_include_own_repos": {"label":"贡献统计含自有仓库","hint":"计算 contribs 和 all_time_contribs 时也算上自己的仓库；默认只算他人的仓库"},
+    "prog_bar_bg_color": {"label":"进度条背景色","hint":"仅 normal 布局有效"},
+    "hide_values": {"label":"隐藏数值","hint":"保留进度条或图表，只隐藏百分比 / 字节数"},
+    "browser_rendering": {"label":"浏览器端换行","hint":"描述文字的换行由浏览器计算，而不是服务端"},
     "id": { "label": "Gist ID", "placeholder": "Gist ID" }
   },
   "cardParams": {
     "stats": {
       "custom_title": { "placeholder": "默认 <名字>'s GitHub Stats" },
       "hide": { "label": "隐藏统计项", "placeholder": "", "hint": "" },
-      "exclude_repo": { "hint": "这些仓库的 stars 不计入统计，多个用逗号分隔" }
+      "exclude_repo": { "hint": "这些仓库的 stars 不计入统计，多个用逗号分隔" },
+      "repo": {"label":"仅统计这些仓库","placeholder":"如 repo1,repo2","hint":"只影响 prs_authored / prs_commented / prs_reviewed / issues_authored / issues_commented，多个用逗号分隔"}
     },
     "top-langs": {
       "custom_title": { "placeholder": "默认 Most Used Languages" }

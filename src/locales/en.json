@@ -25,6 +25,7 @@
     "setCount": "{{count}} set",
     "reset": "Reset",
     "resetTitle": "Restore this card's starting parameters",
+    "extendedOnly": "Only GitHub Stats Extended supports this; github-readme-stats ignores it",
     "ownStyleBadge": "This card only",
     "sharedStyleNote": "Applies to every card; changes sync to all of them.",
     "ownStyleNote": "Applies to this card only; the others keep the shared style.",
@@ -147,13 +148,20 @@
     "description_lines_count": { "label": "Description lines", "hint": "1–3" },
     "display_format": { "label": "Display format", "hint": "time: duration · percent: percentage" },
     "api_domain": { "label": "API domain", "placeholder": "Default wakatime.com", "hint": "Domain of a self-hosted WakaTime instance" },
+    "owner": {"label":"Only these owners","placeholder":"e.g. octocat,github","hint":"Only affects prs_authored / prs_commented / prs_reviewed / issues_authored / issues_commented; comma-separated"},
+    "role": {"label":"Repository roles","hint":"Which of your roles count a repository in: OWNER (default), ORGANIZATION_MEMBER, COLLABORATOR"},
+    "contribs_include_own_repos": {"label":"Own repos in contribs","hint":"Count your own repositories in contribs and all_time_contribs; by default only others' repositories count"},
+    "prog_bar_bg_color": {"label":"Bar background","hint":"Only in the normal layout"},
+    "hide_values": {"label":"Hide values","hint":"Keeps the bars or chart, hides the percentages / bytes"},
+    "browser_rendering": {"label":"Wrap text in browser","hint":"Description line wrapping is computed by the browser instead of the server"},
     "id": { "label": "Gist ID", "placeholder": "Gist ID" }
   },
   "cardParams": {
     "stats": {
       "custom_title": { "placeholder": "Default <name>'s GitHub Stats" },
       "hide": { "label": "Hidden stats", "placeholder": "", "hint": "" },
-      "exclude_repo": { "hint": "Their stars are left out of the count; comma-separated" }
+      "exclude_repo": { "hint": "Their stars are left out of the count; comma-separated" },
+      "repo": {"label":"Only these repos","placeholder":"e.g. repo1,repo2","hint":"Only affects prs_authored / prs_commented / prs_reviewed / issues_authored / issues_commented; comma-separated"}
     },
     "top-langs": {
       "custom_title": { "placeholder": "Default Most Used Languages" }
