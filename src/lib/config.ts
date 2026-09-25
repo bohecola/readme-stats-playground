@@ -9,3 +9,6 @@ export const DEFAULT_BASE_URL =
 export const DEFAULT_USERNAME = import.meta.env.VITE_DEFAULT_USERNAME?.trim() ?? ""
 
 export const UPSTREAM_REPO_URL = "https://github.com/anuraghazra/github-readme-stats"
+
+/** This playground's own repository (the header's GitHub link). */
+export const REPO_URL = "https://github.com/bohecola/readme-stats-playground"
