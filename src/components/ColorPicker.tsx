@@ -135,12 +135,14 @@ export function ColorPicker({
         </PopoverContent>
       </Popover>
 
-      {value && !isGradient && (
-        <span className="select-none font-mono text-sm text-muted-foreground">#</span>
-      )}
+      {/*
+        Shown with a leading `#` so the field copies as a ready-to-paste CSS
+        color; the stored value (and the URL) stay without it, as
+        github-readme-stats expects. Gradients keep their raw syntax.
+      */}
       <input
         id={id}
-        value={value}
+        value={value && !isGradient ? `#${value}` : value}
         spellCheck={false}
         autoComplete="off"
         placeholder={
@@ -331,7 +333,7 @@ function HexInput({
   return (
     <input
       aria-label="HEX"
-      value={draft}
+      value={draft ? `#${draft}` : ""}
       spellCheck={false}
       maxLength={9}
       onChange={(e) => {
