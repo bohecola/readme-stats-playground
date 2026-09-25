@@ -5,7 +5,7 @@
   "description": "Visual playground for github-readme-stats cards: tweak parameters, preview live, copy Markdown/HTML.",
   "license": "MIT",
   "author": "bohecola",
-  "homepage": "https://github.com/bohecola/readme-stats-playground#readme",
+  "homepage": "https://readme-stats.deore.me",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bohecola/readme-stats-playground.git"

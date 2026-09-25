@@ -7,6 +7,8 @@
 
 [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) カードのビジュアルプレイグラウンド。左でパラメータを調整し、右でライブプレビューを確認して、URL / Markdown / HTML をそのまま GitHub プロフィールの README にコピーできます。
 
+**オンラインで使う：[readme-stats.deore.me](https://readme-stats.deore.me)**
+
 ![README Stats Playground のスクリーンショット](./docs/screenshot.ja.png)
 
 > これはコミュニティ製のツールで、github-readme-stats 公式とは関係ありません。カードは指定した github-readme-stats インスタンスで描画されます。

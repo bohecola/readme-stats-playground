@@ -7,6 +7,8 @@ English | [简体中文](./README.zh-CN.md) | [日本語](./README.ja.md)
 
 A visual playground for [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) cards: tweak parameters on the left, preview live on the right, and copy the URL / Markdown / HTML straight into your GitHub profile README.
 
+**Try it: [readme-stats.deore.me](https://readme-stats.deore.me)**
+
 ![README Stats Playground screenshot](./docs/screenshot.png)
 
 > This is a community tool and is not affiliated with github-readme-stats. Cards are rendered by whichever github-readme-stats instance you point it at.
