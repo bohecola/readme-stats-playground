@@ -1,138 +1,39 @@
-import type { ParamValue, ParamValues } from "@/lib/buildUrl"
+import type { ParamValue } from "@/lib/buildUrl"
+import type { StoredState } from "@/lib/cardState"
 import type { CardId } from "@/lib/endpoints"
 
-import { Check, Github, Pencil, RotateCcw, Undo2 } from "lucide-react"
+import { Github, RotateCcw } from "lucide-react"
 import { Trans, useTranslation } from "react-i18next"
+import { BaseUrlField } from "@/components/BaseUrlField"
 import { CardForm } from "@/components/CardForm"
 import { CardTabs } from "@/components/CardTabs"
-import { HintTip } from "@/components/HintTip"
 import { LanguageToggle } from "@/components/LanguageToggle"
 import { Logo } from "@/components/Logo"
 import { Preview } from "@/components/Preview"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import {
-  buildUrl,
-  normalizeBaseUrl,
-
-  toHtml,
-  toMarkdown,
-} from "@/lib/buildUrl"
+import { buildUrl, toHtml, toMarkdown } from "@/lib/buildUrl"
+import { isCommonKey, loadState, seedValues, splitCommon, storeState } from "@/lib/cardState"
 import {
   DEFAULT_BASE_URL,
-  DEFAULT_USERNAME,
   EXTENDED_REPO_URL,
   REPO_URL,
   SUGGESTED_INSTANCE_URL,
   UPSTREAM_REPO_URL,
 } from "@/lib/config"
-import { COMMON_PARAMS, ENDPOINTS } from "@/lib/endpoints"
+import { ENDPOINTS } from "@/lib/endpoints"
 import { useParamText } from "@/lib/paramText"
-import { readJson, readStorage, writeStorage } from "@/lib/storage"
+import { readStorage, writeStorage } from "@/lib/storage"
 import { parseUrlState, toUrlSearch } from "@/lib/urlState"
-import { cn } from "@/lib/utils"
 
 const LS_BASE = "rsp:baseUrl"
-const LS_VALUES = "rsp:values"
-const LS_COMMON = "rsp:common"
-const LS_OWN_STYLE = "rsp:ownStyle"
 
 /** A shared link (?card=…&param=…) takes precedence over what's stored. */
 const URL_STATE = parseUrlState(window.location.search)
 
 const footerLink
   = "font-medium text-foreground/80 underline-offset-4 hover:text-foreground hover:underline"
-
-const COMMON_KEYS = new Set(COMMON_PARAMS.map(p => p.key))
-const isCommonKey = (key: string) => COMMON_KEYS.has(key)
-
-/** Separates a card's own params from common-style ones. */
-function splitCommon(values: ParamValues): { own: ParamValues, common: ParamValues } {
-  const own: ParamValues = {}
-  const common: ParamValues = {}
-  for (const [key, value] of Object.entries(values)) {
-    ;(isCommonKey(key) ? common : own)[key] = value
-  }
-  return { own, common }
-}
-
-/** Equal once unset entries (undefined / empty) are ignored. */
-function sameValues(a: ParamValues, b: ParamValues): boolean {
-  const compact = (v: ParamValues) =>
-    Object.entries(v).filter(([, x]) => x !== undefined && x !== null && x !== "")
-  const ea = compact(a)
-  const eb = new Map(compact(b))
-  return ea.length === eb.size && ea.every(([k, v]) => JSON.stringify(eb.get(k)) === JSON.stringify(v))
-}
-
-interface StoredState {
-  values: Record<string, ParamValues>
-  /** Common style shared by every card that hasn't opted out. */
-  common: ParamValues
-  /** Cards keeping their own common style instead of the shared one. */
-  ownStyle: Record<string, boolean>
-}
-
-/** Sensible starting values so the preview renders something immediately. */
-function seedValues(): Record<string, ParamValues> {
-  return {
-    "stats": { username: DEFAULT_USERNAME, show_icons: true },
-    "top-langs": { username: DEFAULT_USERNAME, layout: "compact" },
-    "pin": { username: DEFAULT_USERNAME, repo: "" },
-    "wakatime": { username: "" },
-    "gist": { id: "bbfce31e0217a3689c8d961a356cb10d" },
-  }
-}
-
-function storeState(state: StoredState) {
-  writeStorage(LS_VALUES, JSON.stringify(state.values))
-  writeStorage(LS_COMMON, JSON.stringify(state.common))
-  writeStorage(LS_OWN_STYLE, JSON.stringify(state.ownStyle))
-}
-
-function loadStoredState(): StoredState {
-  const values = { ...seedValues(), ...readJson<Record<string, ParamValues>>(LS_VALUES) }
-  const common = readJson<ParamValues>(LS_COMMON)
-  if (common) {
-    return { values, common, ownStyle: readJson<Record<string, boolean>>(LS_OWN_STYLE) ?? {} }
-  }
-  // First run with the shared model. Older saves kept common style per card:
-  // promote the first card's to shared, and let any card that differs keep its own.
-  const shared
-    = ENDPOINTS.map(e => splitCommon(values[e.id] ?? {}).common).find(
-      c => Object.keys(c).length > 0,
-    ) ?? {}
-  const ownStyle: Record<string, boolean> = {}
-  for (const e of ENDPOINTS) {
-    const { own, common: cardCommon } = splitCommon(values[e.id] ?? {})
-    if (sameValues(cardCommon, shared))
-      values[e.id] = own
-    else ownStyle[e.id] = true
-  }
-  return { values, common: shared, ownStyle }
-}
-
-/** Stored state with a shared link's card layered on top; the link is then kept. */
-function loadState(): StoredState {
-  const state = loadStoredState()
-  // A bare `?card=x` only picks the tab; the card keeps what was stored.
-  if (!URL_STATE || Object.keys(URL_STATE.values).length === 0)
-    return state
-  const { cardId, values } = URL_STATE
-  const { own, common } = splitCommon(values)
-  // The address bar mirrors the card *with* the shared style, so a plain reload
-  // carries style too; only style that differs from the shared one becomes the
-  // card's own.
-  const styled = Object.keys(common).length > 0 && !sameValues(common, state.common)
-  const next = {
-    ...state,
-    values: { ...state.values, [cardId]: styled ? { ...own, ...common } : own },
-    ownStyle: { ...state.ownStyle, [cardId]: styled },
-  }
-  storeState(next)
-  return next
-}
 
 export default function App() {
   const { t } = useTranslation()
@@ -143,7 +44,7 @@ export default function App() {
   const [activeId, setActiveId] = useState<CardId>(URL_STATE?.cardId ?? ENDPOINTS[0].id)
   // Lifted so the preview's "set up an instance" prompt can open the editor.
   const [editingInstance, setEditingInstance] = useState(false)
-  const [state, setState] = useState<StoredState>(loadState)
+  const [state, setState] = useState<StoredState>(() => loadState(URL_STATE))
   const { values: allValues, common, ownStyle } = state
 
   const endpoint = ENDPOINTS.find(e => e.id === activeId)!
@@ -188,6 +89,15 @@ export default function App() {
     })
   }
 
+  // Back to the card's starting params and the shared style; the shared style itself is kept.
+  const resetActive = () => {
+    persist(prev => ({
+      ...prev,
+      values: { ...prev.values, [activeId]: seedValues()[activeId] ?? {} },
+      ownStyle: { ...prev.ownStyle, [activeId]: false },
+    }))
+  }
+
   const updateBase = (v: string) => {
     setBaseUrl(v)
     writeStorage(LS_BASE, v)
@@ -198,15 +108,6 @@ export default function App() {
   useEffect(() => {
     formScrollRef.current?.scrollTo({ top: 0 })
   }, [activeId])
-
-  // Back to the card's starting params and the shared style; the shared style itself is kept.
-  const resetActive = () => {
-    persist(prev => ({
-      ...prev,
-      values: { ...prev.values, [activeId]: seedValues()[activeId] ?? {} },
-      ownStyle: { ...prev.ownStyle, [activeId]: false },
-    }))
-  }
 
   // Publish the (responsive) header height so sticky elements can sit below it.
   const headerRef = useRef<HTMLElement>(null)
@@ -368,141 +269,5 @@ export default function App() {
         </div>
       </footer>
     </div>
-  )
-}
-
-/** "https://example.com/" -> "example.com": the full URL lives in the editor and tooltip. */
-const displayHost = (url: string) => url.trim().replace(/^https?:\/\//, "").replace(/\/+$/, "")
-
-const iconButton
-  = "shrink-0 rounded p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
-
-/**
- * Shows the instance as text that is itself the Edit button, with a pencil so
- * it's clearly editable (a hover-only input is easy to miss, and invisible on
- * touch). Editing swaps in a real input; reset lives there too.
- */
-function BaseUrlField({
-  value,
-  onChange,
-  editing,
-  onEditingChange: setEditing,
-  className,
-}: {
-  value: string
-  onChange: (v: string) => void
-  editing: boolean
-  onEditingChange: (editing: boolean) => void
-  className?: string
-}) {
-  const { t } = useTranslation()
-  const editRef = useRef<HTMLButtonElement>(null)
-
-  const finish = (next?: string) => {
-    // Adds https:// when omitted; empty falls back to the deployment default (which may itself be empty).
-    if (next !== undefined)
-      onChange(normalizeBaseUrl(next) || DEFAULT_BASE_URL)
-    setEditing(false)
-  }
-  // Keyboard users land back on the Edit button after closing the editor.
-  const finishAndRefocus = (next?: string) => {
-    finish(next)
-    requestAnimationFrame(() => editRef.current?.focus())
-  }
-
-  return (
-    <div className={cn("flex min-h-11 items-center gap-2 text-xs", className)}>
-      <div className="flex shrink-0 items-center gap-1.5 text-muted-foreground">
-        <HintTip text={t("app.baseUrlHint")}>{t("app.baseUrl")}</HintTip>
-      </div>
-
-      {editing
-        ? (
-            // Mounted only while editing, so its draft always starts from the current value.
-            <BaseUrlEditor value={value} onFinish={finish} onFinishAndRefocus={finishAndRefocus} />
-          )
-        : (
-            <button
-              ref={editRef}
-              type="button"
-              onClick={() => setEditing(true)}
-              title={t("app.editBaseUrl")}
-              aria-label={`${t("app.editBaseUrl")}: ${value}`}
-              className="group -mr-1.5 flex h-7 min-w-0 flex-1 items-center gap-2 rounded-md px-2 text-left transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
-            >
-              {value
-                ? (
-                    <span className="min-w-0 flex-1 truncate font-mono text-foreground/90">
-                      {displayHost(value)}
-                    </span>
-                  )
-                : (
-                    <span className="min-w-0 flex-1 truncate text-muted-foreground">{t("app.noInstance")}</span>
-                  )}
-              <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground group-hover:text-foreground" />
-            </button>
-          )}
-    </div>
-  )
-}
-
-/** The instance input with its save / reset buttons; `onFinish(undefined)` cancels. */
-function BaseUrlEditor({
-  value,
-  onFinish,
-  onFinishAndRefocus,
-}: {
-  value: string
-  onFinish: (next?: string) => void
-  onFinishAndRefocus: (next?: string) => void
-}) {
-  const { t } = useTranslation()
-  const [draft, setDraft] = useState(value)
-  // Buttons beside the input keep focus in it, so its blur doesn't race their click.
-  const keepInputFocus = (e: React.MouseEvent) => e.preventDefault()
-
-  return (
-    <>
-      <input
-        id="base-url"
-        aria-label={t("app.baseUrl")}
-        autoFocus
-        value={draft}
-        spellCheck={false}
-        onFocus={e => e.target.select()}
-        onChange={e => setDraft(e.target.value)}
-        onBlur={() => onFinish(draft)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter")
-            onFinishAndRefocus(draft)
-          if (e.key === "Escape")
-            onFinishAndRefocus()
-        }}
-        placeholder={DEFAULT_BASE_URL || t("app.instancePlaceholder")}
-        className="h-7 min-w-0 flex-1 rounded-md border border-input bg-background px-2 font-mono text-xs shadow-xs outline-hidden placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
-      />
-      {DEFAULT_BASE_URL !== "" && value !== DEFAULT_BASE_URL && (
-        <button
-          type="button"
-          title={t("app.resetBaseUrl")}
-          aria-label={t("app.resetBaseUrl")}
-          onMouseDown={keepInputFocus}
-          onClick={() => onFinish(DEFAULT_BASE_URL)}
-          className={iconButton}
-        >
-          <Undo2 className="h-3.5 w-3.5" />
-        </button>
-      )}
-      <button
-        type="button"
-        title={t("app.saveBaseUrl")}
-        aria-label={t("app.saveBaseUrl")}
-        onMouseDown={keepInputFocus}
-        onClick={() => onFinish(draft)}
-        className={cn(iconButton, "-mr-1.5")}
-      >
-        <Check className="h-3.5 w-3.5" />
-      </button>
-    </>
   )
 }
