@@ -130,6 +130,9 @@ export function Preview({
               { value: "checker", label: t("preview.bgTransparent"), icon: <Grid2x2 className="h-3.5 w-3.5" /> },
             ]}
           />
+        </div>
+        {/* Actions sit apart from the backdrop switch so the two groups read separately. */}
+        <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="icon"
