@@ -47,11 +47,21 @@ pnpm preview    # 本番ビルドをローカルで確認
 
 完全な静的サイトです。`pnpm build` 後の `dist/` を任意の静的ホスティングに配置してください。
 
-- **Vercel / Netlify**：リポジトリをインポートし、ビルドコマンド `pnpm build`、出力ディレクトリ `dist` を指定。必要に応じて上記の環境変数を追加します。
+### 自分でデプロイする
 
-  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground)
+セルフホストしなくても使えますが、次のような場合は自分でデプロイする価値があります：
 
-- **GitHub Pages**：サブパス（`https://<user>.github.io/<repo>/`）で配信する場合は、ベースパスを指定してビルドします：`pnpm build --base=/<repo>/`
+- プレビューの既定を、レート制限にかかりやすい公開インスタンスではなく**自分の github-readme-stats インスタンス**（`VITE_DEFAULT_BASE_URL`）にしたい
+- 自分のドメインで使いたい
+- 他人のデプロイに依存したくない
+
+Vercel でワンクリック。途中で `VITE_DEFAULT_BASE_URL` の入力を求められるので、自分のインスタンスか公開インスタンス `https://github-readme-stats.vercel.app` を入力してください：
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground&project-name=readme-stats-playground&repository-name=readme-stats-playground&env=VITE_DEFAULT_BASE_URL&envDescription=Your%20github-readme-stats%20instance%2C%20or%20the%20public%20one%3A%20https%3A%2F%2Fgithub-readme-stats.vercel.app&envLink=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground%23configuration)
+
+Vercel / Netlify / Cloudflare Pages に手動でインポートする場合：ビルドコマンド `pnpm build`、出力ディレクトリ `dist` を指定し、[設定](#設定) の環境変数を追加します。初回デプロイ後に `VITE_SITE_URL` をサイトの URL に設定して再デプロイすると、検索エンジン向けのメタデータが出力されます。
+
+**GitHub Pages**：サブパス（`https://<user>.github.io/<repo>/`）で配信する場合は、ベースパスを指定してビルドします：`pnpm build --base=/<repo>/`
 
 ## トラブルシューティング
 
