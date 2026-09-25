@@ -1,4 +1,3 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { Check, Github, Pencil, RotateCcw, Undo2 } from "lucide-react"
 import { Trans, useTranslation } from "react-i18next"
 

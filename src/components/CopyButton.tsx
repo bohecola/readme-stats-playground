@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react"
 import { Check, Copy } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
