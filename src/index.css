@@ -6,6 +6,12 @@
 @custom-variant coarse (@media (pointer: coarse));
 
 @theme {
+  /* Tailwind 3's stack, kept on purpose: v4.3 switched to "-apple-system, …, Segoe UI"
+     which renders CJK-locale Windows text with different weights. */
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));

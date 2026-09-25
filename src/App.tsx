@@ -10,7 +10,7 @@ import { Preview } from "@/components/Preview"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { DEFAULT_BASE_URL, DEFAULT_USERNAME, UPSTREAM_REPO_URL } from "@/lib/config"
+import { DEFAULT_BASE_URL, DEFAULT_USERNAME, REPO_URL, UPSTREAM_REPO_URL } from "@/lib/config"
 import { COMMON_PARAMS, ENDPOINTS } from "@/lib/endpoints"
 import { useParamText } from "@/lib/paramText"
 import { cn } from "@/lib/utils"
@@ -217,11 +217,11 @@ export default function App() {
             <ThemeToggle />
             <Button variant="ghost" size="icon" asChild>
               <a
-                href={UPSTREAM_REPO_URL}
+                href={REPO_URL}
                 target="_blank"
                 rel="noreferrer"
-                title="github-readme-stats"
-                aria-label={t("app.upstreamRepo")}
+                title={t("app.projectRepo")}
+                aria-label={t("app.projectRepo")}
               >
                 <Github />
               </a>

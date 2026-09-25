@@ -5,7 +5,7 @@
     "resetBaseUrl": "Reset to the default instance",
     "editBaseUrl": "Edit instance URL",
     "saveBaseUrl": "Save",
-    "upstreamRepo": "github-readme-stats repository",
+    "projectRepo": "View source on GitHub",
     "footerBuiltOn": "A visual playground for <repo>github-readme-stats</repo>",
     "footerTagline": "Tweak parameters, preview live, and copy the code into your README"
   },
