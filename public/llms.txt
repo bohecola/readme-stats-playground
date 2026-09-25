@@ -2,7 +2,7 @@
 
 > A visual playground for github-readme-stats cards: choose a card, adjust its parameters in a form, preview it live, and copy the URL / Markdown / HTML for a GitHub profile README. Static site; nothing is uploaded and settings stay in the browser.
 
-Supports all five github-readme-stats cards with every parameter as a form field: Stats (`/api`), Top Languages (`/api/top-langs`), Pin (`/api/pin`), WakaTime (`/api/wakatime`) and Gist (`/api/gist`). Common style (theme, colors, border, radius, cache, locale) is shared across cards. Rendering requires a github-readme-stats instance: the public one is unreliable, so the visitor enters the URL of their own deployment (or a link carries it via `instance=`).
+Supports all five github-readme-stats cards with every parameter as a form field: Stats (`/api`), Top Languages (`/api/top-langs`), Pin (`/api/pin`), WakaTime (`/api/wakatime`) and Gist (`/api/gist`). Common style (theme, colors, border, radius, cache, locale) is shared across cards. Rendering requires a github-readme-stats-compatible instance. github-readme-stats is no longer maintained; its API-compatible successor GitHub Stats Extended (https://github.com/stats-organization/github-stats-extended) runs a public instance at https://github-stats-extended.vercel.app, offered with one click. Self-hosted instances of either project also work, and a link can carry one via `instance=`.
 
 ## Open a pre-filled configuration
 
@@ -23,4 +23,5 @@ Add `instance=https://your-instance.example` so the link opens against that gith
 - [Live site](https://readme-stats.deore.me/)
 - [Source and README](https://github.com/bohecola/readme-stats-playground)
 - [Parameter definitions (types, defaults, ranges)](https://github.com/bohecola/readme-stats-playground/blob/main/src/lib/endpoints.ts)
-- [github-readme-stats, the upstream project](https://github.com/anuraghazra/github-readme-stats)
+- [GitHub Stats Extended, the maintained successor](https://github.com/stats-organization/github-stats-extended)
+- [github-readme-stats, the original project](https://github.com/anuraghazra/github-readme-stats)

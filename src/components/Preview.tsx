@@ -16,7 +16,7 @@ import {
 
 import { CopyButton, useCopy } from "@/components/CopyButton"
 import { Button } from "@/components/ui/button"
-import { UPSTREAM_DEPLOY_URL } from "@/lib/config"
+import { DEPLOY_GUIDE_URL } from "@/lib/config"
 import { cn } from "@/lib/utils"
 
 type Backdrop = "dark" | "light" | "checker"
@@ -72,6 +72,8 @@ interface PreviewProps {
   instanceMissing: boolean
   /** Opens the instance editor. */
   onSetupInstance: () => void
+  /** Points the playground at the suggested public instance. */
+  onUseSuggestedInstance: () => void
 }
 
 export function Preview({
@@ -81,6 +83,7 @@ export function Preview({
   missingRequired,
   instanceMissing,
   onSetupInstance,
+  onUseSuggestedInstance,
 }: PreviewProps) {
   const { t } = useTranslation()
   const [backdrop, setBackdrop] = useState<Backdrop>(() =>
@@ -174,8 +177,11 @@ export function Preview({
       >
         {instanceMissing ? (
           <PreviewMessage backdrop={backdrop} icon={<Unplug className="h-5 w-5" />}>
-            {t("preview.noInstance")}
-            <span className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1">
+            <span className="max-w-sm">{t("preview.noInstance")}</span>
+            <Button size="sm" variant="secondary" onClick={onUseSuggestedInstance}>
+              {t("preview.useSuggestedInstance")}
+            </Button>
+            <span className="flex flex-wrap justify-center gap-x-4 gap-y-1">
               <button
                 type="button"
                 onClick={onSetupInstance}
@@ -184,7 +190,7 @@ export function Preview({
                 {t("preview.setupInstance")}
               </button>
               <a
-                href={UPSTREAM_DEPLOY_URL}
+                href={DEPLOY_GUIDE_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="underline underline-offset-4 hover:opacity-80"
@@ -376,7 +382,7 @@ function PreviewMessage({
       )}
     >
       {icon}
-      <span>{children}</span>
+      <span className="flex flex-col items-center gap-2">{children}</span>
     </div>
   )
 }

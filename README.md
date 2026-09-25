@@ -11,7 +11,7 @@ A visual playground for [github-readme-stats](https://github.com/anuraghazra/git
 
 ![README Stats Playground screenshot](./docs/screenshot.png)
 
-> This is a community tool and is not affiliated with github-readme-stats. Cards are rendered by whichever github-readme-stats instance you point it at.
+> This is a community tool, not affiliated with either project. Cards are rendered by whichever instance you point it at: the original github-readme-stats or its maintained, API-compatible successor [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended).
 
 ## Features
 
@@ -20,7 +20,7 @@ A visual playground for [github-readme-stats](https://github.com/anuraghazra/git
 - Live preview and one-click copy as URL / Markdown / HTML
 - Shareable links: the address bar always mirrors the current card (`?card=stats&username=octocat&theme=dark`), so a configuration can be handed over as a URL
 - Common style shared across cards, with per-card overrides when you want them
-- Renders through your own github-readme-stats instance; everything stays in your browser
+- Works with github-readme-stats and GitHub Stats Extended instances, public or self-hosted; everything stays in your browser
 
 ## Getting started
 
@@ -43,7 +43,7 @@ Defaults are set with build-time env vars. Copy `.env.example` to `.env.local` (
 | `VITE_DEFAULT_USERNAME` | GitHub username pre-filled on first visit | empty |
 | `VITE_SITE_URL` | Public URL of the deployment; when set, the build emits the canonical link, Open Graph image and JSON-LD for search engines and AI crawlers | empty |
 
-> The playground needs a github-readme-stats instance to render cards. The public one (`github-readme-stats.vercel.app`) is unreliable and currently paused, so by default each visitor enters their own — [deploy one](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own) if you don't have it. When self-hosting the playground for yourself, set `VITE_DEFAULT_BASE_URL` to your instance so it's pre-filled.
+> Rendering needs a github-readme-stats-compatible instance. github-readme-stats itself is no longer maintained and its public instance is paused; its successor [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) is API-compatible and runs a public instance (`github-stats-extended.vercel.app`), which the playground offers with one click. Self-hosted instances of either project work too — when hosting the playground for yourself, set `VITE_DEFAULT_BASE_URL` to yours so it's pre-filled.
 
 ## Deployment
 
