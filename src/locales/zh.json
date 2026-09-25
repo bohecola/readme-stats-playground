@@ -118,17 +118,19 @@
     "hide_title": { "label": "隐藏标题" },
     "hide_rank": { "label": "隐藏等级" },
     "include_all_commits": { "label": "统计全部提交", "hint": "统计所有年份的提交，而不只是今年" },
-    "count_private": { "label": "计入私有贡献" },
     "text_bold": { "label": "文字加粗" },
     "disable_animations": { "label": "关闭动画" },
     "rank_icon": { "label": "等级图标" },
     "number_format": { "label": "数字格式", "hint": "short：1.2k；long：1234" },
+    "number_precision": { "label": "数字精度", "hint": "short 格式保留的小数位数，0–2" },
+    "commits_year": { "label": "提交统计年份", "placeholder": "默认今年", "hint": "只统计该年份的提交；开启「统计全部提交」时无效" },
+    "stats_format": { "label": "统计方式", "hint": "percentages：百分比；bytes：代码字节数" },
     "line_height": { "label": "行高" },
     "card_width": { "label": "卡片宽度" },
     "ring_color": { "label": "等级圆环颜色" },
     "layout": { "label": "布局" },
     "exclude_repo": { "label": "排除仓库", "placeholder": "如 repo1,repo2", "hint": "多个用逗号分隔" },
-    "langs_count": { "label": "语言数量", "hint": "1–20" },
+    "langs_count": { "label": "语言数量", "hint": "1–20；不填时 normal / donut 布局显示 5 种，其他布局 6 种" },
     "hide_progress": { "label": "隐藏进度条" },
     "size_weight": { "label": "代码量权重", "hint": "按代码量排序的权重" },
     "count_weight": { "label": "仓库数权重", "hint": "按仓库数量排序的权重" },
@@ -142,7 +144,8 @@
   "cardParams": {
     "stats": {
       "custom_title": { "placeholder": "默认 <名字>'s GitHub Stats" },
-      "hide": { "label": "隐藏统计项", "placeholder": "", "hint": "" }
+      "hide": { "label": "隐藏统计项", "placeholder": "", "hint": "" },
+      "exclude_repo": { "hint": "这些仓库的 stars 不计入统计，多个用逗号分隔" }
     },
     "top-langs": {
       "custom_title": { "placeholder": "默认 Most Used Languages" }
@@ -153,7 +156,8 @@
     "wakatime": {
       "username": { "label": "WakaTime 用户名", "placeholder": "WakaTime 用户名" },
       "custom_title": { "placeholder": "默认 WakaTime Stats" },
-      "hide": { "placeholder": "如 javascript,yaml" }
+      "hide": { "placeholder": "如 javascript,yaml" },
+      "langs_count": { "hint": "不填则显示全部" }
     }
   }
 }

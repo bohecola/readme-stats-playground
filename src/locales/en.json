@@ -118,17 +118,19 @@
     "hide_title": { "label": "Hide title" },
     "hide_rank": { "label": "Hide rank" },
     "include_all_commits": { "label": "Count all commits", "hint": "Count commits from every year, not just this one" },
-    "count_private": { "label": "Count private contributions" },
     "text_bold": { "label": "Bold text" },
     "disable_animations": { "label": "Disable animations" },
     "rank_icon": { "label": "Rank icon" },
     "number_format": { "label": "Number format", "hint": "short: 1.2k · long: 1234" },
+    "number_precision": { "label": "Number precision", "hint": "Decimal places in short format, 0–2" },
+    "commits_year": { "label": "Commits year", "placeholder": "Default: this year", "hint": "Only count commits from this year; ignored with “Count all commits”" },
+    "stats_format": { "label": "Stats format", "hint": "percentages · bytes: code size" },
     "line_height": { "label": "Line height" },
     "card_width": { "label": "Card width" },
     "ring_color": { "label": "Rank ring color" },
     "layout": { "label": "Layout" },
     "exclude_repo": { "label": "Excluded repos", "placeholder": "e.g. repo1,repo2", "hint": "Comma-separated" },
-    "langs_count": { "label": "Language count", "hint": "1–20" },
+    "langs_count": { "label": "Language count", "hint": "1–20; when unset, normal / donut show 5, other layouts 6" },
     "hide_progress": { "label": "Hide progress bar" },
     "size_weight": { "label": "Size weight", "hint": "Weight of code size in the ranking" },
     "count_weight": { "label": "Repo count weight", "hint": "Weight of repo count in the ranking" },
@@ -142,7 +144,8 @@
   "cardParams": {
     "stats": {
       "custom_title": { "placeholder": "Default <name>'s GitHub Stats" },
-      "hide": { "label": "Hidden stats", "placeholder": "", "hint": "" }
+      "hide": { "label": "Hidden stats", "placeholder": "", "hint": "" },
+      "exclude_repo": { "hint": "Their stars are left out of the count; comma-separated" }
     },
     "top-langs": {
       "custom_title": { "placeholder": "Default Most Used Languages" }
@@ -153,7 +156,8 @@
     "wakatime": {
       "username": { "label": "WakaTime username", "placeholder": "WakaTime username" },
       "custom_title": { "placeholder": "Default WakaTime Stats" },
-      "hide": { "placeholder": "e.g. javascript,yaml" }
+      "hide": { "placeholder": "e.g. javascript,yaml" },
+      "langs_count": { "hint": "Shows all languages when unset" }
     }
   }
 }
