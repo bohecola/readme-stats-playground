@@ -44,14 +44,14 @@ function siteMeta(siteUrl: string | undefined): Plugin {
         name: "README Stats Playground",
         url,
         description:
-          "Visual playground for github-readme-stats cards: tweak parameters, preview live, copy the Markdown for your GitHub profile README.",
+          "Visual playground for github-readme-stats and GitHub Stats Extended cards: tweak parameters, preview live, copy the Markdown for your GitHub profile README.",
         applicationCategory: "DeveloperApplication",
         operatingSystem: "Any",
         browserRequirements: "Requires JavaScript",
         isAccessibleForFree: true,
         image: `${base}/og.png`,
         sameAs: "https://github.com/bohecola/readme-stats-playground",
-        isBasedOn: "https://github.com/anuraghazra/github-readme-stats",
+        isBasedOn: ["https://github.com/anuraghazra/github-readme-stats", "https://github.com/stats-organization/github-stats-extended"],
       }
       return [
         { tag: "link", attrs: { rel: "canonical", href: url }, injectTo: "head" },
