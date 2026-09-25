@@ -1,5 +1,5 @@
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "cn"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 import { Select as SelectPrimitive } from "radix-ui"
 
@@ -50,8 +50,7 @@ function SelectTrigger({
 function SelectContent({
   className,
   children,
-  // Project default: dropdown below the trigger (upstream's is "item-aligned").
-  position = "popper",
+  position = "item-aligned",
   align = "center",
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {

@@ -36,6 +36,8 @@ export function LanguageToggle() {
         <span lang={LANGUAGE_NAMES[current].tag}>{LANGUAGE_NAMES[current].short}</span>
       </SelectTrigger>
       <SelectContent
+        // popper: the trigger has no SelectValue, which item-aligned positioning needs.
+        position="popper"
         align="end"
         onCloseAutoFocus={(e) => {
           if (openedByPointer.current) e.preventDefault()

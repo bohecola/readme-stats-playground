@@ -118,7 +118,7 @@ export function ParamControl({
           <SelectTrigger id={id} className="w-full">
             <SelectValue placeholder={t("form.select")} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             {(param.key === "theme" ? THEMES : param.options ?? []).map((opt) => (
               <SelectItem key={opt} value={opt}>
                 {opt}
