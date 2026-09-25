@@ -17,8 +17,9 @@
 - **完整参数表单**：每个参数都有名称和原始参数名对照，关键参数附带说明；写入 URL 的参数会被标记
 - **实时预览**：深色 / 浅色 / 透明棋盘格三种预览背景
 - **一键复制**：URL、Markdown、HTML 三种格式
+- **通用样式共用**：主题、颜色、边框等样式一次设置对所有卡片生效；单张卡片可以脱离共用单独设置
 - **取色器**：HEX / RGB / HSL、透明度、预设色与最近使用；`bg_color` 支持可视化编辑渐变
-- **可切换实例**：页面顶部可改为任意自建的 github-readme-stats 实例
+- **可切换实例**：预览卡片底部可改为任意自建的 github-readme-stats 实例
 - **本地保存**：参数和设置保存在浏览器 localStorage，不上传任何数据
 - **明暗主题**：默认跟随系统
 - **中英双语**：默认跟随浏览器语言（非中英文时为英文），可在顶栏切换
@@ -77,8 +78,12 @@ src/
 │   ├── ColorPicker.tsx      # 取色器（含渐变编辑）
 │   ├── Preview.tsx          # 实时预览 + URL/Markdown/HTML 输出
 │   ├── NumberInput.tsx      # 带步进按钮的数值输入
+│   ├── HintTip.tsx          # 说明气泡（ⓘ 图标或带虚线下划线的文字）
+│   ├── CopyButton.tsx       # 复制按钮
 │   ├── LanguageToggle.tsx   # 语言切换
-│   └── ui/                  # shadcn/ui 组件
+│   ├── ThemeToggle.tsx      # 明暗主题切换
+│   └── ui/                  # shadcn/ui 组件（与 registry 保持一致，不手改）
+├── auto-imports.d.ts        # unplugin-auto-import 生成，React hooks 无需 import
 ├── i18n.ts                  # i18next 初始化与语言检测
 ├── locales/                 # 翻译文件（en.json / zh.json）
 └── lib/
@@ -92,12 +97,14 @@ src/
 
 ## 技术栈
 
-[Vite](https://vitejs.dev/) · [React 18](https://react.dev/) · TypeScript · [Tailwind CSS](https://tailwindcss.com/) · [shadcn/ui](https://ui.shadcn.com/) · [react-i18next](https://react.i18next.com/) · [react-colorful](https://github.com/omgovich/react-colorful) · [lucide](https://lucide.dev/)
+[Vite](https://vitejs.dev/) · [React 19](https://react.dev/) · TypeScript · [Tailwind CSS 4](https://tailwindcss.com/) · [shadcn/ui](https://ui.shadcn.com/) · [react-i18next](https://react.i18next.com/) · [react-colorful](https://github.com/omgovich/react-colorful) · [lucide](https://lucide.dev/)
 
 ## 参与贡献
 
 欢迎提交 Issue 和 Pull Request。提交前请确保 `pnpm lint` 和 `pnpm build` 通过（CI 会自动检查）。
 
+- **React hooks 无需 import**：`useState`、`useEffect` 等由 `unplugin-auto-import` 提供，声明在 `src/auto-imports.d.ts`（运行 dev 或 build 时自动更新，需一并提交）。
+- **`src/components/ui/` 不手改**：这些是 shadcn/ui 原样生成的组件，定制请在调用处传 prop 或另写包装组件，这样随时可以用 `npx shadcn@latest add --overwrite <组件>` 重新拉取。
 - **新增或调整参数**：在 `src/lib/endpoints.ts` 中定义结构，并在 `src/locales/*.json` 的 `params` 下补充名称和说明（某张卡片含义不同时写在 `cardParams.<卡片>` 下覆盖）。
 - **新增语言**：复制 `src/locales/en.json` 翻译后，在 `src/i18n.ts` 中注册即可。两份语言文件的 key 需保持一致。
 
