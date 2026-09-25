@@ -1,16 +1,16 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
-import { Github, Globe, RotateCcw } from "lucide-react"
+import { Check, Github, Pencil, RotateCcw, Undo2 } from "lucide-react"
 import { Trans, useTranslation } from "react-i18next"
 
 import { CardForm } from "@/components/CardForm"
 import { CardTabs } from "@/components/CardTabs"
+import { HintTip } from "@/components/HintTip"
 import { LanguageToggle } from "@/components/LanguageToggle"
 import { Logo } from "@/components/Logo"
 import { Preview } from "@/components/Preview"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import { DEFAULT_BASE_URL, DEFAULT_USERNAME, UPSTREAM_REPO_URL } from "@/lib/config"
 import { ENDPOINTS } from "@/lib/endpoints"
 import { useParamText } from "@/lib/paramText"
@@ -131,15 +131,7 @@ export default function App() {
             </span>
           </div>
 
-          {/* Full-width second row on narrow screens; inline before the icons from md up. */}
-          <BaseUrlField
-            value={baseUrl}
-            onChange={updateBase}
-            className="order-last w-full md:order-none md:ml-auto md:w-[380px]"
-          />
-
-          <div className="ml-auto flex items-center gap-1 md:ml-0">
-            <Separator orientation="vertical" className="mr-2 hidden h-5 md:block" />
+          <div className="ml-auto flex items-center gap-1">
             <LanguageToggle />
             <ThemeToggle />
             <Button variant="ghost" size="icon" asChild>
@@ -216,6 +208,12 @@ export default function App() {
               })}
             />
           </CardContent>
+          {/* Set-once setting that shapes both the preview and the copied code above. */}
+          <BaseUrlField
+            value={baseUrl}
+            onChange={updateBase}
+            className="rounded-b-xl border-t bg-muted/30 px-4 py-2 sm:px-6"
+          />
         </Card>
       </main>
 
@@ -246,6 +244,17 @@ export default function App() {
   )
 }
 
+/** "https://example.com/" -> "example.com": the full URL lives in the editor and tooltip. */
+const displayHost = (url: string) => url.trim().replace(/^https?:\/\//, "").replace(/\/+$/, "")
+
+const iconButton =
+  "shrink-0 rounded p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+
+/**
+ * Shows the instance as text that is itself the Edit button, with a pencil so
+ * it's clearly editable (a hover-only input is easy to miss, and invisible on
+ * touch). Editing swaps in a real input; reset lives there too.
+ */
 function BaseUrlField({
   value,
   onChange,
@@ -256,37 +265,87 @@ function BaseUrlField({
   className?: string
 }) {
   const { t } = useTranslation()
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState(value)
+  const editRef = useRef<HTMLButtonElement>(null)
+
+  const startEdit = () => {
+    setDraft(value)
+    setEditing(true)
+  }
+  const finish = (next?: string) => {
+    // An empty instance would produce relative URLs; fall back to the default.
+    if (next !== undefined) onChange(next.trim() || DEFAULT_BASE_URL)
+    setEditing(false)
+  }
+  // Keyboard users land back on the Edit button after closing the editor.
+  const finishAndRefocus = (next?: string) => {
+    finish(next)
+    requestAnimationFrame(() => editRef.current?.focus())
+  }
+  // Buttons beside the input keep focus in it, so its blur doesn't race their click.
+  const keepInputFocus = (e: React.MouseEvent) => e.preventDefault()
+
   return (
-    <div
-      className={cn(
-        "flex h-9 items-center overflow-hidden rounded-md border border-input bg-background shadow-sm transition-colors focus-within:ring-1 focus-within:ring-ring",
-        className,
-      )}
-    >
-      <label
-        htmlFor="base-url"
-        className="flex h-full shrink-0 items-center gap-1.5 border-r bg-muted/50 px-3 text-xs text-muted-foreground"
-      >
-        <Globe className="h-3.5 w-3.5" />
-        {t("app.baseUrl")}
-      </label>
-      <input
-        id="base-url"
-        value={value}
-        spellCheck={false}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={DEFAULT_BASE_URL}
-        className="h-full min-w-0 flex-1 bg-transparent px-3 font-mono text-xs outline-none placeholder:text-muted-foreground"
-      />
-      {value !== DEFAULT_BASE_URL && (
+    <div className={cn("flex min-h-11 items-center gap-2 text-xs", className)}>
+      <div className="flex shrink-0 items-center gap-1.5 text-muted-foreground">
+        <label htmlFor={editing ? "base-url" : undefined}>{t("app.baseUrl")}</label>
+        <HintTip text={t("app.baseUrlHint")} />
+      </div>
+
+      {editing ? (
+        <>
+          <input
+            id="base-url"
+            autoFocus
+            value={draft}
+            spellCheck={false}
+            onFocus={(e) => e.target.select()}
+            onChange={(e) => setDraft(e.target.value)}
+            onBlur={() => finish(draft)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") finishAndRefocus(draft)
+              if (e.key === "Escape") finishAndRefocus()
+            }}
+            placeholder={DEFAULT_BASE_URL}
+            className="h-7 min-w-0 flex-1 rounded-md border border-input bg-background px-2 font-mono text-xs shadow-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
+          />
+          {value !== DEFAULT_BASE_URL && (
+            <button
+              type="button"
+              title={t("app.resetBaseUrl")}
+              aria-label={t("app.resetBaseUrl")}
+              onMouseDown={keepInputFocus}
+              onClick={() => finish(DEFAULT_BASE_URL)}
+              className={iconButton}
+            >
+              <Undo2 className="h-3.5 w-3.5" />
+            </button>
+          )}
+          <button
+            type="button"
+            title={t("app.saveBaseUrl")}
+            aria-label={t("app.saveBaseUrl")}
+            onMouseDown={keepInputFocus}
+            onClick={() => finish(draft)}
+            className={cn(iconButton, "-mr-1.5")}
+          >
+            <Check className="h-3.5 w-3.5" />
+          </button>
+        </>
+      ) : (
         <button
+          ref={editRef}
           type="button"
-          title={t("app.resetBaseUrl")}
-          aria-label={t("app.resetBaseUrl")}
-          onClick={() => onChange(DEFAULT_BASE_URL)}
-          className="mr-1 rounded p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+          onClick={startEdit}
+          title={t("app.editBaseUrl")}
+          aria-label={`${t("app.editBaseUrl")}: ${value}`}
+          className="group -mr-1.5 flex h-7 min-w-0 flex-1 items-center gap-2 rounded-md px-2 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         >
-          <RotateCcw className="h-3.5 w-3.5" />
+          <span className="min-w-0 flex-1 truncate font-mono text-foreground/90">
+            {displayHost(value)}
+          </span>
+          <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground group-hover:text-foreground" />
         </button>
       )}
     </div>

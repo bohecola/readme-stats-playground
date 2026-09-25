@@ -1,7 +1,10 @@
 {
   "app": {
     "baseUrl": "部署域名",
+    "baseUrlHint": "卡片由该 github-readme-stats 实例渲染。公共实例经常触发 GitHub 限流，建议换成自己部署的实例。",
     "resetBaseUrl": "恢复默认域名",
+    "editBaseUrl": "修改部署域名",
+    "saveBaseUrl": "保存",
     "upstreamRepo": "github-readme-stats 仓库",
     "footerBuiltOn": "基于 <repo>github-readme-stats</repo> 构建的可视化调参工具",
     "footerTagline": "调整参数、实时预览，复制代码即可用在 README 中"
