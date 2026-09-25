@@ -11,6 +11,7 @@ import { currentLanguage, LANGUAGES, setLanguage, type Language } from "@/i18n"
 const LANGUAGE_NAMES: Record<Language, { short: string; full: string; tag: string }> = {
   en: { short: "EN", full: "English", tag: "en" },
   zh: { short: "中文", full: "简体中文", tag: "zh-CN" },
+  ja: { short: "日本語", full: "日本語", tag: "ja" },
 }
 
 /** Language dropdown: the trigger shows the current language, the menu lists all of them. */
