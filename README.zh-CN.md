@@ -47,11 +47,21 @@ pnpm preview    # 本地预览生产构建
 
 这是一个纯静态站点，`pnpm build` 后把 `dist/` 部署到任意静态托管即可。
 
-- **Vercel / Netlify**：导入仓库，构建命令 `pnpm build`，输出目录 `dist`，按需添加上面的环境变量。
+### 部署自己的实例
 
-  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground)
+不自建也能直接用，但以下情况值得自己部署一份：
 
-- **GitHub Pages**：站点部署在子路径（`https://<user>.github.io/<repo>/`）时，需要构建时指定 base：`pnpm build --base=/<repo>/`。
+- 希望预览默认指向**你自己的 github-readme-stats 实例**（`VITE_DEFAULT_BASE_URL`），而不是经常限流的公共实例；
+- 想用自己的域名；
+- 不想依赖别人的站点。
+
+Vercel 一键部署——过程中会要求填写 `VITE_DEFAULT_BASE_URL`，填你的实例，或者公共实例 `https://github-readme-stats.vercel.app`：
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground&project-name=readme-stats-playground&repository-name=readme-stats-playground&env=VITE_DEFAULT_BASE_URL&envDescription=Your%20github-readme-stats%20instance%2C%20or%20the%20public%20one%3A%20https%3A%2F%2Fgithub-readme-stats.vercel.app&envLink=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground%23configuration)
+
+也可以在 Vercel / Netlify / Cloudflare Pages 手动导入仓库：构建命令 `pnpm build`，输出目录 `dist`，再按 [配置](#配置) 一节添加环境变量。首次部署后，把 `VITE_SITE_URL` 设为站点地址并重新部署，搜索引擎用的元数据才会生成。
+
+**GitHub Pages**：站点部署在子路径（`https://<user>.github.io/<repo>/`）时，需要构建时指定 base：`pnpm build --base=/<repo>/`。
 
 ## 常见问题
 

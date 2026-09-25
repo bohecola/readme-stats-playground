@@ -47,11 +47,21 @@ Defaults are set with build-time env vars. Copy `.env.example` to `.env.local` (
 
 It's a fully static site: run `pnpm build` and deploy `dist/` to any static host.
 
-- **Vercel / Netlify**: import the repo, build command `pnpm build`, output directory `dist`, and add the env vars above if needed.
+### Deploy your own
 
-  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground)
+Self-hosting isn't required to use the playground, but it's worth it if you want:
 
-- **GitHub Pages**: when served from a sub-path (`https://<user>.github.io/<repo>/`), build with a base path: `pnpm build --base=/<repo>/`.
+- previews to default to **your own github-readme-stats instance** (`VITE_DEFAULT_BASE_URL`) instead of the shared public one, which is often rate-limited;
+- your own domain;
+- no dependency on someone else's deployment.
+
+One click on Vercel — it asks for `VITE_DEFAULT_BASE_URL`; enter your instance, or the public `https://github-readme-stats.vercel.app`:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground&project-name=readme-stats-playground&repository-name=readme-stats-playground&env=VITE_DEFAULT_BASE_URL&envDescription=Your%20github-readme-stats%20instance%2C%20or%20the%20public%20one%3A%20https%3A%2F%2Fgithub-readme-stats.vercel.app&envLink=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground%23configuration)
+
+Or manually on Vercel / Netlify / Cloudflare Pages: import the repo, build command `pnpm build`, output directory `dist`, then add the variables from [Configuration](#configuration). After the first deploy, set `VITE_SITE_URL` to the site's URL and redeploy so the search-engine metadata is emitted.
+
+**GitHub Pages**: when served from a sub-path (`https://<user>.github.io/<repo>/`), build with `pnpm build --base=/<repo>/`.
 
 ## Troubleshooting
 
