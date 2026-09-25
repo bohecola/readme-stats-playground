@@ -7,6 +7,8 @@
 
 [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) 卡片的可视化调参工具：左侧改参数，右侧实时预览，一键复制 URL / Markdown / HTML 到你的 GitHub 主页 README。
 
+**在线使用：[readme-stats.deore.me](https://readme-stats.deore.me)**
+
 ![README Stats Playground 截图](./docs/screenshot.zh-CN.png)
 
 > 本项目是社区工具，与 github-readme-stats 官方无关联。卡片由你指定的 github-readme-stats 实例渲染。

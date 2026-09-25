@@ -20,6 +20,7 @@ Add `instance=https://your-instance.example` so the link opens against that gith
 
 ## Links
 
+- [Live site](https://readme-stats.deore.me/)
 - [Source and README](https://github.com/bohecola/readme-stats-playground)
 - [Parameter definitions (types, defaults, ranges)](https://github.com/bohecola/readme-stats-playground/blob/main/src/lib/endpoints.ts)
 - [github-readme-stats, the upstream project](https://github.com/anuraghazra/github-readme-stats)
