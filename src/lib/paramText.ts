@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next"
-
 import type { ParamDef } from "@/lib/endpoints"
+
+import { useTranslation } from "react-i18next"
 
 type Field = "label" | "hint" | "placeholder"
 
@@ -20,7 +20,8 @@ export function useParamText() {
 
   return (param: ParamDef, scope: ParamScope, field: Field): string | undefined => {
     const keys = [`cardParams.${scope}.${param.key}.${field}`, `params.${param.key}.${field}`]
-    if (!keys.some((k) => i18n.exists(k))) return undefined
+    if (!keys.some(k => i18n.exists(k)))
+      return undefined
     return tDynamic(keys) || undefined
   }
 }

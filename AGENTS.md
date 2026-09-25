@@ -12,13 +12,15 @@ A static single-page app (Vite + React) that builds card URLs for [github-readme
 | --- | --- |
 | `pnpm install` | Node 20.19+ (or 22.12+), pnpm 11 (pinned in `package.json`) |
 | `pnpm dev` | dev server at http://localhost:5173 |
-| `pnpm lint` | `tsc --noEmit` for `src/` and `vite.config.ts` — the only static check; must pass on every commit |
+| `pnpm lint` | ESLint (antfu config: it is also the formatter, there is no Prettier) plus `tsc --noEmit` for `src/` and `vite.config.ts`; must pass on every commit |
+| `pnpm lint:fix` | ESLint auto-fix / format |
 | `pnpm test` | Vitest unit tests for the pure helpers in `src/lib/*.test.ts` (URL building, URL state, colors) |
 | `pnpm build` | type-check + production build into `dist/` (CI runs `lint`, `test` and `build`) |
 
 ## Conventions
 
-- **Stack**: React 19, TypeScript, Tailwind CSS 4, shadcn/ui, react-i18next.
+- **Stack**: React 19, TypeScript, Tailwind CSS 4, shadcn/ui, react-i18next. Node version in `.nvmrc`, editor settings in `.editorconfig`.
+- **Style is enforced by ESLint** (`eslint.config.js`: double quotes, no semicolons, 2 spaces, sorted imports, `function` declarations at top level). Run `pnpm lint:fix` rather than formatting by hand. `src/components/ui/` and `src/auto-imports.d.ts` are ignored.
 - **Hooks are auto-imported** (`useState`, `useEffect`, `useMemo`, …) via `unplugin-auto-import`; don't add `import { useState } from "react"`. Type-only imports (`type ReactNode`) still come from `"react"`. `src/auto-imports.d.ts` is regenerated on dev/build — commit it when it changes.
 - **`src/components/ui/` is stock shadcn/ui**, byte-identical to the registry. Never edit those files; customize at the call site (props, className) or in a wrapper component. `cn` comes from the `cn` package; `@/lib/utils` re-exports it.
 - **Parameters are declared once** in `src/lib/endpoints.ts` (type, default, range, choices). Their text lives in `src/locales/{en,zh,ja}.json` under `params.<key>`; per-card wording goes under `cardParams.<card>.<key>`. Keep the key set identical across locale files.

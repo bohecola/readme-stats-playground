@@ -1,12 +1,12 @@
 import { THEMES } from "./themes"
 
-export type ParamType =
-  | "text"
-  | "number"
-  | "boolean"
-  | "select"
-  | "multiselect"
-  | "color"
+export type ParamType
+  = | "text"
+    | "number"
+    | "boolean"
+    | "select"
+    | "multiselect"
+    | "color"
 
 export interface ParamDef {
   /** URL query key. Label / hint / placeholder text live in src/locales (see lib/paramText). */

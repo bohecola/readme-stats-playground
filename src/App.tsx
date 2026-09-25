@@ -1,6 +1,8 @@
+import type { ParamValue, ParamValues } from "@/lib/buildUrl"
+import type { CardId } from "@/lib/endpoints"
+
 import { Check, Github, Pencil, RotateCcw, Undo2 } from "lucide-react"
 import { Trans, useTranslation } from "react-i18next"
-
 import { CardForm } from "@/components/CardForm"
 import { CardTabs } from "@/components/CardTabs"
 import { HintTip } from "@/components/HintTip"
@@ -11,6 +13,13 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
+  buildUrl,
+  normalizeBaseUrl,
+
+  toHtml,
+  toMarkdown,
+} from "@/lib/buildUrl"
+import {
   DEFAULT_BASE_URL,
   DEFAULT_USERNAME,
   EXTENDED_REPO_URL,
@@ -18,19 +27,11 @@ import {
   SUGGESTED_INSTANCE_URL,
   UPSTREAM_REPO_URL,
 } from "@/lib/config"
-import { COMMON_PARAMS, ENDPOINTS, type CardId } from "@/lib/endpoints"
+import { COMMON_PARAMS, ENDPOINTS } from "@/lib/endpoints"
+import { useParamText } from "@/lib/paramText"
 import { readJson, readStorage, writeStorage } from "@/lib/storage"
 import { parseUrlState, toUrlSearch } from "@/lib/urlState"
-import { useParamText } from "@/lib/paramText"
 import { cn } from "@/lib/utils"
-import {
-  buildUrl,
-  normalizeBaseUrl,
-  toHtml,
-  toMarkdown,
-  type ParamValue,
-  type ParamValues,
-} from "@/lib/buildUrl"
 
 const LS_BASE = "rsp:baseUrl"
 const LS_VALUES = "rsp:values"
@@ -40,11 +41,14 @@ const LS_OWN_STYLE = "rsp:ownStyle"
 /** A shared link (?card=…&param=…) takes precedence over what's stored. */
 const URL_STATE = parseUrlState(window.location.search)
 
-const COMMON_KEYS = new Set(COMMON_PARAMS.map((p) => p.key))
+const footerLink
+  = "font-medium text-foreground/80 underline-offset-4 hover:text-foreground hover:underline"
+
+const COMMON_KEYS = new Set(COMMON_PARAMS.map(p => p.key))
 const isCommonKey = (key: string) => COMMON_KEYS.has(key)
 
 /** Separates a card's own params from common-style ones. */
-function splitCommon(values: ParamValues): { own: ParamValues; common: ParamValues } {
+function splitCommon(values: ParamValues): { own: ParamValues, common: ParamValues } {
   const own: ParamValues = {}
   const common: ParamValues = {}
   for (const [key, value] of Object.entries(values)) {
@@ -73,11 +77,11 @@ interface StoredState {
 /** Sensible starting values so the preview renders something immediately. */
 function seedValues(): Record<string, ParamValues> {
   return {
-    stats: { username: DEFAULT_USERNAME, show_icons: true },
+    "stats": { username: DEFAULT_USERNAME, show_icons: true },
     "top-langs": { username: DEFAULT_USERNAME, layout: "compact" },
-    pin: { username: DEFAULT_USERNAME, repo: "" },
-    wakatime: { username: "" },
-    gist: { id: "bbfce31e0217a3689c8d961a356cb10d" },
+    "pin": { username: DEFAULT_USERNAME, repo: "" },
+    "wakatime": { username: "" },
+    "gist": { id: "bbfce31e0217a3689c8d961a356cb10d" },
   }
 }
 
@@ -95,14 +99,15 @@ function loadStoredState(): StoredState {
   }
   // First run with the shared model. Older saves kept common style per card:
   // promote the first card's to shared, and let any card that differs keep its own.
-  const shared =
-    ENDPOINTS.map((e) => splitCommon(values[e.id] ?? {}).common).find(
-      (c) => Object.keys(c).length > 0,
+  const shared
+    = ENDPOINTS.map(e => splitCommon(values[e.id] ?? {}).common).find(
+      c => Object.keys(c).length > 0,
     ) ?? {}
   const ownStyle: Record<string, boolean> = {}
   for (const e of ENDPOINTS) {
     const { own, common: cardCommon } = splitCommon(values[e.id] ?? {})
-    if (sameValues(cardCommon, shared)) values[e.id] = own
+    if (sameValues(cardCommon, shared))
+      values[e.id] = own
     else ownStyle[e.id] = true
   }
   return { values, common: shared, ownStyle }
@@ -112,7 +117,8 @@ function loadStoredState(): StoredState {
 function loadState(): StoredState {
   const state = loadStoredState()
   // A bare `?card=x` only picks the tab; the card keeps what was stored.
-  if (!URL_STATE || Object.keys(URL_STATE.values).length === 0) return state
+  if (!URL_STATE || Object.keys(URL_STATE.values).length === 0)
+    return state
   const { cardId, values } = URL_STATE
   const { own, common } = splitCommon(values)
   // The address bar mirrors the card *with* the shared style, so a plain reload
@@ -140,8 +146,8 @@ export default function App() {
   const [state, setState] = useState<StoredState>(loadState)
   const { values: allValues, common, ownStyle } = state
 
-  const endpoint = ENDPOINTS.find((e) => e.id === activeId)!
-  const cardValues = allValues[activeId] ?? {}
+  const endpoint = ENDPOINTS.find(e => e.id === activeId)!
+  const cardValues = useMemo(() => allValues[activeId] ?? {}, [allValues, activeId])
   const ownStyleActive = ownStyle[activeId] === true
   // What the card renders with: its own params plus the shared style, unless it opted out.
   const values = useMemo(
@@ -160,7 +166,7 @@ export default function App() {
   }
 
   const handleChange = (key: string, value: ParamValue) => {
-    persist((prev) =>
+    persist(prev =>
       isCommonKey(key) && prev.ownStyle[activeId] !== true
         ? { ...prev, common: { ...prev.common, [key]: value } }
         : {
@@ -195,7 +201,7 @@ export default function App() {
 
   // Back to the card's starting params and the shared style; the shared style itself is kept.
   const resetActive = () => {
-    persist((prev) => ({
+    persist(prev => ({
       ...prev,
       values: { ...prev.values, [activeId]: seedValues()[activeId] ?? {} },
       ownStyle: { ...prev.ownStyle, [activeId]: false },
@@ -206,7 +212,8 @@ export default function App() {
   const headerRef = useRef<HTMLElement>(null)
   useLayoutEffect(() => {
     const header = headerRef.current
-    if (!header) return
+    if (!header)
+      return
     const publish = () =>
       document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`)
     publish()
@@ -233,8 +240,8 @@ export default function App() {
   // Nothing to reset when the URL already matches this card's starting values.
   const pristine = useMemo(
     () =>
-      !ownStyleActive &&
-      buildUrl(baseUrl, endpoint, { ...seedValues()[activeId], ...common }).url === built.url,
+      !ownStyleActive
+      && buildUrl(baseUrl, endpoint, { ...seedValues()[activeId], ...common }).url === built.url,
     [baseUrl, endpoint, activeId, built, common, ownStyleActive],
   )
 
@@ -325,7 +332,7 @@ export default function App() {
               markdown={toMarkdown(built.url, alt)}
               html={toHtml(built.url, alt)}
               missingRequired={built.missingRequired.map((key) => {
-                const param = endpoint.params.find((p) => p.key === key)
+                const param = endpoint.params.find(p => p.key === key)
                 return (param && paramText(param, endpoint.id, "label")) ?? key
               })}
               instanceMissing={baseUrl.trim() === ""}
@@ -364,14 +371,11 @@ export default function App() {
   )
 }
 
-const footerLink =
-  "font-medium text-foreground/80 underline-offset-4 hover:text-foreground hover:underline"
-
 /** "https://example.com/" -> "example.com": the full URL lives in the editor and tooltip. */
 const displayHost = (url: string) => url.trim().replace(/^https?:\/\//, "").replace(/\/+$/, "")
 
-const iconButton =
-  "shrink-0 rounded p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+const iconButton
+  = "shrink-0 rounded p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
 
 /**
  * Shows the instance as text that is itself the Edit button, with a pencil so
@@ -392,18 +396,12 @@ function BaseUrlField({
   className?: string
 }) {
   const { t } = useTranslation()
-  const [draft, setDraft] = useState(value)
-  // Whether opened by the pencil or by the preview's prompt, editing starts
-  // from the current value; `value` is deliberately read only at that moment.
-  useEffect(() => {
-    if (editing) setDraft(value)
-  }, [editing]) // eslint-disable-line react-hooks/exhaustive-deps
   const editRef = useRef<HTMLButtonElement>(null)
 
-  const startEdit = () => setEditing(true)
   const finish = (next?: string) => {
     // Adds https:// when omitted; empty falls back to the deployment default (which may itself be empty).
-    if (next !== undefined) onChange(normalizeBaseUrl(next) || DEFAULT_BASE_URL)
+    if (next !== undefined)
+      onChange(normalizeBaseUrl(next) || DEFAULT_BASE_URL)
     setEditing(false)
   }
   // Keyboard users land back on the Edit button after closing the editor.
@@ -411,8 +409,6 @@ function BaseUrlField({
     finish(next)
     requestAnimationFrame(() => editRef.current?.focus())
   }
-  // Buttons beside the input keep focus in it, so its blur doesn't race their click.
-  const keepInputFocus = (e: React.MouseEvent) => e.preventDefault()
 
   return (
     <div className={cn("flex min-h-11 items-center gap-2 text-xs", className)}>
@@ -420,66 +416,93 @@ function BaseUrlField({
         <HintTip text={t("app.baseUrlHint")}>{t("app.baseUrl")}</HintTip>
       </div>
 
-      {editing ? (
-        <>
-          <input
-            id="base-url"
-            aria-label={t("app.baseUrl")}
-            autoFocus
-            value={draft}
-            spellCheck={false}
-            onFocus={(e) => e.target.select()}
-            onChange={(e) => setDraft(e.target.value)}
-            onBlur={() => finish(draft)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") finishAndRefocus(draft)
-              if (e.key === "Escape") finishAndRefocus()
-            }}
-            placeholder={DEFAULT_BASE_URL || t("app.instancePlaceholder")}
-            className="h-7 min-w-0 flex-1 rounded-md border border-input bg-background px-2 font-mono text-xs shadow-xs outline-hidden placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
-          />
-          {DEFAULT_BASE_URL !== "" && value !== DEFAULT_BASE_URL && (
+      {editing
+        ? (
+            // Mounted only while editing, so its draft always starts from the current value.
+            <BaseUrlEditor value={value} onFinish={finish} onFinishAndRefocus={finishAndRefocus} />
+          )
+        : (
             <button
+              ref={editRef}
               type="button"
-              title={t("app.resetBaseUrl")}
-              aria-label={t("app.resetBaseUrl")}
-              onMouseDown={keepInputFocus}
-              onClick={() => finish(DEFAULT_BASE_URL)}
-              className={iconButton}
+              onClick={() => setEditing(true)}
+              title={t("app.editBaseUrl")}
+              aria-label={`${t("app.editBaseUrl")}: ${value}`}
+              className="group -mr-1.5 flex h-7 min-w-0 flex-1 items-center gap-2 rounded-md px-2 text-left transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
             >
-              <Undo2 className="h-3.5 w-3.5" />
+              {value
+                ? (
+                    <span className="min-w-0 flex-1 truncate font-mono text-foreground/90">
+                      {displayHost(value)}
+                    </span>
+                  )
+                : (
+                    <span className="min-w-0 flex-1 truncate text-muted-foreground">{t("app.noInstance")}</span>
+                  )}
+              <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground group-hover:text-foreground" />
             </button>
           )}
-          <button
-            type="button"
-            title={t("app.saveBaseUrl")}
-            aria-label={t("app.saveBaseUrl")}
-            onMouseDown={keepInputFocus}
-            onClick={() => finish(draft)}
-            className={cn(iconButton, "-mr-1.5")}
-          >
-            <Check className="h-3.5 w-3.5" />
-          </button>
-        </>
-      ) : (
+    </div>
+  )
+}
+
+/** The instance input with its save / reset buttons; `onFinish(undefined)` cancels. */
+function BaseUrlEditor({
+  value,
+  onFinish,
+  onFinishAndRefocus,
+}: {
+  value: string
+  onFinish: (next?: string) => void
+  onFinishAndRefocus: (next?: string) => void
+}) {
+  const { t } = useTranslation()
+  const [draft, setDraft] = useState(value)
+  // Buttons beside the input keep focus in it, so its blur doesn't race their click.
+  const keepInputFocus = (e: React.MouseEvent) => e.preventDefault()
+
+  return (
+    <>
+      <input
+        id="base-url"
+        aria-label={t("app.baseUrl")}
+        autoFocus
+        value={draft}
+        spellCheck={false}
+        onFocus={e => e.target.select()}
+        onChange={e => setDraft(e.target.value)}
+        onBlur={() => onFinish(draft)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter")
+            onFinishAndRefocus(draft)
+          if (e.key === "Escape")
+            onFinishAndRefocus()
+        }}
+        placeholder={DEFAULT_BASE_URL || t("app.instancePlaceholder")}
+        className="h-7 min-w-0 flex-1 rounded-md border border-input bg-background px-2 font-mono text-xs shadow-xs outline-hidden placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
+      />
+      {DEFAULT_BASE_URL !== "" && value !== DEFAULT_BASE_URL && (
         <button
-          ref={editRef}
           type="button"
-          onClick={startEdit}
-          title={t("app.editBaseUrl")}
-          aria-label={`${t("app.editBaseUrl")}: ${value}`}
-          className="group -mr-1.5 flex h-7 min-w-0 flex-1 items-center gap-2 rounded-md px-2 text-left transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+          title={t("app.resetBaseUrl")}
+          aria-label={t("app.resetBaseUrl")}
+          onMouseDown={keepInputFocus}
+          onClick={() => onFinish(DEFAULT_BASE_URL)}
+          className={iconButton}
         >
-          {value ? (
-            <span className="min-w-0 flex-1 truncate font-mono text-foreground/90">
-              {displayHost(value)}
-            </span>
-          ) : (
-            <span className="min-w-0 flex-1 truncate text-muted-foreground">{t("app.noInstance")}</span>
-          )}
-          <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground group-hover:text-foreground" />
+          <Undo2 className="h-3.5 w-3.5" />
         </button>
       )}
-    </div>
+      <button
+        type="button"
+        title={t("app.saveBaseUrl")}
+        aria-label={t("app.saveBaseUrl")}
+        onMouseDown={keepInputFocus}
+        onClick={() => onFinish(draft)}
+        className={cn(iconButton, "-mr-1.5")}
+      >
+        <Check className="h-3.5 w-3.5" />
+      </button>
+    </>
   )
 }

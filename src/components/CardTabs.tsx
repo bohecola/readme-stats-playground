@@ -1,13 +1,13 @@
-import { useTranslation } from "react-i18next"
+import type { CardId, EndpointDef } from "@/lib/endpoints"
 
 // Radix primitives directly: this is an underline tab bar, not the pill-style ui/tabs.
 import { Tabs as TabsPrimitive } from "radix-ui"
-import type { CardId, EndpointDef } from "@/lib/endpoints"
+import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
 
 /** Current sticky header height, published by App as `--header-h`. */
 function headerHeight() {
-  return parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 0
+  return Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 0
 }
 
 /**
@@ -35,12 +35,13 @@ export function CardTabs({
   // there are more tabs past it so that's discoverable.
   const listRef = useRef<HTMLDivElement>(null)
   const [moreRight, setMoreRight] = useState(false)
-  useEffect(() => {
+  // The observer reports the initial size too, so no synchronous measure is needed.
+  useLayoutEffect(() => {
     const list = listRef.current
-    if (!list) return
+    if (!list)
+      return
     const update = () =>
       setMoreRight(list.scrollWidth - list.clientWidth - list.scrollLeft > 1)
-    update()
     list.addEventListener("scroll", update, { passive: true })
     const ro = new ResizeObserver(update)
     ro.observe(list)
@@ -53,7 +54,7 @@ export function CardTabs({
   // A tab tapped while half off-screen slides fully into view.
   useEffect(() => {
     listRef.current
-      ?.querySelector<HTMLElement>('[data-state="active"]')
+      ?.querySelector<HTMLElement>("[data-state=\"active\"]")
       ?.scrollIntoView({ block: "nearest", inline: "nearest" })
   }, [value])
 
@@ -82,9 +83,11 @@ export function CardTabs({
   const change = (id: string) => {
     onValueChange(id as CardId)
     const sentinel = sentinelRef.current
-    if (!sentinel) return
+    if (!sentinel)
+      return
     const target = sentinel.getBoundingClientRect().top + window.scrollY - headerHeight()
-    if (window.scrollY > target) window.scrollTo({ top: target, behavior: "smooth" })
+    if (window.scrollY > target)
+      window.scrollTo({ top: target, behavior: "smooth" })
   }
 
   return (
@@ -108,7 +111,7 @@ export function CardTabs({
             ref={listRef}
             className="-mb-px flex w-full gap-6 overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden"
           >
-            {endpoints.map((e) => (
+            {endpoints.map(e => (
               <TabsPrimitive.Trigger
                 key={e.id}
                 value={e.id}

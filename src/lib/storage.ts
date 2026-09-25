@@ -6,7 +6,8 @@
 export function readStorage(key: string): string | null {
   try {
     return localStorage.getItem(key)
-  } catch {
+  }
+  catch {
     return null
   }
 }
@@ -14,17 +15,20 @@ export function readStorage(key: string): string | null {
 export function writeStorage(key: string, value: string) {
   try {
     localStorage.setItem(key, value)
-  } catch {
+  }
+  catch {
     // Nothing to do: the app works without persistence.
   }
 }
 
 export function readJson<T>(key: string): T | null {
   const raw = readStorage(key)
-  if (raw === null) return null
+  if (raw === null)
+    return null
   try {
     return JSON.parse(raw) as T
-  } catch {
+  }
+  catch {
     return null
   }
 }

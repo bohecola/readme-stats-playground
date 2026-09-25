@@ -8,8 +8,9 @@ type Theme = "light" | "dark"
 const LS_THEME = "rsp:theme"
 
 /** index.html already applied the saved or OS theme before paint; read it back. */
-const currentTheme = (): Theme =>
-  document.documentElement.classList.contains("dark") ? "dark" : "light"
+function currentTheme(): Theme {
+  return document.documentElement.classList.contains("dark") ? "dark" : "light"
+}
 
 export function ThemeToggle() {
   const { t } = useTranslation()

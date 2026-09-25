@@ -1,7 +1,8 @@
-import { HexAlphaColorPicker } from "react-colorful"
+import type { Gradient, Hsla, Rgba } from "@/lib/color"
 import { Plus, X } from "lucide-react"
-import { useTranslation } from "react-i18next"
+import { HexAlphaColorPicker } from "react-colorful"
 
+import { useTranslation } from "react-i18next"
 import {
   Popover,
   PopoverContent,
@@ -15,15 +16,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
-  type Gradient,
-  type Hsla,
-  type Rgba,
   expandHex,
+
   hexToRgba,
+
   hslaToRgba,
   isHex,
   normalizeHex,
   parseGradient,
+
   rgbaToHex,
   rgbaToHsla,
   serializeGradient,
@@ -35,14 +36,30 @@ import { cn } from "@/lib/utils"
 
 /** Default card colors first, then a general-purpose palette. */
 const PRESETS = [
-  "2f80ed", "434d58", "4c71f2", "fffefe", "e4e2e2",
-  "000000", "151515", "24292e", "0d1117", "ffffff",
-  "ef4444", "f97316", "eab308", "22c55e", "14b8a6",
-  "06b6d4", "3b82f6", "6366f1", "a855f7", "ec4899",
+  "2f80ed",
+  "434d58",
+  "4c71f2",
+  "fffefe",
+  "e4e2e2",
+  "000000",
+  "151515",
+  "24292e",
+  "0d1117",
+  "ffffff",
+  "ef4444",
+  "f97316",
+  "eab308",
+  "22c55e",
+  "14b8a6",
+  "06b6d4",
+  "3b82f6",
+  "6366f1",
+  "a855f7",
+  "ec4899",
 ]
 
-const CHECKER =
-  "bg-[conic-gradient(#d4d4d8_90deg,#fff_90deg_180deg,#d4d4d8_180deg_270deg,#fff_270deg)] bg-size-[8px_8px] bg-clip-padding"
+const CHECKER
+  = "bg-[conic-gradient(#d4d4d8_90deg,#fff_90deg_180deg,#d4d4d8_180deg_270deg,#fff_270deg)] bg-size-[8px_8px] bg-clip-padding"
 
 const LS_RECENT = "rsp:recentColors"
 const LS_FORMAT = "rsp:colorFormat"
@@ -59,7 +76,8 @@ function loadRecent(): string[] {
 function pushRecent(value: string) {
   const colors = parseGradient(value)?.stops ?? [value]
   const fresh = colors.map(normalizeHex).filter(isHex)
-  if (fresh.length === 0) return
+  if (fresh.length === 0)
+    return
   const next = [...new Set([...fresh, ...loadRecent()])].slice(0, MAX_RECENT)
   writeStorage(LS_RECENT, JSON.stringify(next))
 }
@@ -99,7 +117,7 @@ export function ColorPicker({
         invalid && "border-destructive focus-within:ring-destructive",
       )}
     >
-      <Popover onOpenChange={(open) => !open && pushRecent(value)}>
+      <Popover onOpenChange={open => !open && pushRecent(value)}>
         <PopoverTrigger asChild>
           <button
             type="button"
@@ -138,7 +156,7 @@ export function ColorPicker({
         placeholder={
           placeholder ?? (allowGradient ? t("color.followThemeOrGradient") : t("color.followTheme"))
         }
-        onChange={(e) => onChange(stripHash(e.target.value))}
+        onChange={e => onChange(stripHash(e.target.value))}
         className="h-full min-w-0 flex-1 bg-transparent font-mono text-sm outline-hidden placeholder:font-sans placeholder:text-muted-foreground"
       />
       {value && (
@@ -173,7 +191,8 @@ function PickerPanel({
 
   const current = gradient ? gradient.stops[stopIndex] : normalizeHex(value)
   const setCurrent = (hex: string) => {
-    if (!gradient) return onChange(hex)
+    if (!gradient)
+      return onChange(hex)
     const stops = gradient.stops.map((s, i) => (i === stopIndex ? hex : s))
     onChange(serializeGradient({ ...gradient, stops }))
   }
@@ -181,7 +200,8 @@ function PickerPanel({
   const toMode = (mode: "solid" | "gradient") => {
     if (mode === "solid" && gradient) {
       onChange(gradient.stops[0] ?? "")
-    } else if (mode === "gradient" && !gradient) {
+    }
+    else if (mode === "gradient" && !gradient) {
       const base = isHex(value) ? normalizeHex(value) : "2f80ed"
       setActiveStop(0)
       onChange(serializeGradient({ angle: 90, stops: [base, "a855f7"] }))
@@ -218,7 +238,7 @@ function PickerPanel({
           gradient={gradient}
           activeStop={stopIndex}
           onSelectStop={setActiveStop}
-          onChange={(g) => onChange(serializeGradient(g))}
+          onChange={g => onChange(serializeGradient(g))}
         />
       )}
 
@@ -227,7 +247,8 @@ function PickerPanel({
         color={isHex(current) ? `#${expandHex(current)}` : "#000000"}
         onChange={(hex) => {
           const rgba = hexToRgba(hex)
-          if (rgba) setCurrent(rgbaToHex(rgba))
+          if (rgba)
+            setCurrent(rgbaToHex(rgba))
         }}
       />
 
@@ -245,7 +266,7 @@ function PickerPanel({
  * Figma / DevTools-style value row: format switch, per-channel
  * fields and a separate alpha percentage. Always commits card-ready hex.
  */
-function ColorInputs({ value, onCommit }: { value: string; onCommit: (hex: string) => void }) {
+function ColorInputs({ value, onCommit }: { value: string, onCommit: (hex: string) => void }) {
   const { t } = useTranslation()
   const [format, setFormat] = useState<Format>(loadFormat)
   const rgba = hexToRgba(value)
@@ -256,7 +277,8 @@ function ColorInputs({ value, onCommit }: { value: string; onCommit: (hex: strin
     setFormat(f)
     try {
       localStorage.setItem(LS_FORMAT, f)
-    } catch {
+    }
+    catch {
       // Remembering the format is optional.
     }
   }
@@ -266,7 +288,7 @@ function ColorInputs({ value, onCommit }: { value: string; onCommit: (hex: strin
 
   return (
     <div className="flex items-center gap-1.5">
-      <Select value={format} onValueChange={(f) => changeFormat(f as Format)}>
+      <Select value={format} onValueChange={f => changeFormat(f as Format)}>
         <SelectTrigger aria-label={t("color.format")} size="sm" className="w-[66px] shrink-0 px-2 text-xs">
           <SelectValue />
         </SelectTrigger>
@@ -281,16 +303,16 @@ function ColorInputs({ value, onCommit }: { value: string; onCommit: (hex: strin
         {format === "hex" && <HexInput value={value} alpha={base.a} onCommit={onCommit} />}
         {format === "rgb" && (
           <>
-            <NumberField label="R" value={rgba?.r} max={255} onCommit={(r) => setRgb({ r })} />
-            <NumberField label="G" value={rgba?.g} max={255} onCommit={(g) => setRgb({ g })} />
-            <NumberField label="B" value={rgba?.b} max={255} onCommit={(b) => setRgb({ b })} />
+            <NumberField label="R" value={rgba?.r} max={255} onCommit={r => setRgb({ r })} />
+            <NumberField label="G" value={rgba?.g} max={255} onCommit={g => setRgb({ g })} />
+            <NumberField label="B" value={rgba?.b} max={255} onCommit={b => setRgb({ b })} />
           </>
         )}
         {format === "hsl" && (
           <>
-            <NumberField label="H" value={rgba && hsla.h} max={360} onCommit={(h) => setHsl({ h })} />
-            <NumberField label="S" value={rgba && hsla.s} max={100} onCommit={(s) => setHsl({ s })} />
-            <NumberField label="L" value={rgba && hsla.l} max={100} onCommit={(l) => setHsl({ l })} />
+            <NumberField label="H" value={rgba && hsla.h} max={360} onCommit={h => setHsl({ h })} />
+            <NumberField label="S" value={rgba && hsla.s} max={100} onCommit={s => setHsl({ s })} />
+            <NumberField label="L" value={rgba && hsla.l} max={100} onCommit={l => setHsl({ l })} />
           </>
         )}
         <NumberField
@@ -299,7 +321,7 @@ function ColorInputs({ value, onCommit }: { value: string; onCommit: (hex: strin
           max={100}
           suffix="%"
           className="w-[52px] flex-none"
-          onCommit={(pct) => setRgb({ a: pct / 100 })}
+          onCommit={pct => setRgb({ a: pct / 100 })}
         />
       </div>
     </div>
@@ -318,7 +340,12 @@ function HexInput({
 }) {
   const shown = isHex(value) ? expandHex(value).slice(0, 6) : ""
   const [draft, setDraft] = useState(shown)
-  useEffect(() => setDraft(shown), [shown])
+  // A new value from outside (picker, swatch) replaces what's being typed.
+  const [prevShown, setPrevShown] = useState(shown)
+  if (shown !== prevShown) {
+    setPrevShown(shown)
+    setDraft(shown)
+  }
 
   return (
     <input
@@ -330,7 +357,8 @@ function HexInput({
         const next = normalizeHex(e.target.value)
         setDraft(next)
         const rgba = hexToRgba(next)
-        if (!rgba) return
+        if (!rgba)
+          return
         const hasAlpha = next.length === 4 || next.length === 8
         onCommit(rgbaToHex(hasAlpha ? rgba : { ...rgba, a: alpha }))
       }}
@@ -361,7 +389,11 @@ function NumberField({
 }) {
   const shown = value == null ? "" : String(Math.round(value))
   const [draft, setDraft] = useState(shown)
-  useEffect(() => setDraft(shown), [shown])
+  const [prevShown, setPrevShown] = useState(shown)
+  if (shown !== prevShown) {
+    setPrevShown(shown)
+    setDraft(shown)
+  }
 
   const commit = (n: number) => onCommit(Math.min(max, Math.max(0, n)))
 
@@ -374,10 +406,12 @@ function NumberField({
         onChange={(e) => {
           const text = e.target.value.replace(/\D/g, "")
           setDraft(text)
-          if (text !== "") commit(Number(text))
+          if (text !== "")
+            commit(Number(text))
         }}
         onKeyDown={(e) => {
-          if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return
+          if (e.key !== "ArrowUp" && e.key !== "ArrowDown")
+            return
           e.preventDefault()
           const step = (e.shiftKey ? 10 : 1) * (e.key === "ArrowUp" ? 1 : -1)
           commit(Math.round(value ?? 0) + step)
@@ -412,7 +446,7 @@ function SwatchGrid({
     <div className="space-y-1.5">
       <p className="text-[11px] font-medium text-muted-foreground">{title}</p>
       <div className="grid grid-cols-10 gap-1">
-        {colors.map((hex) => (
+        {colors.map(hex => (
           <button
             key={hex}
             type="button"
@@ -460,6 +494,8 @@ function GradientEditor({
 
       <div className="flex flex-wrap items-center gap-1.5">
         {stops.map((stop, i) => (
+          // Stops can repeat and are edited in place, so the position is the identity.
+          // eslint-disable-next-line react/no-array-index-key
           <div key={i} className="group relative">
             <button
               type="button"
@@ -513,10 +549,13 @@ function GradientEditor({
           min={0}
           max={360}
           value={angle}
-          onChange={(e) => onChange({ angle: Number(e.target.value), stops })}
+          onChange={e => onChange({ angle: Number(e.target.value), stops })}
           className="h-1.5 flex-1 cursor-pointer accent-primary"
         />
-        <span className="w-9 text-right font-mono text-xs tabular-nums">{angle}°</span>
+        <span className="w-9 text-right font-mono text-xs tabular-nums">
+          {angle}
+          °
+        </span>
       </div>
     </div>
   )

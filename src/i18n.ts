@@ -48,7 +48,7 @@ i18n
     react: { useSuspense: false }, // resources are bundled, nothing to wait for
   })
 
-const syncHtmlLang = (lng: string) => {
+function syncHtmlLang(lng: string) {
   document.documentElement.lang = HTML_LANG[currentLanguage(lng)]
 }
 syncHtmlLang(i18n.language)

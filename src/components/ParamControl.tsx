@@ -1,12 +1,14 @@
-import { useTranslation } from "react-i18next"
-import { Check } from "lucide-react"
+import type { ParamValue } from "@/lib/buildUrl"
+import type { ParamDef } from "@/lib/endpoints"
 
+import type { ParamScope } from "@/lib/paramText"
+import { Check } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { ColorPicker } from "@/components/ColorPicker"
 import { HintTip } from "@/components/HintTip"
 import { NumberInput } from "@/components/NumberInput"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
 import {
   Select,
   SelectContent,
@@ -14,10 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
+import { useParamText } from "@/lib/paramText"
 import { cn } from "@/lib/utils"
-import type { ParamDef } from "@/lib/endpoints"
-import { useParamText, type ParamScope } from "@/lib/paramText"
-import type { ParamValue } from "@/lib/buildUrl"
 
 interface ParamControlProps {
   param: ParamDef
@@ -81,7 +82,7 @@ export function ParamControl({
           className="flex h-9 cursor-pointer items-center justify-between rounded-md border border-input px-3 shadow-xs transition-colors hover:bg-accent/40"
         >
           <span className="text-sm text-muted-foreground">{checked ? t("form.on") : t("form.off")}</span>
-          <Switch id={id} checked={checked} onCheckedChange={(c) => set(c)} />
+          <Switch id={id} checked={checked} onCheckedChange={c => set(c)} />
         </label>
       </div>
     )
@@ -104,7 +105,7 @@ export function ParamControl({
         <Switch
           id={id}
           checked={Boolean(value ?? param.default ?? false)}
-          onCheckedChange={(c) => set(c)}
+          onCheckedChange={c => set(c)}
         />
       </label>
     )
@@ -117,14 +118,14 @@ export function ParamControl({
       {param.type === "select" && (
         <Select
           value={(value as string) ?? param.default ?? ""}
-          onValueChange={(v) => set(v)}
+          onValueChange={v => set(v)}
         >
           {/* The regenerated trigger defaults to w-fit; form fields fill their column. */}
           <SelectTrigger id={id} className="w-full">
             <SelectValue placeholder={t("form.select")} />
           </SelectTrigger>
           <SelectContent position="popper">
-            {(param.options ?? []).map((opt) => (
+            {(param.options ?? []).map(opt => (
               <SelectItem key={opt} value={opt}>
                 {opt}
               </SelectItem>
@@ -139,7 +140,7 @@ export function ParamControl({
           choices={[...(param.choices ?? []), ...(param.extendedChoices ?? [])]}
           extendedChoices={param.extendedChoices}
           value={(value as string[]) ?? []}
-          onChange={(arr) => set(arr)}
+          onChange={arr => set(arr)}
         />
       )}
 
@@ -159,8 +160,8 @@ export function ParamControl({
           value={value == null ? "" : String(value)}
           onChange={set}
           placeholder={
-            placeholder ??
-            (param.default !== undefined
+            placeholder
+            ?? (param.default !== undefined
               ? t("form.defaultValue", { value: param.default })
               : t("form.auto"))
           }
@@ -178,7 +179,7 @@ export function ParamControl({
           value={(value as string) ?? ""}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          onChange={(e) => set(e.target.value)}
+          onChange={e => set(e.target.value)}
         />
       )}
 
@@ -204,7 +205,7 @@ function MultiSelect({
   const toggle = (choice: string) => {
     onChange(
       value.includes(choice)
-        ? value.filter((c) => c !== choice)
+        ? value.filter(c => c !== choice)
         : [...value, choice],
     )
   }

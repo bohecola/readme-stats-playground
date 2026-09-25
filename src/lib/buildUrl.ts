@@ -1,5 +1,5 @@
-import { stripHash } from "./color"
 import type { EndpointDef, ParamDef } from "./endpoints"
+import { stripHash } from "./color"
 import { COMMON_PARAMS } from "./endpoints"
 
 export type ParamValue = string | number | boolean | string[] | undefined
@@ -11,7 +11,8 @@ export type ParamValues = Record<string, ParamValue>
  */
 export function normalizeBaseUrl(input: string): string {
   const s = input.trim().replace(/\/+$/, "")
-  if (!s) return ""
+  if (!s)
+    return ""
   return /^[a-z][a-z0-9+.-]*:\/\//i.test(s) ? s : `https://${s}`
 }
 
@@ -21,24 +22,30 @@ export function allParams(endpoint: EndpointDef): ParamDef[] {
 }
 
 function isEmptyValue(v: ParamValue): boolean {
-  if (v == null) return true
-  if (typeof v === "string") return v.trim() === ""
-  if (Array.isArray(v)) return v.length === 0
+  if (v == null)
+    return true
+  if (typeof v === "string")
+    return v.trim() === ""
+  if (Array.isArray(v))
+    return v.length === 0
   return false
 }
 
 /** Serialize a single param to a query value, or null to omit it. */
 function serialize(param: ParamDef, value: ParamValue): string | null {
-  if (isEmptyValue(value)) return null
+  if (isEmptyValue(value))
+    return null
 
   switch (param.type) {
     case "boolean": {
       const def = param.default ?? false
-      if (value === def) return null
+      if (value === def)
+        return null
       return value ? "true" : "false"
     }
     case "select": {
-      if (param.default !== undefined && value === param.default) return null
+      if (param.default !== undefined && value === param.default)
+        return null
       return String(value)
     }
     case "multiselect": {
@@ -51,7 +58,8 @@ function serialize(param: ParamDef, value: ParamValue): string | null {
     }
     case "number": {
       const text = String(value).trim()
-      if (param.default !== undefined && Number(text) === param.default) return null
+      if (param.default !== undefined && Number(text) === param.default)
+        return null
       return text
     }
     case "text":

@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest"
 import { ENDPOINTS } from "./endpoints"
 import { parseUrlState, toUrlSearch } from "./urlState"
 
-const stats = ENDPOINTS.find((e) => e.id === "stats")!
+const stats = ENDPOINTS.find(e => e.id === "stats")!
 const DEFAULT = ""
 
 describe("parseUrlState", () => {

@@ -1,11 +1,10 @@
-import { type ReactNode } from "react"
-import { useTranslation } from "react-i18next"
+import type { ReactNode } from "react"
 import {
   Check,
   ExternalLink,
   Grid2x2,
-  Link2,
   ImageOff,
+  Link2,
   LoaderCircle,
   Moon,
   RefreshCw,
@@ -13,9 +12,11 @@ import {
   TriangleAlert,
   Unplug,
 } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
-import { CopyButton, useCopy } from "@/components/CopyButton"
+import { CopyButton } from "@/components/CopyButton"
 import { Button } from "@/components/ui/button"
+import { useCopy } from "@/hooks/useCopy"
 import { DEPLOY_GUIDE_URL } from "@/lib/config"
 import { readStorage, writeStorage } from "@/lib/storage"
 import { cn } from "@/lib/utils"
@@ -50,7 +51,7 @@ function loadChoice<T extends string>(key: string, allowed: readonly T[], fallba
 function useDebounced<T>(value: T, ms: number): T {
   const [debounced, setDebounced] = useState(value)
   useEffect(() => {
-    const t = setTimeout(() => setDebounced(value), ms)
+    const t = setTimeout(setDebounced, ms, value)
     return () => clearTimeout(t)
   }, [value, ms])
   return debounced
@@ -97,7 +98,8 @@ export function Preview({
   const [frameVisible, setFrameVisible] = useState(true)
   useEffect(() => {
     const frame = frameRef.current
-    if (!frame) return
+    if (!frame)
+      return
     const io = new IntersectionObserver(([entry]) => setFrameVisible(entry.isIntersecting))
     io.observe(frame)
     return () => io.disconnect()
@@ -133,7 +135,7 @@ export function Preview({
             title={t("preview.refresh")}
             aria-label={t("preview.refreshLabel")}
             disabled={!ready}
-            onClick={() => setNonce((n) => n + 1)}
+            onClick={() => setNonce(n => n + 1)}
           >
             <RefreshCw className={cn(card.loading && "animate-spin")} />
           </Button>
@@ -146,13 +148,15 @@ export function Preview({
             disabled={!ready}
             asChild={ready}
           >
-            {ready ? (
-              <a href={url} target="_blank" rel="noreferrer">
-                <ExternalLink />
-              </a>
-            ) : (
-              <ExternalLink />
-            )}
+            {ready
+              ? (
+                  <a href={url} target="_blank" rel="noreferrer">
+                    <ExternalLink />
+                  </a>
+                )
+              : (
+                  <ExternalLink />
+                )}
           </Button>
           <ShareLinkButton />
         </div>
@@ -165,71 +169,81 @@ export function Preview({
           BACKDROP_CLASS[backdrop],
         )}
       >
-        {instanceMissing ? (
-          <PreviewMessage backdrop={backdrop} icon={<Unplug className="h-5 w-5" />}>
-            <span className="max-w-sm">{t("preview.noInstance")}</span>
-            <Button size="sm" variant="secondary" onClick={onUseSuggestedInstance}>
-              {t("preview.useSuggestedInstance")}
-            </Button>
-            <span className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-              <button
-                type="button"
-                onClick={onSetupInstance}
-                className="font-medium underline underline-offset-4 hover:opacity-80"
-              >
-                {t("preview.setupInstance")}
-              </button>
-              <a
-                href={DEPLOY_GUIDE_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="underline underline-offset-4 hover:opacity-80"
-              >
-                {t("preview.deployGuide")} ↗
-              </a>
-            </span>
-          </PreviewMessage>
-        ) : !ready ? (
-          <PreviewMessage backdrop={backdrop} icon={<TriangleAlert className="h-5 w-5" />}>
-            {t("preview.missingRequired", {
-              fields: missingRequired.join(t("preview.listSeparator")),
-            })}
-          </PreviewMessage>
-        ) : card.error && !card.shown ? (
-          <PreviewMessage backdrop={backdrop} icon={<ImageOff className="h-5 w-5" />}>
-            {t("preview.loadFailed")}
-            <button
-              type="button"
-              onClick={() => setNonce((n) => n + 1)}
-              className="font-medium underline underline-offset-4 hover:opacity-80"
-            >
-              {t("preview.retry")}
-            </button>
-          </PreviewMessage>
-        ) : card.shown ? (
-          <img
-            src={card.shown}
-            alt={t("preview.alt")}
-            className={cn(
-              "max-w-full transition-opacity duration-200",
-              (card.loading || card.error) && "opacity-50",
-            )}
-          />
-        ) : (
-          <LoaderCircle
-            className={cn(
-              "h-5 w-5 animate-spin",
-              backdrop === "dark" ? "text-zinc-500" : "text-zinc-400",
-            )}
-          />
-        )}
+        {instanceMissing
+          ? (
+              <PreviewMessage backdrop={backdrop} icon={<Unplug className="h-5 w-5" />}>
+                <span className="max-w-sm">{t("preview.noInstance")}</span>
+                <Button size="sm" variant="secondary" onClick={onUseSuggestedInstance}>
+                  {t("preview.useSuggestedInstance")}
+                </Button>
+                <span className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+                  <button
+                    type="button"
+                    onClick={onSetupInstance}
+                    className="font-medium underline underline-offset-4 hover:opacity-80"
+                  >
+                    {t("preview.setupInstance")}
+                  </button>
+                  <a
+                    href={DEPLOY_GUIDE_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline underline-offset-4 hover:opacity-80"
+                  >
+                    {t("preview.deployGuide")}
+                    {" "}
+                    ↗
+                  </a>
+                </span>
+              </PreviewMessage>
+            )
+          : !ready
+              ? (
+                  <PreviewMessage backdrop={backdrop} icon={<TriangleAlert className="h-5 w-5" />}>
+                    {t("preview.missingRequired", {
+                      fields: missingRequired.join(t("preview.listSeparator")),
+                    })}
+                  </PreviewMessage>
+                )
+              : card.error && !card.shown
+                ? (
+                    <PreviewMessage backdrop={backdrop} icon={<ImageOff className="h-5 w-5" />}>
+                      {t("preview.loadFailed")}
+                      <button
+                        type="button"
+                        onClick={() => setNonce(n => n + 1)}
+                        className="font-medium underline underline-offset-4 hover:opacity-80"
+                      >
+                        {t("preview.retry")}
+                      </button>
+                    </PreviewMessage>
+                  )
+                : card.shown
+                  ? (
+                      <img
+                        src={card.shown}
+                        alt={t("preview.alt")}
+                        className={cn(
+                          "max-w-full transition-opacity duration-200",
+                          (card.loading || card.error) && "opacity-50",
+                        )}
+                      />
+                    )
+                  : (
+                      <LoaderCircle
+                        className={cn(
+                          "h-5 w-5 animate-spin",
+                          backdrop === "dark" ? "text-zinc-500" : "text-zinc-400",
+                        )}
+                      />
+                    )}
 
         {ready && card.shown && card.error && (
           <span className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-md bg-destructive px-2 py-1 text-xs text-destructive-foreground shadow-sm">
             {t("preview.staleError")}
             <button
               type="button"
-              onClick={() => setNonce((n) => n + 1)}
+              onClick={() => setNonce(n => n + 1)}
               className="shrink-0 rounded border border-current/50 px-1.5 py-0.5 font-medium hover:bg-white/10"
             >
               {t("preview.retry")}
@@ -248,7 +262,7 @@ export function Preview({
               setFormat(f)
               writeStorage(LS_FORMAT, f)
             }}
-            options={FORMATS.map((f) => ({ value: f, label: FORMAT_LABEL[f] }))}
+            options={FORMATS.map(f => ({ value: f, label: FORMAT_LABEL[f] }))}
           />
           <CopyButton
             text={output}
@@ -281,15 +295,17 @@ export function Preview({
                 BACKDROP_CLASS[backdrop],
               )}
             >
-              {ready && card.shown ? (
-                <img
-                  src={card.shown}
-                  alt=""
-                  className={cn("max-h-full max-w-full", card.loading && "opacity-50")}
-                />
-              ) : (
-                <TriangleAlert className="h-4 w-4 text-zinc-400" />
-              )}
+              {ready && card.shown
+                ? (
+                    <img
+                      src={card.shown}
+                      alt=""
+                      className={cn("max-h-full max-w-full", card.loading && "opacity-50")}
+                    />
+                  )
+                : (
+                    <TriangleAlert className="h-4 w-4 text-zinc-400" />
+                  )}
             </span>
             <span className="min-w-0">
               <span className="block text-sm font-medium">{t("preview.live")}</span>
@@ -315,31 +331,33 @@ export function Preview({
  */
 function useCardImage(src: string) {
   const [shown, setShown] = useState("")
-  const [state, setState] = useState<{ src: string; status: "loading" | "ok" | "error" }>({
+  const [state, setState] = useState<{ src: string, status: "loading" | "ok" | "error" }>({
     src: "",
     status: "ok",
   })
 
   useEffect(() => {
-    if (!src) return
+    if (!src)
+      return
     let cancelled = false
     let img: HTMLImageElement | undefined
     let retry: ReturnType<typeof setTimeout> | undefined
-    setState({ src, status: "loading" })
 
     const load = (attempt: number) => {
       img = new Image()
       img.onload = () => {
-        if (cancelled) return
+        if (cancelled)
+          return
         setShown(src)
         setState({ src, status: "ok" })
       }
       img.onerror = () => {
-        if (cancelled) return
+        if (cancelled)
+          return
         // Instances answer errors with a 200 SVG, so a load failure is the
         // transport (network blip, platform error): try once more, quietly.
         if (attempt === 0) {
-          retry = setTimeout(() => load(1), RETRY_DELAY_MS)
+          retry = setTimeout(load, RETRY_DELAY_MS, 1)
           return
         }
         setState({ src, status: "error" })
@@ -351,7 +369,8 @@ function useCardImage(src: string) {
     return () => {
       cancelled = true
       clearTimeout(retry)
-      if (img) img.onload = img.onerror = null
+      if (img)
+        img.onload = img.onerror = null
     }
   }, [src])
 
@@ -413,7 +432,7 @@ function Segmented<T extends string>({
   label: string
   value: T
   onChange: (v: T) => void
-  options: { value: T; label: string; icon?: ReactNode }[]
+  options: { value: T, label: string, icon?: ReactNode }[]
 }) {
   // Toggle buttons rather than radios: radios would promise arrow-key movement.
   return (

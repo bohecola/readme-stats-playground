@@ -1,12 +1,13 @@
-import { type ReactNode } from "react"
+import type { ReactNode } from "react"
+import type { ParamValue, ParamValues } from "@/lib/buildUrl"
+import type { EndpointDef, ParamDef } from "@/lib/endpoints"
+
+import type { ParamScope } from "@/lib/paramText"
 import { ChevronDown } from "lucide-react"
 import { useTranslation } from "react-i18next"
-
 import { ParamControl } from "@/components/ParamControl"
 import { Separator } from "@/components/ui/separator"
-import { COMMON_PARAMS, type EndpointDef, type ParamDef } from "@/lib/endpoints"
-import type { ParamValue, ParamValues } from "@/lib/buildUrl"
-import type { ParamScope } from "@/lib/paramText"
+import { COMMON_PARAMS } from "@/lib/endpoints"
 import { readStorage, writeStorage } from "@/lib/storage"
 import { cn } from "@/lib/utils"
 
@@ -37,8 +38,9 @@ export function CardForm({
   // Only once (this component stays mounted across tabs) and only with a
   // mouse, since a popped-up keyboard would push the preview off screen.
   const [autoFocusKey] = useState(() => {
-    if (!window.matchMedia?.("(pointer: fine)").matches) return null
-    const first = endpoint.params.find((p) => p.required)
+    if (!window.matchMedia?.("(pointer: fine)").matches)
+      return null
+    const first = endpoint.params.find(p => p.required)
     return first && !values[first.key] ? first.key : null
   })
 
@@ -49,7 +51,7 @@ export function CardForm({
     setStyleOpen(next)
     writeStorage(LS_STYLE_OPEN, next ? "1" : "0")
   }
-  const styleCount = COMMON_PARAMS.filter((p) => setKeys.has(p.key)).length
+  const styleCount = COMMON_PARAMS.filter(p => setKeys.has(p.key)).length
 
   return (
     <div className="space-y-7">
@@ -67,7 +69,7 @@ export function CardForm({
         params={COMMON_PARAMS}
         collapsed={!styleOpen}
         onToggle={toggleStyle}
-        meta={
+        meta={(
           <>
             {styleCount > 0 && (
               <span className="text-xs font-normal tabular-nums text-muted-foreground">
@@ -80,8 +82,8 @@ export function CardForm({
               </span>
             )}
           </>
-        }
-        note={
+        )}
+        note={(
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
             {ownStyle ? t("form.ownStyleNote") : t("form.sharedStyleNote")}
             <button
@@ -92,7 +94,7 @@ export function CardForm({
               {ownStyle ? t("form.useSharedStyle") : t("form.customizeStyle")}
             </button>
           </p>
-        }
+        )}
         {...shared}
       />
     </div>
@@ -127,11 +129,11 @@ function FieldSet({
   /** Explanatory line under the heading, shown while open. */
   note?: ReactNode
 }) {
-  const toggles = params.filter((p) => p.type === "boolean")
+  const toggles = params.filter(p => p.type === "boolean")
   // A lone toggle or two would leave a half-empty list, so fold them into the
   // field grid (in declaration order) instead of grouping them separately.
   const inlineToggles = toggles.length <= 2
-  const gridParams = inlineToggles ? params : params.filter((p) => p.type !== "boolean")
+  const gridParams = inlineToggles ? params : params.filter(p => p.type !== "boolean")
   const listToggles = inlineToggles ? [] : toggles
 
   const heading = (
@@ -145,33 +147,35 @@ function FieldSet({
   return (
     <section className="space-y-4">
       <h3 className="flex items-center gap-2 text-sm font-semibold">
-        {onToggle ? (
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-expanded={!collapsed}
-            className="-m-1 flex flex-1 items-center gap-2 rounded-md p-1 text-left hover:bg-accent/60 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
-          >
-            {heading}
-            <ChevronDown
-              className={cn(
-                "ml-auto h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
-                collapsed && "-rotate-90",
-              )}
-            />
-          </button>
-        ) : (
-          heading
-        )}
+        {onToggle
+          ? (
+              <button
+                type="button"
+                onClick={onToggle}
+                aria-expanded={!collapsed}
+                className="-m-1 flex flex-1 items-center gap-2 rounded-md p-1 text-left hover:bg-accent/60 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                {heading}
+                <ChevronDown
+                  className={cn(
+                    "ml-auto h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
+                    collapsed && "-rotate-90",
+                  )}
+                />
+              </button>
+            )
+          : (
+              heading
+            )}
       </h3>
 
-      {collapsed ? null : (
+      {!collapsed && (
         <>
           {note}
 
           {gridParams.length > 0 && (
             <div className="grid grid-cols-1 items-start gap-x-5 gap-y-5 sm:grid-cols-2">
-              {gridParams.map((param) => (
+              {gridParams.map(param => (
                 <div
                   key={param.key}
                   className={param.type === "multiselect" ? "sm:col-span-2" : undefined}
@@ -193,7 +197,7 @@ function FieldSet({
           {listToggles.length > 0 && (
             <div className="overflow-hidden rounded-lg border">
               <div className="grid grid-cols-1 gap-px bg-border sm:grid-cols-2">
-                {listToggles.map((param) => (
+                {listToggles.map(param => (
                   <div key={param.key} className="bg-card transition-colors hover:bg-accent/40">
                     <ParamControl
                       param={param}

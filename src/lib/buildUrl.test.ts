@@ -3,8 +3,8 @@ import { describe, expect, it } from "vitest"
 import { buildUrl, normalizeBaseUrl, toHtml, toMarkdown } from "./buildUrl"
 import { ENDPOINTS } from "./endpoints"
 
-const stats = ENDPOINTS.find((e) => e.id === "stats")!
-const pin = ENDPOINTS.find((e) => e.id === "pin")!
+const stats = ENDPOINTS.find(e => e.id === "stats")!
+const pin = ENDPOINTS.find(e => e.id === "pin")!
 const BASE = "https://example.com"
 
 describe("normalizeBaseUrl", () => {
@@ -70,6 +70,6 @@ describe("buildUrl", () => {
 describe("snippets", () => {
   it("wraps the URL in Markdown and HTML", () => {
     expect(toMarkdown("https://x/api", "stats card")).toBe("![stats card](https://x/api)")
-    expect(toHtml("https://x/api", "stats card")).toBe('<img src="https://x/api" alt="stats card" />')
+    expect(toHtml("https://x/api", "stats card")).toBe("<img src=\"https://x/api\" alt=\"stats card\" />")
   })
 })

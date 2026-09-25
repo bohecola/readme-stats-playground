@@ -151,12 +151,12 @@
     "description_lines_count": { "label": "説明の行数", "hint": "1–3" },
     "display_format": { "label": "表示形式", "hint": "time: 時間 · percent: 割合" },
     "api_domain": { "label": "API ドメイン", "placeholder": "既定 wakatime.com", "hint": "セルフホストした WakaTime のドメイン" },
-    "owner": {"label":"対象オーナーを限定","placeholder":"例: octocat,github","hint":"prs_authored / prs_commented / prs_reviewed / issues_authored / issues_commented のみに影響。カンマ区切り"},
-    "role": {"label":"リポジトリでの役割","hint":"集計に含めるリポジトリを役割で絞り込み：OWNER（既定）、ORGANIZATION_MEMBER、COLLABORATOR"},
-    "contribs_include_own_repos": {"label":"contribs に自分のリポジトリを含める","hint":"contribs と all_time_contribs の計算に自分のリポジトリも含めます。既定では他人のリポジトリのみ"},
-    "prog_bar_bg_color": {"label":"バーの背景色","hint":"normal レイアウトのみ"},
-    "hide_values": {"label":"数値を隠す","hint":"バーやチャートは残し、割合 / バイト数だけ隠します"},
-    "browser_rendering": {"label":"ブラウザ側で折り返し","hint":"説明文の折り返しをサーバーではなくブラウザで計算します"},
+    "owner": { "label": "対象オーナーを限定", "placeholder": "例: octocat,github", "hint": "prs_authored / prs_commented / prs_reviewed / issues_authored / issues_commented のみに影響。カンマ区切り" },
+    "role": { "label": "リポジトリでの役割", "hint": "集計に含めるリポジトリを役割で絞り込み：OWNER（既定）、ORGANIZATION_MEMBER、COLLABORATOR" },
+    "contribs_include_own_repos": { "label": "contribs に自分のリポジトリを含める", "hint": "contribs と all_time_contribs の計算に自分のリポジトリも含めます。既定では他人のリポジトリのみ" },
+    "prog_bar_bg_color": { "label": "バーの背景色", "hint": "normal レイアウトのみ" },
+    "hide_values": { "label": "数値を隠す", "hint": "バーやチャートは残し、割合 / バイト数だけ隠します" },
+    "browser_rendering": { "label": "ブラウザ側で折り返し", "hint": "説明文の折り返しをサーバーではなくブラウザで計算します" },
     "id": { "label": "Gist ID", "placeholder": "Gist ID" }
   },
   "cardParams": {
@@ -164,7 +164,7 @@
       "custom_title": { "placeholder": "既定 <名前>'s GitHub Stats" },
       "hide": { "label": "隠す統計", "placeholder": "", "hint": "" },
       "exclude_repo": { "hint": "これらのリポジトリのスターは集計から除外。カンマ区切り" },
-      "repo": {"label":"対象リポジトリを限定","placeholder":"例: repo1,repo2","hint":"prs_authored / prs_commented / prs_reviewed / issues_authored / issues_commented のみに影響。カンマ区切り"}
+      "repo": { "label": "対象リポジトリを限定", "placeholder": "例: repo1,repo2", "hint": "prs_authored / prs_commented / prs_reviewed / issues_authored / issues_commented のみに影響。カンマ区切り" }
     },
     "top-langs": {
       "custom_title": { "placeholder": "既定 Most Used Languages" }

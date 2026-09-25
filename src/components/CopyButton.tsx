@@ -2,6 +2,7 @@ import { Check, Copy } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
+import { useCopy } from "@/hooks/useCopy"
 import { cn } from "@/lib/utils"
 
 interface CopyButtonProps {
@@ -10,35 +11,6 @@ interface CopyButtonProps {
   disabled?: boolean
   variant?: React.ComponentProps<typeof Button>["variant"]
   className?: string
-}
-
-/** Clipboard write with a fallback; `copied` flips back after a moment. */
-export function useCopy() {
-  const [copied, setCopied] = useState(false)
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
-
-  useEffect(() => () => clearTimeout(timer.current), [])
-
-  const copy = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text)
-    } catch {
-      // Fallback for insecure contexts / older browsers.
-      const el = document.createElement("textarea")
-      el.value = text
-      el.style.position = "fixed"
-      el.style.opacity = "0"
-      document.body.appendChild(el)
-      el.select()
-      document.execCommand("copy")
-      document.body.removeChild(el)
-    }
-    setCopied(true)
-    clearTimeout(timer.current)
-    timer.current = setTimeout(() => setCopied(false), 1500)
-  }
-
-  return { copied, copy }
 }
 
 export function CopyButton({ text, label, disabled, variant, className }: CopyButtonProps) {

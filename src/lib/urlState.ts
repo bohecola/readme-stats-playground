@@ -1,5 +1,7 @@
-import { allParams, buildUrl, normalizeBaseUrl, type ParamValue, type ParamValues } from "./buildUrl"
-import { ENDPOINTS, type CardId, type EndpointDef, type ParamDef } from "./endpoints"
+import type { ParamValue, ParamValues } from "./buildUrl"
+import type { CardId, EndpointDef, ParamDef } from "./endpoints"
+import { allParams, buildUrl, normalizeBaseUrl } from "./buildUrl"
+import { ENDPOINTS } from "./endpoints"
 
 /**
  * The playground's own URL mirrors the card: `?card=stats&username=x&theme=dark`.
@@ -23,9 +25,9 @@ function parse(param: ParamDef, text: string): ParamValue {
     case "boolean":
       return text === "true" ? true : text === "false" ? false : undefined
     case "multiselect": {
-      const picked = text.split(",").map((s) => s.trim())
+      const picked = text.split(",").map(s => s.trim())
       const allowed = [...(param.choices ?? []), ...(param.extendedChoices ?? [])]
-      const known = allowed.length ? picked.filter((s) => allowed.includes(s)) : picked
+      const known = allowed.length ? picked.filter(s => allowed.includes(s)) : picked
       return known.length ? known : undefined
     }
     case "select":
@@ -41,15 +43,18 @@ function parse(param: ParamDef, text: string): ParamValue {
 
 export function parseUrlState(search: string): UrlState | null {
   const query = new URLSearchParams(search)
-  const endpoint = ENDPOINTS.find((e) => e.id === query.get(CARD_KEY))
-  if (!endpoint) return null
+  const endpoint = ENDPOINTS.find(e => e.id === query.get(CARD_KEY))
+  if (!endpoint)
+    return null
 
   const values: ParamValues = {}
   for (const param of allParams(endpoint)) {
     const text = query.get(param.key)
-    if (text === null) continue
+    if (text === null)
+      continue
     const value = parse(param, text)
-    if (value !== undefined) values[param.key] = value
+    if (value !== undefined)
+      values[param.key] = value
   }
   // An empty `instance=` is deliberate ("no instance" on a deployment that has a default).
   const instance = query.get(INSTANCE_KEY)
@@ -64,13 +69,14 @@ export function toUrlSearch(
   defaultBaseUrl: string,
 ): string {
   const pairs: [string, string][] = [[CARD_KEY, endpoint.id], ...buildUrl(baseUrl, endpoint, values).pairs]
-  if (baseUrl !== defaultBaseUrl) pairs.push([INSTANCE_KEY, baseUrl])
+  if (baseUrl !== defaultBaseUrl)
+    pairs.push([INSTANCE_KEY, baseUrl])
   return (
-    "?" +
-    pairs
+    `?${
+      pairs
       // Keep lists (hide=stars,commits) and the instance URL readable; these
       // characters are valid unescaped in a query value.
-      .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v).replace(/%2C/g, ",").replace(/%3A/g, ":").replace(/%2F/g, "/")}`)
-      .join("&")
+        .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v).replace(/%2C/g, ",").replace(/%3A/g, ":").replace(/%2F/g, "/")}`)
+        .join("&")}`
   )
 }

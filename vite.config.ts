@@ -1,8 +1,10 @@
+import type { Plugin } from "vite"
 import path from "node:path"
+import process from "node:process"
 import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
 import AutoImport from "unplugin-auto-import/vite"
-import { defineConfig, loadEnv, type Plugin } from "vite"
+import { defineConfig, loadEnv } from "vite"
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE_")
@@ -20,8 +22,13 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "./src"),
+        "@": path.resolve(import.meta.dirname, "./src"),
       },
+    },
+    build: {
+      // One chunk (React, Radix, i18n, three locales) caches better than
+      // splitting a static site; it sits just above the default 500 kB warning.
+      chunkSizeWarningLimit: 600,
     },
   }
 })
@@ -36,22 +43,23 @@ function siteMeta(siteUrl: string | undefined): Plugin {
   return {
     name: "site-meta",
     transformIndexHtml() {
-      if (!base) return []
+      if (!base)
+        return []
       const url = `${base}/`
       const jsonLd = {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        name: "README Stats Playground",
+        "name": "README Stats Playground",
         url,
-        description:
+        "description":
           "Visual playground for github-readme-stats and GitHub Stats Extended cards: tweak parameters, preview live, copy the Markdown for your GitHub profile README.",
-        applicationCategory: "DeveloperApplication",
-        operatingSystem: "Any",
-        browserRequirements: "Requires JavaScript",
-        isAccessibleForFree: true,
-        image: `${base}/og.png`,
-        sameAs: "https://github.com/bohecola/readme-stats-playground",
-        isBasedOn: ["https://github.com/anuraghazra/github-readme-stats", "https://github.com/stats-organization/github-stats-extended"],
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "isAccessibleForFree": true,
+        "image": `${base}/og.png`,
+        "sameAs": "https://github.com/bohecola/readme-stats-playground",
+        "isBasedOn": ["https://github.com/anuraghazra/github-readme-stats", "https://github.com/stats-organization/github-stats-extended"],
       }
       return [
         { tag: "link", attrs: { rel: "canonical", href: url }, injectTo: "head" },
