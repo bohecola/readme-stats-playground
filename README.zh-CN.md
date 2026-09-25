@@ -3,7 +3,7 @@
 [![CI](https://github.com/bohecola/readme-stats-playground/actions/workflows/ci.yml/badge.svg)](https://github.com/bohecola/readme-stats-playground/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-[English](./README.md) | 简体中文
+[English](./README.md) | 简体中文 | [日本語](./README.ja.md)
 
 [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) 卡片的可视化调参工具：左侧改参数，右侧实时预览，一键复制 URL / Markdown / HTML 到你的 GitHub 主页 README。
 
@@ -80,7 +80,7 @@ src/
 │   └── ui/                  # shadcn/ui 组件（与 registry 保持一致，不手改）
 ├── auto-imports.d.ts        # unplugin-auto-import 生成，React hooks 无需 import
 ├── i18n.ts                  # i18next 初始化与语言检测
-├── locales/                 # 翻译文件（en.json / zh.json）
+├── locales/                 # 翻译文件（en.json / zh.json / ja.json）
 └── lib/
     ├── config.ts            # 环境变量读取的默认配置
     ├── endpoints.ts         # 各卡片的参数结构（类型、默认值、取值范围）

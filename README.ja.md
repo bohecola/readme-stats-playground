@@ -1,0 +1,108 @@
+# README Stats Playground
+
+[![CI](https://github.com/bohecola/readme-stats-playground/actions/workflows/ci.yml/badge.svg)](https://github.com/bohecola/readme-stats-playground/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
+[English](./README.md) | [简体中文](./README.zh-CN.md) | 日本語
+
+[github-readme-stats](https://github.com/anuraghazra/github-readme-stats) カードのビジュアルプレイグラウンド。左でパラメータを調整し、右でライブプレビューを確認して、URL / Markdown / HTML をそのまま GitHub プロフィールの README にコピーできます。
+
+![README Stats Playground のスクリーンショット](./docs/screenshot.ja.png)
+
+> これはコミュニティ製のツールで、github-readme-stats 公式とは関係ありません。カードは指定した github-readme-stats インスタンスで描画されます。
+
+## 機能
+
+- github-readme-stats の全 5 種類のカードに対応：Stats、Top Languages、Pin、WakaTime、Gist
+- すべてのパラメータをフォームで編集。名前・説明・元のパラメータ名を表示し、URL に含まれるものはマークされます
+- ライブプレビューと、URL / Markdown / HTML のワンクリックコピー
+- 共通スタイルは全カードで共有。必要ならカードごとに個別設定も可能
+- セルフホストしたインスタンスにも対応。データはすべてブラウザ内に保存されます
+
+## はじめに
+
+Node.js 20 以上と pnpm 11 が必要です（`corepack enable` で `package.json` に固定されたバージョンが入ります）。
+
+```bash
+pnpm install
+pnpm dev        # http://localhost:5173
+pnpm build      # 型チェック + 本番ビルド（dist/ に出力）
+pnpm preview    # 本番ビルドをローカルで確認
+```
+
+## 設定
+
+既定値はビルド時の環境変数で指定します。`.env.example` を `.env.local`（git 管理外）にコピーするか、ホスティングサービス側で設定してください：
+
+| 変数 | 説明 | 既定値 |
+| --- | --- | --- |
+| `VITE_DEFAULT_BASE_URL` | 既定で使う github-readme-stats インスタンス | `https://github-readme-stats.vercel.app` |
+| `VITE_DEFAULT_USERNAME` | 初回アクセス時にあらかじめ入力される GitHub ユーザー名 | 空 |
+
+> 公開インスタンスは全員で共有されているため、GitHub API のレート制限に頻繁にかかります。[自前でデプロイ](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own)して `VITE_DEFAULT_BASE_URL` に設定することをおすすめします。
+
+## デプロイ
+
+完全な静的サイトです。`pnpm build` 後の `dist/` を任意の静的ホスティングに配置してください。
+
+- **Vercel / Netlify**：リポジトリをインポートし、ビルドコマンド `pnpm build`、出力ディレクトリ `dist` を指定。必要に応じて上記の環境変数を追加します。
+
+  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground)
+
+- **GitHub Pages**：サブパス（`https://<user>.github.io/<repo>/`）で配信する場合は、ベースパスを指定してビルドします：`pnpm build --base=/<repo>/`
+
+## トラブルシューティング
+
+プレビューに表示されるエラーは、使用している github-readme-stats インスタンスからのものです。プレイグラウンドはそれをそのまま表示しているだけです：
+
+| メッセージ | 原因 | 対処 |
+| --- | --- | --- |
+| `This username is not whitelisted` | インスタンスに `WHITELIST` が設定されており、リストにあるユーザー名しか許可されていない | 許可されたユーザー名を使うか、インスタンスから `WHITELIST` を外す |
+| `Bad credentials` | インスタンスの `PAT_1`（GitHub Personal Access Token）が期限切れまたは無効 | インスタンス側でトークンを更新する |
+| `Maximum retries exceeded` / レート制限 | インスタンスの GitHub API 割り当てを使い切った（公開インスタンスでよく起きる） | 時間をおいて再試行するか、自前のインスタンスをデプロイする |
+
+## プロジェクト構成
+
+```
+src/
+├── App.tsx                  # ページレイアウトと状態管理
+├── components/
+│   ├── CardTabs.tsx         # カード種別のタブ
+│   ├── CardForm.tsx         # カードごとのパラメータフォーム
+│   ├── ParamControl.tsx     # パラメータ型ごとのコントロール
+│   ├── ColorPicker.tsx      # カラーピッカー（グラデーション編集を含む）
+│   ├── Preview.tsx          # ライブプレビュー + URL/Markdown/HTML 出力
+│   ├── NumberInput.tsx      # ステッパー付き数値入力
+│   ├── HintTip.tsx          # 説明バブル（情報アイコン、または点線下線付きテキスト）
+│   ├── CopyButton.tsx       # コピーボタン
+│   ├── LanguageToggle.tsx   # 言語切り替え
+│   ├── ThemeToggle.tsx      # ライト / ダーク切り替え
+│   └── ui/                  # shadcn/ui コンポーネント（registry と同一のまま保持）
+├── auto-imports.d.ts        # unplugin-auto-import が生成。React hooks の import は不要
+├── i18n.ts                  # i18next の初期化と言語検出
+├── locales/                 # 翻訳ファイル（en.json / zh.json / ja.json）
+└── lib/
+    ├── config.ts            # 環境変数からの既定値
+    ├── endpoints.ts         # カードごとのパラメータ定義（型・既定値・範囲）
+    ├── paramText.ts         # パラメータ文言の解決（カード個別 → 共通）
+    ├── buildUrl.ts          # カード URL の組み立て（既定値と空値は省略）
+    ├── color.ts             # 色の変換とグラデーションの解析
+    └── themes.ts            # 組み込みテーマ一覧
+```
+
+## 技術スタック
+
+[Vite](https://vitejs.dev/) · [React 19](https://react.dev/) · TypeScript · [Tailwind CSS 4](https://tailwindcss.com/) · [shadcn/ui](https://ui.shadcn.com/) · [react-i18next](https://react.i18next.com/) · [react-colorful](https://github.com/omgovich/react-colorful) · [lucide](https://lucide.dev/)
+
+## コントリビュート
+
+Issue や Pull Request を歓迎します。送る前に `pnpm lint` と `pnpm build` が通ることを確認してください（CI でも両方チェックされます）。
+
+- **React hooks は import 不要**：`useState`、`useEffect` などは `unplugin-auto-import` が提供し、`src/auto-imports.d.ts` に宣言されます（dev / build 時に再生成されるので、一緒にコミットしてください）。
+- **`src/components/ui/` は手で編集しない**：shadcn/ui の生成物そのままです。カスタマイズは呼び出し側で prop を渡すか、ラッパーコンポーネントで行ってください。そうすれば `npx shadcn@latest add --overwrite <component>` でいつでも再取得できます。
+- **パラメータの追加・変更**：`src/lib/endpoints.ts` に定義を追加し、`src/locales/*.json` の `params` に名前と説明を追加します（特定カードだけ文言を変えたい場合は `cardParams.<card>` で上書き）。
+- **言語の追加**：`src/locales/en.json` をコピーして翻訳し、`src/i18n.ts` に登録します。各言語ファイルのキーは揃えてください。
+
+## ライセンス
+
+[MIT](./LICENSE)
