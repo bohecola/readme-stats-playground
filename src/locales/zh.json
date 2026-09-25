@@ -3,7 +3,7 @@
     "baseUrl": "部署域名",
     "resetBaseUrl": "恢复默认域名",
     "upstreamRepo": "github-readme-stats 仓库",
-    "footerBuiltOn": "基于 <link>github-readme-stats</link> 构建的可视化调参工具",
+    "footerBuiltOn": "基于 <repo>github-readme-stats</repo> 构建的可视化调参工具",
     "footerTagline": "调整参数、实时预览，复制代码即可用在 README 中"
   },
   "language": {

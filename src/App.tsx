@@ -225,8 +225,9 @@ export default function App() {
             <Trans
               i18nKey="app.footerBuiltOn"
               components={{
-                link: (
-                  // Text comes from the translation's <link>…</link>.
+                repo: (
+                  // Text comes from the translation's <repo>…</repo> (not <link>: that is a void
+                  // HTML element, so the parser would leave the link empty).
                   // eslint-disable-next-line jsx-a11y/anchor-has-content
                   <a
                     href={UPSTREAM_REPO_URL}
