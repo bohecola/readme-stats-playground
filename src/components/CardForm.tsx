@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import { ParamControl } from "@/components/ParamControl"
@@ -17,12 +18,21 @@ interface CardFormProps {
 export function CardForm({ endpoint, values, onChange, setKeys }: CardFormProps) {
   const { t } = useTranslation()
   const shared = { values, onChange, setKeys }
+  // First visit with nothing filled in: put the cursor in the required field.
+  // Only once (this component stays mounted across tabs) and only with a
+  // mouse, since a popped-up keyboard would push the preview off screen.
+  const [autoFocusKey] = useState(() => {
+    if (!window.matchMedia?.("(pointer: fine)").matches) return null
+    const first = endpoint.params.find((p) => p.required)
+    return first && !values[first.key] ? first.key : null
+  })
   return (
     <div className="space-y-7">
       <FieldSet
         title={t("form.cardParams")}
         scope={endpoint.id}
         params={endpoint.params}
+        autoFocusKey={autoFocusKey}
         {...shared}
       />
       <Separator />
@@ -38,6 +48,7 @@ function FieldSet({
   values,
   onChange,
   setKeys,
+  autoFocusKey,
 }: {
   title: string
   scope: ParamScope
@@ -45,6 +56,7 @@ function FieldSet({
   values: ParamValues
   onChange: (key: string, value: ParamValue) => void
   setKeys: ReadonlySet<string>
+  autoFocusKey?: string | null
 }) {
   const toggles = params.filter((p) => p.type === "boolean")
   // A lone toggle or two would leave a half-empty list, so fold them into the
@@ -74,6 +86,7 @@ function FieldSet({
                 toggleLayout="field"
                 isSet={setKeys.has(param.key)}
                 scope={scope}
+                autoFocus={param.key === autoFocusKey}
               />
             </div>
           ))}
