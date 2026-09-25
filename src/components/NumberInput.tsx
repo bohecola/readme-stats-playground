@@ -77,7 +77,7 @@ export function NumberInput({
   const atMax = max !== undefined && parsed >= max
 
   return (
-    <div className="flex h-9 items-stretch overflow-hidden rounded-md border border-input shadow-sm transition-colors focus-within:ring-1 focus-within:ring-ring">
+    <div className="flex h-9 items-stretch overflow-hidden rounded-md border border-input shadow-xs transition-colors focus-within:ring-1 focus-within:ring-ring">
       <input
         id={id}
         value={value}
@@ -94,7 +94,7 @@ export function NumberInput({
           // Pull out-of-range typing back into bounds once the user is done.
           if (!Number.isNaN(parsed) && clamp(parsed) !== parsed) onChange(String(clamp(parsed)))
         }}
-        className="min-w-0 flex-1 bg-transparent px-3 text-sm tabular-nums outline-none placeholder:text-muted-foreground"
+        className="min-w-0 flex-1 bg-transparent px-3 text-sm tabular-nums outline-hidden placeholder:text-muted-foreground"
       />
       {unit && (
         <span className="flex select-none items-center pr-2.5 text-xs text-muted-foreground">

@@ -40,7 +40,7 @@ const PRESETS = [
 ]
 
 const CHECKER =
-  "bg-[conic-gradient(#d4d4d8_90deg,#fff_90deg_180deg,#d4d4d8_180deg_270deg,#fff_270deg)] [background-size:8px_8px] bg-clip-padding"
+  "bg-[conic-gradient(#d4d4d8_90deg,#fff_90deg_180deg,#d4d4d8_180deg_270deg,#fff_270deg)] bg-size-[8px_8px] bg-clip-padding"
 
 const LS_RECENT = "rsp:recentColors"
 const LS_FORMAT = "rsp:colorFormat"
@@ -105,7 +105,7 @@ export function ColorPicker({
   return (
     <div
       className={cn(
-        "flex h-9 items-center gap-2 rounded-md border border-input bg-transparent pl-1.5 pr-1 shadow-sm transition-colors focus-within:ring-1 focus-within:ring-ring",
+        "flex h-9 items-center gap-2 rounded-md border border-input bg-transparent pl-1.5 pr-1 shadow-xs transition-colors focus-within:ring-1 focus-within:ring-ring",
         invalid && "border-destructive focus-within:ring-destructive",
       )}
     >
@@ -115,7 +115,7 @@ export function ColorPicker({
             type="button"
             aria-label={t("color.open")}
             className={cn(
-              "relative h-6 w-6 shrink-0 overflow-hidden rounded border border-black/10 shadow-sm transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-white/15",
+              "relative h-6 w-6 shrink-0 overflow-hidden rounded border border-black/10 shadow-xs transition-transform hover:scale-110 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring dark:border-white/15",
               CHECKER,
             )}
           >
@@ -147,7 +147,7 @@ export function ColorPicker({
           placeholder ?? (allowGradient ? t("color.followThemeOrGradient") : t("color.followTheme"))
         }
         onChange={(e) => onChange(e.target.value.replace(/^#/, ""))}
-        className="h-full min-w-0 flex-1 bg-transparent font-mono text-sm outline-none placeholder:font-sans placeholder:text-muted-foreground"
+        className="h-full min-w-0 flex-1 bg-transparent font-mono text-sm outline-hidden placeholder:font-sans placeholder:text-muted-foreground"
       />
       {value && (
         <button
@@ -210,7 +210,7 @@ function PickerPanel({
                 className={cn(
                   "rounded px-2 py-1 transition-colors",
                   active
-                    ? "bg-background text-foreground shadow-sm"
+                    ? "bg-background text-foreground shadow-xs"
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
@@ -275,7 +275,7 @@ function ColorInputs({ value, onCommit }: { value: string; onCommit: (hex: strin
   return (
     <div className="flex items-center gap-1.5">
       <Select value={format} onValueChange={(f) => changeFormat(f as Format)}>
-        <SelectTrigger aria-label={t("color.format")} className="h-8 w-[66px] shrink-0 px-2 text-xs">
+        <SelectTrigger aria-label={t("color.format")} size="sm" className="w-[66px] shrink-0 px-2 text-xs">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -285,7 +285,7 @@ function ColorInputs({ value, onCommit }: { value: string; onCommit: (hex: strin
         </SelectContent>
       </Select>
 
-      <div className="flex h-8 min-w-0 flex-1 divide-x divide-input overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
+      <div className="flex h-8 min-w-0 flex-1 divide-x divide-input overflow-hidden rounded-md border border-input shadow-xs focus-within:ring-1 focus-within:ring-ring">
         {format === "hex" && <HexInput value={value} alpha={base.a} onCommit={onCommit} />}
         {format === "rgb" && (
           <>
@@ -344,7 +344,7 @@ function HexInput({
       }}
       onBlur={() => setDraft(shown)}
       className={cn(
-        "min-w-0 flex-1 bg-transparent px-2 font-mono text-xs uppercase outline-none",
+        "min-w-0 flex-1 bg-transparent px-2 font-mono text-xs uppercase outline-hidden",
         draft !== "" && !isHex(draft) && "text-destructive",
       )}
     />
@@ -392,7 +392,7 @@ function NumberField({
         }}
         onBlur={() => setDraft(shown)}
         className={cn(
-          "h-full w-full min-w-0 bg-transparent text-center font-mono text-xs tabular-nums outline-none",
+          "h-full w-full min-w-0 bg-transparent text-center font-mono text-xs tabular-nums outline-hidden",
           suffix && "pr-3",
         )}
       />

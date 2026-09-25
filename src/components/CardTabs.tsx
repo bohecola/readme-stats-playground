@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next"
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+// Radix primitives directly: this is an underline tab bar, not the pill-style ui/tabs.
+import { Tabs as TabsPrimitive } from "radix-ui"
 import type { CardId, EndpointDef } from "@/lib/endpoints"
 import { cn } from "@/lib/utils"
 
@@ -91,34 +92,34 @@ export function CardTabs({
       <div ref={sentinelRef} aria-hidden />
       <div
         className={cn(
-          "sticky top-[var(--header-h,0px)] z-20 shrink-0 border-b bg-card/95 px-4 backdrop-blur sm:px-6 lg:static transition-[border-radius,box-shadow] duration-200 supports-[backdrop-filter]:bg-card/90",
+          "sticky top-(--header-h,0px) z-20 shrink-0 border-b bg-card/95 px-4 backdrop-blur-sm sm:px-6 lg:static transition-[border-radius,box-shadow] duration-200 supports-backdrop-filter:bg-card/90",
           stuck ? "rounded-none shadow-[0_6px_12px_-8px_rgb(0_0_0/0.15)]" : "rounded-t-xl",
         )}
       >
-        <Tabs value={value} onValueChange={change} className="relative">
+        <TabsPrimitive.Root value={value} onValueChange={change} className="relative">
           <div
             aria-hidden
             className={cn(
-              "pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-card to-transparent transition-opacity duration-200",
+              "pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-linear-to-l from-card to-transparent transition-opacity duration-200",
               moreRight ? "opacity-100" : "opacity-0",
             )}
           />
-          <TabsList
+          <TabsPrimitive.List
             ref={listRef}
-            className="-mb-px flex h-auto w-full justify-start gap-6 overflow-x-auto rounded-none bg-transparent p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="-mb-px flex w-full gap-6 overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden"
           >
             {endpoints.map((e) => (
-              <TabsTrigger
+              <TabsPrimitive.Trigger
                 key={e.id}
                 value={e.id}
                 // scroll-mr matches the fade's width so a scrolled-to tab clears it.
-                className="scroll-mr-12 rounded-none border-b-2 border-transparent px-0.5 pb-3 pt-4 text-muted-foreground hover:text-foreground data-[state=active]:border-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                className="shrink-0 scroll-mr-12 border-b-2 border-transparent px-0.5 pt-4 pb-3 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-foreground data-[state=active]:text-foreground"
               >
                 {t(`cards.${e.id}.name`)}
-              </TabsTrigger>
+              </TabsPrimitive.Trigger>
             ))}
-          </TabsList>
-        </Tabs>
+          </TabsPrimitive.List>
+        </TabsPrimitive.Root>
       </div>
     </>
   )

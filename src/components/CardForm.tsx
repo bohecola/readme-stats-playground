@@ -159,7 +159,7 @@ function FieldSet({
             type="button"
             onClick={onToggle}
             aria-expanded={!collapsed}
-            className="-m-1 flex flex-1 items-center gap-2 rounded-md p-1 text-left hover:bg-accent/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="-m-1 flex flex-1 items-center gap-2 rounded-md p-1 text-left hover:bg-accent/60 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
           >
             {heading}
             <ChevronDown

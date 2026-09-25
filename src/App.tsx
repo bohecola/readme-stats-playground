@@ -201,7 +201,7 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen flex-col lg:h-dvh lg:min-h-0 lg:overflow-hidden">
-      <header ref={headerRef} className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90">
+      <header ref={headerRef} className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/90">
         <div className="container flex min-h-14 flex-wrap items-center gap-x-4 gap-y-2 py-2.5">
           <div className="flex min-w-0 flex-1 basis-0 items-center gap-2.5">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
@@ -235,11 +235,11 @@ export default function App() {
         and each column scrolls on its own. Below lg it's a normal scrolling page.
       */}
       <main className="container grid flex-1 grid-cols-1 content-start gap-6 py-6 sm:py-8 lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_minmax(360px,440px)] lg:grid-rows-[minmax(0,1fr)] lg:content-stretch lg:py-6">
-        <Card className="lg:flex lg:min-h-0 lg:flex-col lg:overflow-hidden">
+        <Card className="gap-0 py-0 lg:flex lg:min-h-0 lg:flex-col lg:overflow-hidden">
           <CardTabs endpoints={ENDPOINTS} value={activeId} onValueChange={setActiveId} />
           <div
             ref={formScrollRef}
-            className="lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:overscroll-contain lg:[scrollbar-width:thin]"
+            className="lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:overscroll-contain lg:scrollbar-thin"
           >
             <div className="flex flex-col gap-1 px-4 pb-2 pt-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6">
               <p className="text-xs leading-6 text-muted-foreground">
@@ -279,7 +279,7 @@ export default function App() {
         </Card>
 
         {/* Preview comes first on mobile so the result is visible up front. */}
-        <Card className="order-first lg:order-none lg:max-h-full lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:[scrollbar-width:thin]">
+        <Card className="gap-0 py-0 order-first lg:order-0 lg:max-h-full lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:scrollbar-thin">
           <CardContent className="p-4 sm:p-6">
             <Preview
               url={built.url}
@@ -391,7 +391,7 @@ function BaseUrlField({
               if (e.key === "Escape") finishAndRefocus()
             }}
             placeholder={DEFAULT_BASE_URL}
-            className="h-7 min-w-0 flex-1 rounded-md border border-input bg-background px-2 font-mono text-xs shadow-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
+            className="h-7 min-w-0 flex-1 rounded-md border border-input bg-background px-2 font-mono text-xs shadow-xs outline-hidden placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
           />
           {value !== DEFAULT_BASE_URL && (
             <button
@@ -423,7 +423,7 @@ function BaseUrlField({
           onClick={startEdit}
           title={t("app.editBaseUrl")}
           aria-label={`${t("app.editBaseUrl")}: ${value}`}
-          className="group -mr-1.5 flex h-7 min-w-0 flex-1 items-center gap-2 rounded-md px-2 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          className="group -mr-1.5 flex h-7 min-w-0 flex-1 items-center gap-2 rounded-md px-2 text-left transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
         >
           <span className="min-w-0 flex-1 truncate font-mono text-foreground/90">
             {displayHost(value)}

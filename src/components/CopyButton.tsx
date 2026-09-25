@@ -1,14 +1,14 @@
 import { Check, Copy } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
-import { Button, type ButtonProps } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 interface CopyButtonProps {
   text: string
   label?: string
   disabled?: boolean
-  variant?: ButtonProps["variant"]
+  variant?: React.ComponentProps<typeof Button>["variant"]
   className?: string
 }
 
