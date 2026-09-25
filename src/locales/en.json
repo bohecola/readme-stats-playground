@@ -7,8 +7,7 @@
     "footerTagline": "Tweak parameters, preview live, and copy the code into your README"
   },
   "language": {
-    "switchTo": "Switch to English",
-    "target": "EN"
+    "label": "Language"
   },
   "theme": {
     "toggle": "Toggle theme",
