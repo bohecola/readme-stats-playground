@@ -3,7 +3,7 @@
     "baseUrl": "Instance",
     "resetBaseUrl": "Reset to the default instance",
     "upstreamRepo": "github-readme-stats repository",
-    "footerBuiltOn": "A visual playground for <link>github-readme-stats</link>",
+    "footerBuiltOn": "A visual playground for <repo>github-readme-stats</repo>",
     "footerTagline": "Tweak parameters, preview live, and copy the code into your README"
   },
   "language": {
