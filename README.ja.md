@@ -53,13 +53,13 @@ pnpm preview    # 本番ビルドをローカルで確認
 
 セルフホストしなくても使えますが、次のような場合は自分でデプロイする価値があります：
 
-- プレビューの既定を、レート制限にかかりやすい公開インスタンスではなく**自分の github-readme-stats インスタンス**（`VITE_DEFAULT_BASE_URL`）にしたい
+- **自分の github-readme-stats インスタンスを最初から設定しておきたい**（`VITE_DEFAULT_BASE_URL`）。訪問者が入力する必要がなくなります
 - 自分のドメインで使いたい
 - 他人のデプロイに依存したくない
 
-Vercel でワンクリック。途中で `VITE_DEFAULT_BASE_URL` の入力を求められるので、自分のインスタンスか公開インスタンス `https://github-readme-stats.vercel.app` を入力してください：
+Vercel でワンクリック。途中で `VITE_DEFAULT_BASE_URL` の入力を求められるので、自分のインスタンスを入力するか空のままにしてください：
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground&project-name=readme-stats-playground&repository-name=readme-stats-playground&env=VITE_DEFAULT_BASE_URL&envDescription=Your%20github-readme-stats%20instance%2C%20or%20the%20public%20one%3A%20https%3A%2F%2Fgithub-readme-stats.vercel.app&envLink=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground%23configuration)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground&project-name=readme-stats-playground&repository-name=readme-stats-playground&env=VITE_DEFAULT_BASE_URL&envDescription=Your%20github-readme-stats%20instance%20(pre-filled%20for%20visitors)%3B%20leave%20empty%20to%20let%20each%20visitor%20enter%20their%20own&envLink=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground%23configuration)
 
 Vercel / Netlify / Cloudflare Pages に手動でインポートする場合：ビルドコマンド `pnpm build`、出力ディレクトリ `dist` を指定し、[設定](#設定) の環境変数を追加します。初回デプロイ後に `VITE_SITE_URL` をサイトの URL に設定して再デプロイすると、検索エンジン向けのメタデータが出力されます。
 
@@ -73,7 +73,7 @@ Vercel / Netlify / Cloudflare Pages に手動でインポートする場合：�
 | --- | --- | --- |
 | `This username is not whitelisted` | インスタンスに `WHITELIST` が設定されており、リストにあるユーザー名しか許可されていない | 許可されたユーザー名を使うか、インスタンスから `WHITELIST` を外す |
 | `Bad credentials` | インスタンスの `PAT_1`（GitHub Personal Access Token）が期限切れまたは無効 | インスタンス側でトークンを更新する |
-| `Maximum retries exceeded` / レート制限 | インスタンスの GitHub API 割り当てを使い切った（公開インスタンスでよく起きる） | 時間をおいて再試行するか、自前のインスタンスをデプロイする |
+| `Maximum retries exceeded` / レート制限 | インスタンスの GitHub API 割り当てを使い切った | 時間をおいて再試行するか、インスタンスにトークンを追加する（`PAT_2`、`PAT_3`…） |
 
 ## プロジェクト構成
 
@@ -100,6 +100,7 @@ src/
     ├── endpoints.ts         # カードごとのパラメータ定義（型・既定値・範囲）
     ├── paramText.ts         # パラメータ文言の解決（カード個別 → 共通）
     ├── buildUrl.ts          # カード URL の組み立て（既定値と空値は省略）
+    ├── urlState.ts          # ページ URL ⇄ カードの状態（共有リンク）
     ├── color.ts             # 色の変換とグラデーションの解析
     └── themes.ts            # 組み込みテーマ一覧
 ```
@@ -112,8 +113,8 @@ src/
 
 Issue や Pull Request を歓迎します。送る前に `pnpm lint` と `pnpm build` が通ることを確認してください（CI でも両方チェックされます）。
 
-- **React hooks は import 不要**：`useState`、`useEffect` などは `unplugin-auto-import` が提供し、`src/auto-imports.d.ts` に宣言されます（dev / build 時に再生成されるので、一緒にコミットしてください）。
-- **`src/components/ui/` は手で編集しない**：shadcn/ui の生成物そのままです。カスタマイズは呼び出し側で prop を渡すか、ラッパーコンポーネントで行ってください。そうすれば `npx shadcn@latest add --overwrite <component>` でいつでも再取得できます。
+プロジェクトの約束事——React hooks の自動 import、`src/components/ui/` を shadcn/ui のまま保つこと、パラメータと文言の置き場所——は [AGENTS.md](./AGENTS.md) にまとめてあります。人にもコーディングエージェントにも同じく適用されます。
+
 - **パラメータの追加・変更**：`src/lib/endpoints.ts` に定義を追加し、`src/locales/*.json` の `params` に名前と説明を追加します（特定カードだけ文言を変えたい場合は `cardParams.<card>` で上書き）。
 - **言語の追加**：`src/locales/en.json` をコピーして翻訳し、`src/i18n.ts` に登録します。各言語ファイルのキーは揃えてください。
 
