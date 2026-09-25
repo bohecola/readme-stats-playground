@@ -53,13 +53,13 @@ pnpm preview    # 本地预览生产构建
 
 不自建也能直接用，但以下情况值得自己部署一份：
 
-- 希望预览默认指向**你自己的 github-readme-stats 实例**（`VITE_DEFAULT_BASE_URL`），而不是经常限流的公共实例；
+- 希望**预填好你自己的 github-readme-stats 实例**（`VITE_DEFAULT_BASE_URL`），访客不用再填；
 - 想用自己的域名；
 - 不想依赖别人的站点。
 
-Vercel 一键部署——过程中会要求填写 `VITE_DEFAULT_BASE_URL`，填你的实例，或者公共实例 `https://github-readme-stats.vercel.app`：
+Vercel 一键部署——过程中会要求填写 `VITE_DEFAULT_BASE_URL`，填你的实例，或者留空：
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground&project-name=readme-stats-playground&repository-name=readme-stats-playground&env=VITE_DEFAULT_BASE_URL&envDescription=Your%20github-readme-stats%20instance%2C%20or%20the%20public%20one%3A%20https%3A%2F%2Fgithub-readme-stats.vercel.app&envLink=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground%23configuration)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground&project-name=readme-stats-playground&repository-name=readme-stats-playground&env=VITE_DEFAULT_BASE_URL&envDescription=Your%20github-readme-stats%20instance%20(pre-filled%20for%20visitors)%3B%20leave%20empty%20to%20let%20each%20visitor%20enter%20their%20own&envLink=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground%23configuration)
 
 也可以在 Vercel / Netlify / Cloudflare Pages 手动导入仓库：构建命令 `pnpm build`，输出目录 `dist`，再按 [配置](#配置) 一节添加环境变量。首次部署后，把 `VITE_SITE_URL` 设为站点地址并重新部署，搜索引擎用的元数据才会生成。
 
@@ -73,7 +73,7 @@ Vercel 一键部署——过程中会要求填写 `VITE_DEFAULT_BASE_URL`，填�
 | --- | --- | --- |
 | `This username is not whitelisted` | 实例设置了 `WHITELIST` 环境变量，只允许名单内的用户名 | 换成允许的用户名，或在实例中移除 `WHITELIST` |
 | `Bad credentials` | 实例的 `PAT_1`（GitHub Personal Access Token）过期或无效 | 在实例中更新 token |
-| `Maximum retries exceeded` / 限流 | 实例的 GitHub API 额度用完（公共实例常见） | 稍后再试，或部署自己的实例 |
+| `Maximum retries exceeded` / 限流 | 实例的 GitHub API 额度用完 | 稍后再试，或给实例多配几个 token（`PAT_2`、`PAT_3`…） |
 
 ## 项目结构
 
@@ -100,6 +100,7 @@ src/
     ├── endpoints.ts         # 各卡片的参数结构（类型、默认值、取值范围）
     ├── paramText.ts         # 参数文案查找（卡片覆盖 → 通用）
     ├── buildUrl.ts          # 拼接卡片 URL（省略默认值与空值）
+    ├── urlState.ts          # 页面 URL ⇄ 卡片状态（可分享链接）
     ├── color.ts             # 颜色格式换算与渐变解析
     └── themes.ts            # 内置主题列表
 ```
@@ -112,8 +113,8 @@ src/
 
 欢迎提交 Issue 和 Pull Request。提交前请确保 `pnpm lint` 和 `pnpm build` 通过（CI 会自动检查）。
 
-- **React hooks 无需 import**：`useState`、`useEffect` 等由 `unplugin-auto-import` 提供，声明在 `src/auto-imports.d.ts`（运行 dev 或 build 时自动更新，需一并提交）。
-- **`src/components/ui/` 不手改**：这些是 shadcn/ui 原样生成的组件，定制请在调用处传 prop 或另写包装组件，这样随时可以用 `npx shadcn@latest add --overwrite <组件>` 重新拉取。
+项目约定——React hooks 自动导入、`src/components/ui/` 保持 shadcn/ui 原样、参数和文案放在哪里——都写在 [AGENTS.md](./AGENTS.md) 里，对人和编码 agent 同样适用。
+
 - **新增或调整参数**：在 `src/lib/endpoints.ts` 中定义结构，并在 `src/locales/*.json` 的 `params` 下补充名称和说明（某张卡片含义不同时写在 `cardParams.<卡片>` 下覆盖）。
 - **新增语言**：复制 `src/locales/en.json` 翻译后，在 `src/i18n.ts` 中注册即可。各语言文件的 key 需保持一致。
 

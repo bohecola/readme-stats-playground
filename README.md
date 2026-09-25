@@ -53,13 +53,13 @@ It's a fully static site: run `pnpm build` and deploy `dist/` to any static host
 
 Self-hosting isn't required to use the playground, but it's worth it if you want:
 
-- previews to default to **your own github-readme-stats instance** (`VITE_DEFAULT_BASE_URL`) instead of the shared public one, which is often rate-limited;
+- **your own github-readme-stats instance pre-filled** (`VITE_DEFAULT_BASE_URL`), so nobody has to enter one;
 - your own domain;
 - no dependency on someone else's deployment.
 
-One click on Vercel — it asks for `VITE_DEFAULT_BASE_URL`; enter your instance, or the public `https://github-readme-stats.vercel.app`:
+One click on Vercel — it asks for `VITE_DEFAULT_BASE_URL`; enter your instance, or leave it empty:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground&project-name=readme-stats-playground&repository-name=readme-stats-playground&env=VITE_DEFAULT_BASE_URL&envDescription=Your%20github-readme-stats%20instance%2C%20or%20the%20public%20one%3A%20https%3A%2F%2Fgithub-readme-stats.vercel.app&envLink=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground%23configuration)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground&project-name=readme-stats-playground&repository-name=readme-stats-playground&env=VITE_DEFAULT_BASE_URL&envDescription=Your%20github-readme-stats%20instance%20(pre-filled%20for%20visitors)%3B%20leave%20empty%20to%20let%20each%20visitor%20enter%20their%20own&envLink=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground%23configuration)
 
 Or manually on Vercel / Netlify / Cloudflare Pages: import the repo, build command `pnpm build`, output directory `dist`, then add the variables from [Configuration](#configuration). After the first deploy, set `VITE_SITE_URL` to the site's URL and redeploy so the search-engine metadata is emitted.
 
@@ -73,7 +73,7 @@ Errors shown in the preview come from the github-readme-stats instance you're us
 | --- | --- | --- |
 | `This username is not whitelisted` | The instance sets `WHITELIST` and only allows listed usernames | Use an allowed username, or remove `WHITELIST` from the instance |
 | `Bad credentials` | The instance's `PAT_1` (GitHub Personal Access Token) is expired or invalid | Update the token on the instance |
-| `Maximum retries exceeded` / rate limited | The instance ran out of GitHub API quota (common on the public one) | Retry later, or deploy your own instance |
+| `Maximum retries exceeded` / rate limited | The instance ran out of GitHub API quota | Retry later, or add more tokens (`PAT_2`, `PAT_3`…) to the instance |
 
 ## Project structure
 
@@ -100,6 +100,7 @@ src/
     ├── endpoints.ts         # parameter structure per card (type, default, range)
     ├── paramText.ts         # parameter text lookup (card override → shared)
     ├── buildUrl.ts          # builds the card URL, omitting defaults and empty values
+    ├── urlState.ts          # page URL ⇄ card state (shareable links)
     ├── color.ts             # color conversions and gradient parsing
     └── themes.ts            # built-in theme names
 ```
@@ -112,8 +113,8 @@ src/
 
 Issues and pull requests are welcome. Please make sure `pnpm lint` and `pnpm build` pass before submitting (CI checks both).
 
-- **React hooks need no import**: `useState`, `useEffect` etc. come from `unplugin-auto-import`, declared in `src/auto-imports.d.ts` (regenerated on dev/build; commit it along).
-- **Don't hand-edit `src/components/ui/`**: those are stock shadcn/ui components. Customize at the call site or in a wrapper, so `npx shadcn@latest add --overwrite <component>` can always re-pull them.
+Conventions — auto-imported React hooks, stock shadcn/ui components in `src/components/ui/`, where parameters and their text live — are in [AGENTS.md](./AGENTS.md); they apply to people as much as to coding agents.
+
 - **Adding or changing a parameter**: define its structure in `src/lib/endpoints.ts`, and add its name and hint under `params` in `src/locales/*.json` (use `cardParams.<card>` to override text for one card).
 - **Adding a language**: copy `src/locales/en.json`, translate it, and register it in `src/i18n.ts`. Keep the keys identical across locale files.
 
