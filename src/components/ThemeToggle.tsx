@@ -2,38 +2,26 @@ import { Moon, Sun } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { Button } from "@/components/ui/button"
+import { writeStorage } from "@/lib/storage"
 
 type Theme = "light" | "dark"
 const LS_THEME = "rsp:theme"
 
-function getInitialTheme(): Theme {
-  try {
-    const stored = localStorage.getItem(LS_THEME)
-    if (stored === "light" || stored === "dark") return stored
-  } catch {
-    /* ignore */
-  }
-  // Fall back to the OS preference.
-  return window.matchMedia?.("(prefers-color-scheme: light)").matches
-    ? "light"
-    : "dark"
-}
+/** index.html already applied the saved or OS theme before paint; read it back. */
+const currentTheme = (): Theme =>
+  document.documentElement.classList.contains("dark") ? "dark" : "light"
 
 export function ThemeToggle() {
   const { t } = useTranslation()
-  const [theme, setTheme] = useState<Theme>(getInitialTheme)
+  const [theme, setTheme] = useState<Theme>(currentTheme)
 
-  useEffect(() => {
-    const root = document.documentElement
-    root.classList.toggle("dark", theme === "dark")
-    try {
-      localStorage.setItem(LS_THEME, theme)
-    } catch {
-      /* ignore */
-    }
-  }, [theme])
-
-  const toggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"))
+  // Only an explicit choice is remembered, so an untouched setting keeps following the OS.
+  const toggle = () => {
+    const next: Theme = theme === "dark" ? "light" : "dark"
+    document.documentElement.classList.toggle("dark", next === "dark")
+    writeStorage(LS_THEME, next)
+    setTheme(next)
+  }
 
   return (
     <Button

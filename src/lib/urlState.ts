@@ -52,8 +52,9 @@ export function parseUrlState(search: string): UrlState | null {
     const value = parse(param, text)
     if (value !== undefined) values[param.key] = value
   }
-  const instance = normalizeBaseUrl(query.get(INSTANCE_KEY) ?? "")
-  return { cardId: endpoint.id, values, baseUrl: instance || undefined }
+  // An empty `instance=` is deliberate ("no instance" on a deployment that has a default).
+  const instance = query.get(INSTANCE_KEY)
+  return { cardId: endpoint.id, values, baseUrl: instance === null ? undefined : normalizeBaseUrl(instance) }
 }
 
 /** Query string for the current card, serialized exactly like the card URL. */
