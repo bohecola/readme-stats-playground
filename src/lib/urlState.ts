@@ -1,4 +1,4 @@
-import { allParams, buildUrl, type ParamValue, type ParamValues } from "./buildUrl"
+import { allParams, buildUrl, normalizeBaseUrl, type ParamValue, type ParamValues } from "./buildUrl"
 import { ENDPOINTS, type CardId, type EndpointDef, type ParamDef } from "./endpoints"
 
 /**
@@ -51,7 +51,7 @@ export function parseUrlState(search: string): UrlState | null {
     const value = parse(param, text)
     if (value !== undefined) values[param.key] = value
   }
-  const instance = query.get(INSTANCE_KEY)?.trim()
+  const instance = normalizeBaseUrl(query.get(INSTANCE_KEY) ?? "")
   return { cardId: endpoint.id, values, baseUrl: instance || undefined }
 }
 
