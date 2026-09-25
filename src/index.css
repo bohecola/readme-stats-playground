@@ -117,49 +117,50 @@
   }
 }
 
-/* react-colorful — match shadcn look */
-@layer components {
-  .color-picker.react-colorful {
-    width: 100%;
-    height: auto;
-    gap: 0;
-  }
-  .color-picker .react-colorful__saturation {
-    flex: none;
-    height: 148px;
-    margin-bottom: 16px; /* room for the corner pointer, which overhangs by half */
-    border-bottom: none;
-    border-radius: calc(var(--radius) - 2px);
-    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
-  }
-  .color-picker .react-colorful__hue,
-  .color-picker .react-colorful__alpha {
-    flex: none;
-    height: 12px;
-    border-radius: 9999px;
-    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
-  }
-  .color-picker .react-colorful__alpha {
-    margin-top: 12px;
-  }
-  .color-picker .react-colorful__last-control {
-    border-radius: 9999px;
-  }
-  /* Keep slider thumbs within the rounded caps instead of hanging off the ends. */
-  .color-picker .react-colorful__hue .react-colorful__interactive,
-  .color-picker .react-colorful__alpha .react-colorful__interactive {
-    left: 6px;
-    right: 6px;
-  }
-  .color-picker .react-colorful__pointer {
-    width: 14px;
-    height: 14px;
-    border-width: 2px;
-    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12), 0 1px 3px rgb(0 0 0 / 0.25);
-  }
-  .color-picker .react-colorful__hue-pointer,
-  .color-picker .react-colorful__alpha-pointer {
-    width: 16px;
-    height: 16px;
-  }
+/*
+react-colorful — match shadcn look. Deliberately unlayered: the library injects
+its own unlayered styles at runtime, and unlayered CSS always beats @layer rules.
+*/
+.color-picker.react-colorful {
+  width: 100%;
+  height: auto;
+  gap: 0;
+}
+.color-picker .react-colorful__saturation {
+  flex: none;
+  height: 148px;
+  margin-bottom: 16px; /* room for the corner pointer, which overhangs by half */
+  border-bottom: none;
+  border-radius: calc(var(--radius) - 2px);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+}
+.color-picker .react-colorful__hue,
+.color-picker .react-colorful__alpha {
+  flex: none;
+  height: 12px;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
+}
+.color-picker .react-colorful__alpha {
+  margin-top: 12px;
+}
+.color-picker .react-colorful__last-control {
+  border-radius: 9999px;
+}
+/* Keep slider thumbs within the rounded caps instead of hanging off the ends. */
+.color-picker .react-colorful__hue .react-colorful__interactive,
+.color-picker .react-colorful__alpha .react-colorful__interactive {
+  left: 6px;
+  right: 6px;
+}
+.color-picker .react-colorful__pointer {
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12), 0 1px 3px rgb(0 0 0 / 0.25);
+}
+.color-picker .react-colorful__hue-pointer,
+.color-picker .react-colorful__alpha-pointer {
+  width: 16px;
+  height: 16px;
 }
