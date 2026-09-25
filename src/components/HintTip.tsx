@@ -32,7 +32,7 @@ export function HintTip({ text, children }: { text: string; children?: ReactNode
           className={cn(
             "shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
             children
-              ? "cursor-help rounded-sm underline decoration-dotted decoration-muted-foreground/60 underline-offset-[3px] hover:text-foreground hover:decoration-foreground/60"
+              ? "cursor-default rounded-sm underline decoration-dotted decoration-muted-foreground/60 underline-offset-[3px] hover:text-foreground hover:decoration-foreground/60"
               : "rounded-full text-muted-foreground/70 hover:text-foreground coarse:-m-1.5 coarse:p-1.5",
           )}
         >
