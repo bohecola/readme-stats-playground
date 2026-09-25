@@ -3,106 +3,106 @@
 [![CI](https://github.com/bohecola/readme-stats-playground/actions/workflows/ci.yml/badge.svg)](https://github.com/bohecola/readme-stats-playground/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-简体中文 | [English](./README.en.md)
+English | [简体中文](./README.zh-CN.md)
 
-[github-readme-stats](https://github.com/anuraghazra/github-readme-stats) 卡片的可视化调参工具：左侧改参数，右侧实时预览，一键复制 URL / Markdown / HTML 到你的 GitHub 主页 README。
+A visual playground for [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) cards: tweak parameters on the left, preview live on the right, and copy the URL / Markdown / HTML straight into your GitHub profile README.
 
-![README Stats Playground 截图](./docs/screenshot.zh-CN.png)
+![README Stats Playground screenshot](./docs/screenshot.png)
 
-> 本项目是社区工具，与 github-readme-stats 官方无关联。卡片由你指定的 github-readme-stats 实例渲染。
+> This is a community tool and is not affiliated with github-readme-stats. Cards are rendered by whichever github-readme-stats instance you point it at.
 
-## 功能
+## Features
 
-- 覆盖 github-readme-stats 全部 5 种卡片：Stats、Top Languages、Pin、WakaTime、Gist
-- 参数即表单：每个参数都有名称、说明和原始参数名，写入 URL 的参数会被标记
-- 实时预览，一键复制 URL / Markdown / HTML
-- 通用样式对所有卡片共用，单张卡片也可以单独设置
-- 可指向任意自建实例；所有数据只保存在浏览器本地
+- All 5 github-readme-stats cards: Stats, Top Languages, Pin, WakaTime and Gist
+- Every parameter as a form field, with its name, a hint and the raw URL key; the ones written to the URL are marked
+- Live preview and one-click copy as URL / Markdown / HTML
+- Common style shared across cards, with per-card overrides when you want them
+- Works with any self-hosted instance; everything stays in your browser
 
-## 快速开始
+## Getting started
 
-需要 Node.js 20+ 和 pnpm 11（推荐用 `corepack enable` 自动安装 `package.json` 中指定的版本）。
+Requires Node.js 20+ and pnpm 11 (`corepack enable` installs the version pinned in `package.json`).
 
 ```bash
 pnpm install
 pnpm dev        # http://localhost:5173
-pnpm build      # 类型检查 + 生产构建，产物在 dist/
-pnpm preview    # 本地预览生产构建
+pnpm build      # type-check + production build into dist/
+pnpm preview    # serve the production build locally
 ```
 
-## 配置
+## Configuration
 
-通过构建时环境变量设置默认值。复制 `.env.example` 为 `.env.local`（不会被提交），或在托管平台中设置：
+Defaults are set with build-time env vars. Copy `.env.example` to `.env.local` (git-ignored), or set them in your hosting provider:
 
-| 变量 | 说明 | 默认值 |
+| Variable | Description | Default |
 | --- | --- | --- |
-| `VITE_DEFAULT_BASE_URL` | 默认使用的 github-readme-stats 实例 | `https://github-readme-stats.vercel.app` |
-| `VITE_DEFAULT_USERNAME` | 首次打开时预填的 GitHub 用户名 | 空 |
+| `VITE_DEFAULT_BASE_URL` | github-readme-stats instance to use by default | `https://github-readme-stats.vercel.app` |
+| `VITE_DEFAULT_USERNAME` | GitHub username pre-filled on first visit | empty |
 
-> 公共实例由所有人共享，经常触发 GitHub API 限流。建议按照 [官方文档](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own) 部署自己的实例，再填到 `VITE_DEFAULT_BASE_URL`。
+> The public instance is shared by everyone and frequently hits GitHub API rate limits. Consider [deploying your own](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own) and setting it as `VITE_DEFAULT_BASE_URL`.
 
-## 部署
+## Deployment
 
-这是一个纯静态站点，`pnpm build` 后把 `dist/` 部署到任意静态托管即可。
+It's a fully static site: run `pnpm build` and deploy `dist/` to any static host.
 
-- **Vercel / Netlify**：导入仓库，构建命令 `pnpm build`，输出目录 `dist`，按需添加上面的环境变量。
+- **Vercel / Netlify**: import the repo, build command `pnpm build`, output directory `dist`, and add the env vars above if needed.
 
   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fbohecola%2Freadme-stats-playground)
 
-- **GitHub Pages**：站点部署在子路径（`https://<user>.github.io/<repo>/`）时，需要构建时指定 base：`pnpm build --base=/<repo>/`。
+- **GitHub Pages**: when served from a sub-path (`https://<user>.github.io/<repo>/`), build with a base path: `pnpm build --base=/<repo>/`.
 
-## 常见问题
+## Troubleshooting
 
-预览里显示的错误信息来自你所用的 github-readme-stats 实例，Playground 只是如实展示：
+Errors shown in the preview come from the github-readme-stats instance you're using; the playground just displays them:
 
-| 提示 | 原因 | 处理 |
+| Message | Cause | Fix |
 | --- | --- | --- |
-| `This username is not whitelisted` | 实例设置了 `WHITELIST` 环境变量，只允许名单内的用户名 | 换成允许的用户名，或在实例中移除 `WHITELIST` |
-| `Bad credentials` | 实例的 `PAT_1`（GitHub Personal Access Token）过期或无效 | 在实例中更新 token |
-| `Maximum retries exceeded` / 限流 | 实例的 GitHub API 额度用完（公共实例常见） | 稍后再试，或部署自己的实例 |
+| `This username is not whitelisted` | The instance sets `WHITELIST` and only allows listed usernames | Use an allowed username, or remove `WHITELIST` from the instance |
+| `Bad credentials` | The instance's `PAT_1` (GitHub Personal Access Token) is expired or invalid | Update the token on the instance |
+| `Maximum retries exceeded` / rate limited | The instance ran out of GitHub API quota (common on the public one) | Retry later, or deploy your own instance |
 
-## 项目结构
+## Project structure
 
 ```
 src/
-├── App.tsx                  # 页面布局、状态管理
+├── App.tsx                  # page layout and state
 ├── components/
-│   ├── CardTabs.tsx         # 卡片类型切换
-│   ├── CardForm.tsx         # 按卡片渲染参数表单
-│   ├── ParamControl.tsx     # 按参数类型渲染控件
-│   ├── ColorPicker.tsx      # 取色器（含渐变编辑）
-│   ├── Preview.tsx          # 实时预览 + URL/Markdown/HTML 输出
-│   ├── NumberInput.tsx      # 带步进按钮的数值输入
-│   ├── HintTip.tsx          # 说明气泡（ⓘ 图标或带虚线下划线的文字）
-│   ├── CopyButton.tsx       # 复制按钮
-│   ├── LanguageToggle.tsx   # 语言切换
-│   ├── ThemeToggle.tsx      # 明暗主题切换
-│   └── ui/                  # shadcn/ui 组件（与 registry 保持一致，不手改）
-├── auto-imports.d.ts        # unplugin-auto-import 生成，React hooks 无需 import
-├── i18n.ts                  # i18next 初始化与语言检测
-├── locales/                 # 翻译文件（en.json / zh.json）
+│   ├── CardTabs.tsx         # card-type tabs
+│   ├── CardForm.tsx         # parameter form per card
+│   ├── ParamControl.tsx     # control per parameter type
+│   ├── ColorPicker.tsx      # color picker incl. gradient editor
+│   ├── Preview.tsx          # live preview + URL/Markdown/HTML output
+│   ├── NumberInput.tsx      # numeric input with stepper buttons
+│   ├── HintTip.tsx          # explanation bubble (info icon or dotted-underlined text)
+│   ├── CopyButton.tsx       # copy button
+│   ├── LanguageToggle.tsx   # language switch
+│   ├── ThemeToggle.tsx      # light / dark toggle
+│   └── ui/                  # shadcn/ui components (kept identical to the registry)
+├── auto-imports.d.ts        # generated by unplugin-auto-import; React hooks need no import
+├── i18n.ts                  # i18next setup and language detection
+├── locales/                 # translations (en.json / zh.json)
 └── lib/
-    ├── config.ts            # 环境变量读取的默认配置
-    ├── endpoints.ts         # 各卡片的参数结构（类型、默认值、取值范围）
-    ├── paramText.ts         # 参数文案查找（卡片覆盖 → 通用）
-    ├── buildUrl.ts          # 拼接卡片 URL（省略默认值与空值）
-    ├── color.ts             # 颜色格式换算与渐变解析
-    └── themes.ts            # 内置主题列表
+    ├── config.ts            # env-driven defaults
+    ├── endpoints.ts         # parameter structure per card (type, default, range)
+    ├── paramText.ts         # parameter text lookup (card override → shared)
+    ├── buildUrl.ts          # builds the card URL, omitting defaults and empty values
+    ├── color.ts             # color conversions and gradient parsing
+    └── themes.ts            # built-in theme names
 ```
 
-## 技术栈
+## Tech stack
 
 [Vite](https://vitejs.dev/) · [React 19](https://react.dev/) · TypeScript · [Tailwind CSS 4](https://tailwindcss.com/) · [shadcn/ui](https://ui.shadcn.com/) · [react-i18next](https://react.i18next.com/) · [react-colorful](https://github.com/omgovich/react-colorful) · [lucide](https://lucide.dev/)
 
-## 参与贡献
+## Contributing
 
-欢迎提交 Issue 和 Pull Request。提交前请确保 `pnpm lint` 和 `pnpm build` 通过（CI 会自动检查）。
+Issues and pull requests are welcome. Please make sure `pnpm lint` and `pnpm build` pass before submitting (CI checks both).
 
-- **React hooks 无需 import**：`useState`、`useEffect` 等由 `unplugin-auto-import` 提供，声明在 `src/auto-imports.d.ts`（运行 dev 或 build 时自动更新，需一并提交）。
-- **`src/components/ui/` 不手改**：这些是 shadcn/ui 原样生成的组件，定制请在调用处传 prop 或另写包装组件，这样随时可以用 `npx shadcn@latest add --overwrite <组件>` 重新拉取。
-- **新增或调整参数**：在 `src/lib/endpoints.ts` 中定义结构，并在 `src/locales/*.json` 的 `params` 下补充名称和说明（某张卡片含义不同时写在 `cardParams.<卡片>` 下覆盖）。
-- **新增语言**：复制 `src/locales/en.json` 翻译后，在 `src/i18n.ts` 中注册即可。两份语言文件的 key 需保持一致。
+- **React hooks need no import**: `useState`, `useEffect` etc. come from `unplugin-auto-import`, declared in `src/auto-imports.d.ts` (regenerated on dev/build; commit it along).
+- **Don't hand-edit `src/components/ui/`**: those are stock shadcn/ui components. Customize at the call site or in a wrapper, so `npx shadcn@latest add --overwrite <component>` can always re-pull them.
+- **Adding or changing a parameter**: define its structure in `src/lib/endpoints.ts`, and add its name and hint under `params` in `src/locales/*.json` (use `cardParams.<card>` to override text for one card).
+- **Adding a language**: copy `src/locales/en.json`, translate it, and register it in `src/i18n.ts`. Keep the keys identical across locale files.
 
-## 许可证
+## License
 
 [MIT](./LICENSE)
