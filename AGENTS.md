@@ -4,7 +4,7 @@ Guidance for coding agents working in this repository. Humans: see [README.md](.
 
 ## What this is
 
-A static single-page app (Vite + React) that builds card URLs for [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) and its API-compatible successor [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) (the original is unmaintained; both must stay supported): pick a card, edit its parameters in a form, preview live, copy URL / Markdown / HTML. No backend, no database, no automated UI tests. All source is under `src/`.
+A static single-page app (Vite + React) that builds card URLs for [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) and its API-compatible successor [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) (the original is unmaintained; both must stay supported): pick a card, edit its parameters in a form, preview live, copy URL / Markdown / HTML. No backend, no database, no automated UI tests (only unit tests for `src/lib`). All source is under `src/`.
 
 ## Commands
 
@@ -13,6 +13,7 @@ A static single-page app (Vite + React) that builds card URLs for [github-readme
 | `pnpm install` | Node 20+, pnpm 11 (pinned in `package.json`) |
 | `pnpm dev` | dev server at http://localhost:5173 |
 | `pnpm lint` | `tsc --noEmit` — the only static check; must pass on every commit |
+| `pnpm test` | Vitest unit tests for the pure helpers in `src/lib/*.test.ts` (URL building, URL state, colors) |
 | `pnpm build` | type-check + production build into `dist/` (CI runs `lint` and `build`) |
 
 ## Conventions
@@ -31,6 +32,6 @@ A static single-page app (Vite + React) that builds card URLs for [github-readme
 
 ## Verifying a change
 
-1. `pnpm lint` must be clean.
+1. `pnpm lint` and `pnpm test` must be clean; add a case to the matching `*.test.ts` when changing a helper in `src/lib`.
 2. Load the dev server and exercise the affected UI in the browser (dropdowns, popovers, the color picker and the number stepper are the usual suspects after dependency or styling changes).
 3. `pnpm build` for anything touching CSS, Vite config or dependencies.

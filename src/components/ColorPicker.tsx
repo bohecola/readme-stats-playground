@@ -27,6 +27,7 @@ import {
   rgbaToHex,
   rgbaToHsla,
   serializeGradient,
+  stripHash,
   toCssBackground,
 } from "@/lib/color"
 import { cn } from "@/lib/utils"
@@ -148,7 +149,7 @@ export function ColorPicker({
         placeholder={
           placeholder ?? (allowGradient ? t("color.followThemeOrGradient") : t("color.followTheme"))
         }
-        onChange={(e) => onChange(e.target.value.replace(/^#/, ""))}
+        onChange={(e) => onChange(stripHash(e.target.value))}
         className="h-full min-w-0 flex-1 bg-transparent font-mono text-sm outline-hidden placeholder:font-sans placeholder:text-muted-foreground"
       />
       {value && (

@@ -54,9 +54,15 @@ export function ParamControl({
   const id = useId()
   const set = (v: ParamValue) => onChange(param.key, v)
 
+  // A multiselect is a group of buttons, so its label names the group instead of a control.
+  const labelId = `${id}-label`
   const labelNode = (
     <div className="flex items-center gap-2">
-      <Label htmlFor={id} className="flex shrink-0 items-center gap-1">
+      <Label
+        id={labelId}
+        htmlFor={param.type === "multiselect" ? undefined : id}
+        className="flex shrink-0 items-center gap-1"
+      >
         {label}
         {param.required && <span className="text-destructive">*</span>}
       </Label>
@@ -130,6 +136,7 @@ export function ParamControl({
 
       {param.type === "multiselect" && (
         <MultiSelect
+          labelId={labelId}
           choices={[...(param.choices ?? []), ...(param.extendedChoices ?? [])]}
           extendedChoices={param.extendedChoices}
           value={(value as string[]) ?? []}
@@ -181,11 +188,13 @@ export function ParamControl({
 }
 
 function MultiSelect({
+  labelId,
   choices,
   extendedChoices,
   value,
   onChange,
 }: {
+  labelId: string
   choices: string[]
   /** Subset of `choices` only GitHub Stats Extended understands; marked in the UI. */
   extendedChoices?: string[]
@@ -201,7 +210,7 @@ function MultiSelect({
     )
   }
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <div role="group" aria-labelledby={labelId} className="flex flex-wrap gap-1.5">
       {choices.map((choice) => {
         const active = value.includes(choice)
         const extended = extendedChoices?.includes(choice)
@@ -209,6 +218,7 @@ function MultiSelect({
           <button
             key={choice}
             type="button"
+            aria-pressed={active}
             onClick={() => toggle(choice)}
             title={extended ? t("form.extendedOnly") : undefined}
             className={cn(

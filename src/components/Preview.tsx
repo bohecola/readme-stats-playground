@@ -124,6 +124,7 @@ export function Preview({
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1">
           <Segmented
+            label={t("preview.backdrop")}
             value={backdrop}
             onChange={(b) => {
               setBackdrop(b)
@@ -254,6 +255,7 @@ export function Preview({
       <div className="overflow-hidden rounded-lg border">
         <div className="flex items-center justify-between gap-2 border-b bg-muted/40 p-1">
           <Segmented
+            label={t("preview.format")}
             value={format}
             onChange={(f) => {
               setFormat(f)
@@ -419,24 +421,27 @@ function PreviewMessage({
 }
 
 function Segmented<T extends string>({
+  label,
   value,
   onChange,
   options,
 }: {
+  /** Accessible name of the whole control. */
+  label: string
   value: T
   onChange: (v: T) => void
   options: { value: T; label: string; icon?: ReactNode }[]
 }) {
+  // Toggle buttons rather than radios: radios would promise arrow-key movement.
   return (
-    <div role="radiogroup" className="inline-flex rounded-md bg-muted p-0.5">
+    <div role="group" aria-label={label} className="inline-flex rounded-md bg-muted p-0.5">
       {options.map((o) => {
         const active = o.value === value
         return (
           <button
             key={o.value}
             type="button"
-            role="radio"
-            aria-checked={active}
+            aria-pressed={active}
             aria-label={o.icon ? o.label : undefined}
             title={o.icon ? o.label : undefined}
             onClick={() => onChange(o.value)}

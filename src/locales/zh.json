@@ -46,6 +46,8 @@
   },
   "preview": {
     "title": "预览",
+    "backdrop": "预览背景",
+    "format": "输出格式",
     "bgDark": "深色背景",
     "bgLight": "浅色背景",
     "bgTransparent": "透明背景",

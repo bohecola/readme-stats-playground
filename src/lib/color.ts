@@ -2,6 +2,12 @@
 const HEX_RE = /^([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i
 
 export const normalizeHex = (s: string) => s.trim().replace(/^#/, "").toLowerCase()
+/** Drops the `#` from a color or from every stop of an `angle,c1,c2` gradient (the card adds it back). */
+export const stripHash = (value: string) =>
+  value
+    .split(",")
+    .map((part) => part.trim().replace(/^#/, ""))
+    .join(",")
 export const isHex = (s: string) => HEX_RE.test(normalizeHex(s))
 
 /** Expand 3/4-digit shorthand to 6/8 digits. */

@@ -46,6 +46,8 @@
   },
   "preview": {
     "title": "プレビュー",
+    "backdrop": "プレビュー背景",
+    "format": "出力形式",
     "bgDark": "ダーク背景",
     "bgLight": "ライト背景",
     "bgTransparent": "透明背景",

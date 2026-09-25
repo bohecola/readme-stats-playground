@@ -1,6 +1,7 @@
 import isNil from "lodash/isNil"
 import trim from "lodash/trim"
 
+import { stripHash } from "./color"
 import type { EndpointDef, ParamDef } from "./endpoints"
 import { COMMON_PARAMS } from "./endpoints"
 
@@ -48,8 +49,8 @@ function serialize(param: ParamDef, value: ParamValue): string | null {
       return arr.length ? arr.join(",") : null
     }
     case "color": {
-      // Colors are passed without a leading '#'.
-      return trim(String(value)).replace(/^#/, "")
+      // Colors (and every gradient stop) are passed without a leading '#'.
+      return stripHash(String(value))
     }
     case "number": {
       const text = trim(String(value))

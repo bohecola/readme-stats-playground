@@ -19,6 +19,7 @@ import {
   UPSTREAM_REPO_URL,
 } from "@/lib/config"
 import { COMMON_PARAMS, ENDPOINTS, type CardId } from "@/lib/endpoints"
+import { readJson, readStorage, writeStorage } from "@/lib/storage"
 import { parseUrlState, toUrlSearch } from "@/lib/urlState"
 import { useParamText } from "@/lib/paramText"
 import { cn } from "@/lib/utils"
@@ -80,23 +81,10 @@ function seedValues(): Record<string, ParamValues> {
   }
 }
 
-function readJson<T>(key: string): T | null {
-  try {
-    const raw = localStorage.getItem(key)
-    return raw ? (JSON.parse(raw) as T) : null
-  } catch {
-    return null
-  }
-}
-
-function writeStorage(state: StoredState) {
-  try {
-    localStorage.setItem(LS_VALUES, JSON.stringify(state.values))
-    localStorage.setItem(LS_COMMON, JSON.stringify(state.common))
-    localStorage.setItem(LS_OWN_STYLE, JSON.stringify(state.ownStyle))
-  } catch {
-    /* ignore */
-  }
+function storeState(state: StoredState) {
+  writeStorage(LS_VALUES, JSON.stringify(state.values))
+  writeStorage(LS_COMMON, JSON.stringify(state.common))
+  writeStorage(LS_OWN_STYLE, JSON.stringify(state.ownStyle))
 }
 
 function loadStoredState(): StoredState {
@@ -123,18 +111,20 @@ function loadStoredState(): StoredState {
 /** Stored state with a shared link's card layered on top; the link is then kept. */
 function loadState(): StoredState {
   const state = loadStoredState()
-  if (!URL_STATE) return state
+  // A bare `?card=x` only picks the tab; the card keeps what was stored.
+  if (!URL_STATE || Object.keys(URL_STATE.values).length === 0) return state
   const { cardId, values } = URL_STATE
   const { own, common } = splitCommon(values)
-  // A link that carries style is reproduced as the card's own style; one
-  // without style params just takes the shared style.
-  const styled = Object.keys(common).length > 0
+  // The address bar mirrors the card *with* the shared style, so a plain reload
+  // carries style too; only style that differs from the shared one becomes the
+  // card's own.
+  const styled = Object.keys(common).length > 0 && !sameValues(common, state.common)
   const next = {
     ...state,
     values: { ...state.values, [cardId]: styled ? { ...own, ...common } : own },
     ownStyle: { ...state.ownStyle, [cardId]: styled },
   }
-  writeStorage(next)
+  storeState(next)
   return next
 }
 
@@ -142,7 +132,7 @@ export default function App() {
   const { t } = useTranslation()
   const paramText = useParamText()
   const [baseUrl, setBaseUrl] = useState(
-    () => URL_STATE?.baseUrl ?? localStorage.getItem(LS_BASE) ?? DEFAULT_BASE_URL,
+    () => URL_STATE?.baseUrl ?? readStorage(LS_BASE) ?? DEFAULT_BASE_URL,
   )
   const [activeId, setActiveId] = useState<CardId>(URL_STATE?.cardId ?? ENDPOINTS[0].id)
   // Lifted so the preview's "set up an instance" prompt can open the editor.
@@ -162,7 +152,7 @@ export default function App() {
   const persist = (patch: Partial<StoredState>) => {
     const next = { ...state, ...patch }
     setState(next)
-    writeStorage(next)
+    storeState(next)
   }
 
   const handleChange = (key: string, value: ParamValue) => {
@@ -186,11 +176,7 @@ export default function App() {
 
   const updateBase = (v: string) => {
     setBaseUrl(v)
-    try {
-      localStorage.setItem(LS_BASE, v)
-    } catch {
-      /* ignore */
-    }
+    writeStorage(LS_BASE, v)
   }
 
   // The form column scrolls internally on lg; start each card at its top.

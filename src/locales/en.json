@@ -46,6 +46,8 @@
   },
   "preview": {
     "title": "Preview",
+    "backdrop": "Preview background",
+    "format": "Output format",
     "bgDark": "Dark background",
     "bgLight": "Light background",
     "bgTransparent": "Transparent background",
