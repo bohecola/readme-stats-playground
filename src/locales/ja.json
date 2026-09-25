@@ -48,6 +48,7 @@
     "bgTransparent": "透明背景",
     "refresh": "再読み込み（キャッシュを無視）",
     "refreshLabel": "プレビューを再読み込み",
+    "shareLink": "共有リンクをコピー",
     "openInNewTab": "新しいタブで開く",
     "missingRequired": "先に必須項目を入力してください：{{fields}}",
     "missingRequiredShort": "先に必須項目を入力してください",

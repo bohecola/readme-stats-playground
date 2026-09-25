@@ -16,6 +16,7 @@ A visual playground for [github-readme-stats](https://github.com/anuraghazra/git
 - All 5 github-readme-stats cards: Stats, Top Languages, Pin, WakaTime and Gist
 - Every parameter as a form field, with its name, a hint and the raw URL key; the ones written to the URL are marked
 - Live preview and one-click copy as URL / Markdown / HTML
+- Shareable links: the address bar always mirrors the current card (`?card=stats&username=octocat&theme=dark`), so a configuration can be handed over as a URL
 - Common style shared across cards, with per-card overrides when you want them
 - Works with any self-hosted instance; everything stays in your browser
 
