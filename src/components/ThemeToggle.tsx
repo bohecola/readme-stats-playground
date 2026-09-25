@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTranslation } from "react-i18next"
 

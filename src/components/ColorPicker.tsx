@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { HexAlphaColorPicker } from "react-colorful"
 import { Plus, X } from "lucide-react"
 import { useTranslation } from "react-i18next"
