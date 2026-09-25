@@ -1,0 +1,25 @@
+# README Stats Playground
+
+> A visual playground for github-readme-stats cards: choose a card, adjust its parameters in a form, preview it live, and copy the URL / Markdown / HTML for a GitHub profile README. Static site; nothing is uploaded and settings stay in the browser.
+
+Supports all five github-readme-stats cards with every parameter as a form field: Stats (`/api`), Top Languages (`/api/top-langs`), Pin (`/api/pin`), WakaTime (`/api/wakatime`) and Gist (`/api/gist`). Common style (theme, colors, border, radius, cache, locale) is shared across cards. Any self-hosted github-readme-stats instance can be used.
+
+## Open a pre-filled configuration
+
+The page URL mirrors the card, using github-readme-stats' own parameter names and values:
+
+    /?card=<stats|top-langs|pin|wakatime|gist>&<param>=<value>&…
+
+Examples:
+
+- `/?card=stats&username=octocat&theme=dark&show_icons=true&hide=issues,contribs`
+- `/?card=top-langs&username=octocat&layout=compact&langs_count=8`
+- `/?card=pin&username=anuraghazra&repo=github-readme-stats`
+
+Add `instance=https://your-instance.example` to target a self-hosted github-readme-stats deployment. Colors are hex without `#` (`title_color=2f80ed`); lists are comma-separated.
+
+## Links
+
+- [Source and README](https://github.com/bohecola/readme-stats-playground)
+- [Parameter definitions (types, defaults, ranges)](https://github.com/bohecola/readme-stats-playground/blob/main/src/lib/endpoints.ts)
+- [github-readme-stats, the upstream project](https://github.com/anuraghazra/github-readme-stats)

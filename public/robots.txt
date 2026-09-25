@@ -1,0 +1,3 @@
+# Everyone, including AI crawlers, is welcome. See /llms.txt for a summary written for assistants.
+User-agent: *
+Allow: /

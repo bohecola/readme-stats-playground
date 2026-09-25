@@ -1,0 +1,35 @@
+# AGENTS.md
+
+Guidance for coding agents working in this repository. Humans: see [README.md](./README.md).
+
+## What this is
+
+A static single-page app (Vite + React) that builds [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) card URLs: pick a card, edit its parameters in a form, preview live, copy URL / Markdown / HTML. No backend, no database, no automated UI tests. All source is under `src/`.
+
+## Commands
+
+| Command | What it does |
+| --- | --- |
+| `pnpm install` | Node 20+, pnpm 11 (pinned in `package.json`) |
+| `pnpm dev` | dev server at http://localhost:5173 |
+| `pnpm lint` | `tsc --noEmit` — the only static check; must pass on every commit |
+| `pnpm build` | type-check + production build into `dist/` (CI runs `lint` and `build`) |
+
+## Conventions
+
+- **Stack**: React 19, TypeScript, Tailwind CSS 4, shadcn/ui, react-i18next.
+- **Hooks are auto-imported** (`useState`, `useEffect`, `useMemo`, …) via `unplugin-auto-import`; don't add `import { useState } from "react"`. Type-only imports (`type ReactNode`) still come from `"react"`. `src/auto-imports.d.ts` is regenerated on dev/build — commit it when it changes.
+- **`src/components/ui/` is stock shadcn/ui**, byte-identical to the registry. Never edit those files; customize at the call site (props, className) or in a wrapper component. `cn` comes from the `cn` package; `@/lib/utils` re-exports it.
+- **Parameters are declared once** in `src/lib/endpoints.ts` (type, default, range, choices). Their text lives in `src/locales/{en,zh,ja}.json` under `params.<key>`; per-card wording goes under `cardParams.<card>.<key>`. Keep the key set identical across locale files.
+- **URL building** (`src/lib/buildUrl.ts`) omits defaults and empty values; colors are written without `#`.
+- **Common style** (theme, colors, border…) is shared across cards in App state (`common`); a card with `ownStyle[card] === true` keeps its own copy instead.
+- **The page URL mirrors the card**: `?card=<id>&<param>=<value>…&instance=<url>` (`src/lib/urlState.ts`). A link wins over stored state on load and is then persisted.
+- **Tailwind 4 specifics already handled in `src/index.css`**: buttons get `cursor: pointer` back (v4 preflight removed it); the react-colorful overrides must stay *unlayered* because the library injects unlayered styles at runtime; theme tokens are `hsl(var(--x))` values from the `:root` / `.dark` blocks.
+- **Adding a language**: copy `src/locales/en.json`, translate, then register it in `src/i18n.ts` (`LANGUAGES`, `HTML_LANG`, `resources`) and in `LANGUAGE_NAMES` in `src/components/LanguageToggle.tsx`.
+- **Adding or changing a parameter**: check the upstream README / `api/*.js` first; update `endpoints.ts` and all locale files together.
+
+## Verifying a change
+
+1. `pnpm lint` must be clean.
+2. Load the dev server and exercise the affected UI in the browser (dropdowns, popovers, the color picker and the number stepper are the usual suspects after dependency or styling changes).
+3. `pnpm build` for anything touching CSS, Vite config or dependencies.
