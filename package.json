@@ -2,7 +2,7 @@
   "name": "readme-stats-playground",
   "private": true,
   "version": "0.1.0",
-  "description": "Visual playground for github-readme-stats cards: tweak parameters, preview live, copy Markdown/HTML.",
+  "description": "Visual playground for github-readme-stats and GitHub Stats Extended cards: tweak parameters, preview live, copy Markdown/HTML.",
   "license": "MIT",
   "author": "bohecola",
   "homepage": "https://readme-stats.deore.me",
@@ -15,6 +15,7 @@
   },
   "keywords": [
     "github-readme-stats",
+    "github-stats-extended",
     "readme",
     "github-profile",
     "playground",

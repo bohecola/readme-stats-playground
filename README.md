@@ -5,7 +5,7 @@
 
 English | [简体中文](./README.zh-CN.md) | [日本語](./README.ja.md)
 
-A visual playground for [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) cards: tweak parameters on the left, preview live on the right, and copy the URL / Markdown / HTML straight into your GitHub profile README.
+A visual playground for [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) and [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) cards: tweak parameters on the left, preview live on the right, and copy the URL / Markdown / HTML straight into your GitHub profile README.
 
 **Try it: [readme-stats.deore.me](https://readme-stats.deore.me)**
 
@@ -39,7 +39,7 @@ Defaults are set with build-time env vars. Copy `.env.example` to `.env.local` (
 
 | Variable | Description | Default |
 | --- | --- | --- |
-| `VITE_DEFAULT_BASE_URL` | github-readme-stats instance used until a visitor enters their own | empty — visitors enter their instance |
+| `VITE_DEFAULT_BASE_URL` | Card instance (github-readme-stats or GitHub Stats Extended) used until a visitor picks their own | empty — visitors pick their instance |
 | `VITE_DEFAULT_USERNAME` | GitHub username pre-filled on first visit | empty |
 | `VITE_SITE_URL` | Public URL of the deployment; when set, the build emits the canonical link, Open Graph image and JSON-LD for search engines and AI crawlers | empty |
 
@@ -53,7 +53,7 @@ It's a fully static site: run `pnpm build` and deploy `dist/` to any static host
 
 Self-hosting isn't required to use the playground, but it's worth it if you want:
 
-- **your own github-readme-stats instance pre-filled** (`VITE_DEFAULT_BASE_URL`), so nobody has to enter one;
+- **your own card instance pre-filled** (`VITE_DEFAULT_BASE_URL`), so nobody has to pick one;
 - your own domain;
 - no dependency on someone else's deployment.
 
@@ -67,7 +67,7 @@ Or manually on Vercel / Netlify / Cloudflare Pages: import the repo, build comma
 
 ## Troubleshooting
 
-Errors shown in the preview come from the github-readme-stats instance you're using; the playground just displays them:
+Errors shown in the preview come from the card instance you're using; the playground just displays them:
 
 | Message | Cause | Fix |
 | --- | --- | --- |

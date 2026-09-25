@@ -13,6 +13,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import {
   DEFAULT_BASE_URL,
   DEFAULT_USERNAME,
+  EXTENDED_REPO_URL,
   REPO_URL,
   SUGGESTED_INSTANCE_URL,
   UPSTREAM_REPO_URL,
@@ -354,17 +355,10 @@ export default function App() {
             <Trans
               i18nKey="app.footerBuiltOn"
               components={{
-                repo: (
-                  // Text comes from the translation's <repo>…</repo> (not <link>: that is a void
-                  // HTML element, so the parser would leave the link empty).
-                  // eslint-disable-next-line jsx-a11y/anchor-has-content
-                  <a
-                    href={UPSTREAM_REPO_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-medium text-foreground/80 underline-offset-4 hover:text-foreground hover:underline"
-                  />
-                ),
+                // Text comes from the translation's <repo>…</repo> / <extended>…</extended>
+                // (not <link>: that is a void HTML element, so the parser would leave it empty).
+                repo: <a href={UPSTREAM_REPO_URL} target="_blank" rel="noreferrer" className={footerLink} />,
+                extended: <a href={EXTENDED_REPO_URL} target="_blank" rel="noreferrer" className={footerLink} />,
               }}
             />
           </p>
@@ -374,6 +368,9 @@ export default function App() {
     </div>
   )
 }
+
+const footerLink =
+  "font-medium text-foreground/80 underline-offset-4 hover:text-foreground hover:underline"
 
 /** "https://example.com/" -> "example.com": the full URL lives in the editor and tooltip. */
 const displayHost = (url: string) => url.trim().replace(/^https?:\/\//, "").replace(/\/+$/, "")

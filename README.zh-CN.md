@@ -5,7 +5,7 @@
 
 [English](./README.md) | 简体中文 | [日本語](./README.ja.md)
 
-[github-readme-stats](https://github.com/anuraghazra/github-readme-stats) 卡片的可视化调参工具：左侧改参数，右侧实时预览，一键复制 URL / Markdown / HTML 到你的 GitHub 主页 README。
+[github-readme-stats](https://github.com/anuraghazra/github-readme-stats) 与 [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) 卡片的可视化调参工具：左侧改参数，右侧实时预览，一键复制 URL / Markdown / HTML 到你的 GitHub 主页 README。
 
 **在线使用：[readme-stats.deore.me](https://readme-stats.deore.me)**
 
@@ -39,7 +39,7 @@ pnpm preview    # 本地预览生产构建
 
 | 变量 | 说明 | 默认值 |
 | --- | --- | --- |
-| `VITE_DEFAULT_BASE_URL` | 访客填写自己的实例之前默认使用的 github-readme-stats 实例 | 空——由访客填写自己的实例 |
+| `VITE_DEFAULT_BASE_URL` | 访客选择自己的实例之前默认使用的卡片实例（github-readme-stats 或 GitHub Stats Extended） | 空——由访客选择实例 |
 | `VITE_DEFAULT_USERNAME` | 首次打开时预填的 GitHub 用户名 | 空 |
 | `VITE_SITE_URL` | 站点的公开地址；设置后构建会生成 canonical 链接、Open Graph 图片和 JSON-LD，便于搜索引擎和 AI 爬虫识别 | 空 |
 
@@ -53,7 +53,7 @@ pnpm preview    # 本地预览生产构建
 
 不自建也能直接用，但以下情况值得自己部署一份：
 
-- 希望**预填好你自己的 github-readme-stats 实例**（`VITE_DEFAULT_BASE_URL`），访客不用再填；
+- 希望**预填好你自己的卡片实例**（`VITE_DEFAULT_BASE_URL`），访客不用再选；
 - 想用自己的域名；
 - 不想依赖别人的站点。
 
@@ -67,7 +67,7 @@ Vercel 一键部署——过程中会要求填写 `VITE_DEFAULT_BASE_URL`，填�
 
 ## 常见问题
 
-预览里显示的错误信息来自你所用的 github-readme-stats 实例，Playground 只是如实展示：
+预览里显示的错误信息来自你所用的卡片实例，Playground 只是如实展示：
 
 | 提示 | 原因 | 处理 |
 | --- | --- | --- |
