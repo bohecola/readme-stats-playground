@@ -1,3 +1,5 @@
+import { normalizeBaseUrl } from "./buildUrl"
+
 /**
  * Deployment-level defaults, set via env vars at build time (see .env.example).
  */
@@ -8,7 +10,7 @@
  * visitor points the playground at their own deployment. Self-hosters can set
  * VITE_DEFAULT_BASE_URL to theirs.
  */
-export const DEFAULT_BASE_URL = import.meta.env.VITE_DEFAULT_BASE_URL?.trim().replace(/\/+$/, "") ?? ""
+export const DEFAULT_BASE_URL = normalizeBaseUrl(import.meta.env.VITE_DEFAULT_BASE_URL ?? "")
 
 export const DEFAULT_USERNAME = import.meta.env.VITE_DEFAULT_USERNAME?.trim() ?? ""
 

@@ -17,6 +17,7 @@ import { useParamText } from "@/lib/paramText"
 import { cn } from "@/lib/utils"
 import {
   buildUrl,
+  normalizeBaseUrl,
   toHtml,
   toMarkdown,
   type ParamValue,
@@ -405,8 +406,8 @@ function BaseUrlField({
     setEditing(true)
   }
   const finish = (next?: string) => {
-    // Empty falls back to the deployment default (which may itself be empty).
-    if (next !== undefined) onChange(next.trim() || DEFAULT_BASE_URL)
+    // Adds https:// when omitted; empty falls back to the deployment default (which may itself be empty).
+    if (next !== undefined) onChange(normalizeBaseUrl(next) || DEFAULT_BASE_URL)
     setEditing(false)
   }
   // Keyboard users land back on the Edit button after closing the editor.

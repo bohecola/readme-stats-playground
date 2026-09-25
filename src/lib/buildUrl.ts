@@ -7,6 +7,16 @@ import { COMMON_PARAMS } from "./endpoints"
 export type ParamValue = string | number | boolean | string[] | undefined
 export type ParamValues = Record<string, ParamValue>
 
+/**
+ * Cleans up a user-entered instance URL: trims, drops trailing slashes and adds
+ * `https://` when no scheme was given, so `my-instance.vercel.app` works too.
+ */
+export function normalizeBaseUrl(input: string): string {
+  const s = trim(input).replace(/\/+$/, "")
+  if (!s) return ""
+  return /^[a-z][a-z0-9+.-]*:\/\//i.test(s) ? s : `https://${s}`
+}
+
 /** All params for an endpoint: its own params followed by shared style params. */
 export function allParams(endpoint: EndpointDef): ParamDef[] {
   return [...endpoint.params, ...COMMON_PARAMS]
