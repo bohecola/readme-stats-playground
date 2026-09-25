@@ -39,6 +39,7 @@ pnpm preview    # 本地预览生产构建
 | --- | --- | --- |
 | `VITE_DEFAULT_BASE_URL` | 默认使用的 github-readme-stats 实例 | `https://github-readme-stats.vercel.app` |
 | `VITE_DEFAULT_USERNAME` | 首次打开时预填的 GitHub 用户名 | 空 |
+| `VITE_SITE_URL` | 站点的公开地址；设置后构建会生成 canonical 链接、Open Graph 图片和 JSON-LD，便于搜索引擎和 AI 爬虫识别 | 空 |
 
 > 公共实例由所有人共享，经常触发 GitHub API 限流。建议按照 [官方文档](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own) 部署自己的实例，再填到 `VITE_DEFAULT_BASE_URL`。
 
