@@ -3,18 +3,20 @@ import LanguageDetector from "i18next-browser-languagedetector"
 import { initReactI18next } from "react-i18next"
 
 import en from "@/locales/en.json"
+import ja from "@/locales/ja.json"
 import zh from "@/locales/zh.json"
 
-export const LANGUAGES = ["en", "zh"] as const
+export const LANGUAGES = ["en", "zh", "ja"] as const
 const LS_LANG = "rsp:lang"
 export type Language = (typeof LANGUAGES)[number]
 
 /** BCP 47 tag for <html lang>. */
-const HTML_LANG: Record<Language, string> = { en: "en", zh: "zh-CN" }
+const HTML_LANG: Record<Language, string> = { en: "en", zh: "zh-CN", ja: "ja" }
 
 export const resources = {
   en: { translation: en },
   zh: { translation: zh },
+  ja: { translation: ja },
 } as const
 
 declare module "i18next" {
@@ -53,7 +55,8 @@ i18n.on("languageChanged", syncHtmlLang)
 
 /** Normalizes whatever i18next resolved (e.g. "zh-CN") to a shipped language. */
 export function currentLanguage(lng = i18n.resolvedLanguage ?? i18n.language): Language {
-  return lng?.startsWith("zh") ? "zh" : "en"
+  const base = lng?.split("-")[0] ?? ""
+  return (LANGUAGES as readonly string[]).includes(base) ? (base as Language) : "en"
 }
 
 /** Switch language and remember it as the user's explicit choice. */

@@ -1,0 +1,163 @@
+{
+  "app": {
+    "baseUrl": "インスタンス",
+    "baseUrlHint": "カードはこの github-readme-stats インスタンスで描画されます。公開インスタンスは GitHub のレート制限にかかりやすいため、自前のデプロイをおすすめします。",
+    "resetBaseUrl": "既定のインスタンスに戻す",
+    "editBaseUrl": "インスタンス URL を編集",
+    "saveBaseUrl": "保存",
+    "projectRepo": "GitHub でソースを見る",
+    "footerBuiltOn": "<repo>github-readme-stats</repo> のビジュアルプレイグラウンド",
+    "footerTagline": "パラメータを調整し、プレビューを確認して、コードを README にコピー"
+  },
+  "language": {
+    "label": "言語"
+  },
+  "theme": {
+    "toggle": "テーマを切り替え",
+    "toLight": "ライトモードに切り替え",
+    "toDark": "ダークモードに切り替え"
+  },
+  "form": {
+    "cardParams": "カードのパラメータ",
+    "commonStyle": "共通スタイル",
+    "setCount": "{{count}} 件設定済み",
+    "reset": "リセット",
+    "resetTitle": "このカードの初期パラメータに戻す",
+    "ownStyleBadge": "このカードのみ",
+    "sharedStyleNote": "すべてのカードに適用され、変更は全カードに同期されます。",
+    "ownStyleNote": "このカードにのみ適用されます。他のカードは共通スタイルのままです。",
+    "customizeStyle": "このカードだけ個別に設定",
+    "useSharedStyle": "共通スタイルに戻す",
+    "on": "オン",
+    "off": "オフ",
+    "select": "選択…",
+    "auto": "自動",
+    "defaultValue": "既定 {{value}}",
+    "paramSet": "設定済み — URL に含まれます",
+    "increase": "増やす",
+    "decrease": "減らす"
+  },
+  "units": {
+    "px": "px",
+    "seconds": "秒"
+  },
+  "preview": {
+    "title": "プレビュー",
+    "bgDark": "ダーク背景",
+    "bgLight": "ライト背景",
+    "bgTransparent": "透明背景",
+    "refresh": "再読み込み（キャッシュを無視）",
+    "refreshLabel": "プレビューを再読み込み",
+    "openInNewTab": "新しいタブで開く",
+    "missingRequired": "先に必須項目を入力してください：{{fields}}",
+    "missingRequiredShort": "先に必須項目を入力してください",
+    "listSeparator": "、",
+    "loadFailed": "読み込みに失敗しました。インスタンス URL とパラメータを確認してください。",
+    "staleError": "最新のパラメータで読み込めなかったため、前回の結果を表示しています",
+    "alt": "カードのプレビュー",
+    "live": "ライブプレビュー",
+    "tapToView": "タップして拡大表示",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "copyFormat": "{{format}} をコピー"
+  },
+  "color": {
+    "open": "カラーピッカーを開く",
+    "clear": "色をクリア",
+    "followTheme": "テーマに従う",
+    "followThemeOrGradient": "テーマに従う、またはグラデーション 90,2f80ed,a855f7",
+    "solid": "単色",
+    "gradient": "グラデーション",
+    "recent": "最近使った色",
+    "presets": "プリセット",
+    "format": "色の形式",
+    "alpha": "不透明度",
+    "stop": "ストップ {{n}}: #{{hex}}",
+    "removeStop": "ストップ {{n}} を削除",
+    "addStop": "ストップを追加",
+    "angle": "角度"
+  },
+  "cards": {
+    "stats": {
+      "name": "Stats",
+      "description": "スター、コミット、PR、Issue などの統計"
+    },
+    "top-langs": {
+      "name": "Top Languages",
+      "description": "よく使う言語を複数のレイアウトで表示"
+    },
+    "pin": {
+      "name": "Pin",
+      "description": "リポジトリ 1 件の説明・スター・フォークを表示"
+    },
+    "wakatime": {
+      "name": "WakaTime",
+      "description": "WakaTime のコーディング時間統計"
+    },
+    "gist": {
+      "name": "Gist",
+      "description": "Gist 1 件の説明とスターを表示"
+    }
+  },
+  "params": {
+    "theme": { "label": "テーマ", "hint": "プリセットの配色。下で個別に指定した色が優先されます" },
+    "title_color": { "label": "タイトルの色" },
+    "text_color": { "label": "本文の色" },
+    "icon_color": { "label": "アイコンの色" },
+    "bg_color": { "label": "背景色", "hint": "グラデーション対応：角度,色1,色2" },
+    "border_color": { "label": "枠線の色" },
+    "hide_border": { "label": "枠線を隠す" },
+    "border_radius": { "label": "角丸" },
+    "cache_seconds": { "label": "キャッシュ時間", "hint": "最小 21600（6 時間）" },
+    "locale": { "label": "言語", "placeholder": "既定 en", "hint": "カード内テキストの言語。例: cn / ja / es" },
+    "username": { "label": "ユーザー名", "placeholder": "GitHub ユーザー名" },
+    "custom_title": { "label": "カスタムタイトル" },
+    "hide": { "label": "隠す言語", "placeholder": "例: javascript,html", "hint": "カンマ区切り" },
+    "show": { "label": "追加の統計" },
+    "show_icons": { "label": "アイコンを表示" },
+    "hide_title": { "label": "タイトルを隠す" },
+    "hide_rank": { "label": "ランクを隠す" },
+    "include_all_commits": { "label": "全コミットを集計", "hint": "今年だけでなく全期間のコミットを数えます" },
+    "text_bold": { "label": "太字" },
+    "disable_animations": { "label": "アニメーションを無効化" },
+    "rank_icon": { "label": "ランクアイコン" },
+    "number_format": { "label": "数値の形式", "hint": "short: 1.2k · long: 1234" },
+    "number_precision": { "label": "小数点以下の桁数", "hint": "short 形式での小数桁数、0–2" },
+    "commits_year": { "label": "コミットの対象年", "placeholder": "既定: 今年", "hint": "指定した年のコミットのみ集計。「全コミットを集計」が有効な場合は無視されます" },
+    "stats_format": { "label": "統計の形式", "hint": "percentages: 割合 · bytes: コード量" },
+    "line_height": { "label": "行の高さ" },
+    "card_width": { "label": "カードの幅" },
+    "ring_color": { "label": "ランクリングの色" },
+    "layout": { "label": "レイアウト" },
+    "exclude_repo": { "label": "除外するリポジトリ", "placeholder": "例: repo1,repo2", "hint": "カンマ区切り" },
+    "langs_count": { "label": "言語の数", "hint": "1–20。未指定の場合 normal / donut は 5、他のレイアウトは 6" },
+    "hide_progress": { "label": "プログレスバーを隠す" },
+    "size_weight": { "label": "コード量の重み", "hint": "ランキングにおけるコード量の重み" },
+    "count_weight": { "label": "リポジトリ数の重み", "hint": "ランキングにおけるリポジトリ数の重み" },
+    "repo": { "label": "リポジトリ", "placeholder": "例: github-readme-stats" },
+    "show_owner": { "label": "オーナーを表示" },
+    "description_lines_count": { "label": "説明の行数", "hint": "1–3" },
+    "display_format": { "label": "表示形式", "hint": "time: 時間 · percent: 割合" },
+    "api_domain": { "label": "API ドメイン", "placeholder": "既定 wakatime.com", "hint": "セルフホストした WakaTime のドメイン" },
+    "id": { "label": "Gist ID", "placeholder": "Gist ID" }
+  },
+  "cardParams": {
+    "stats": {
+      "custom_title": { "placeholder": "既定 <名前>'s GitHub Stats" },
+      "hide": { "label": "隠す統計", "placeholder": "", "hint": "" },
+      "exclude_repo": { "hint": "これらのリポジトリのスターは集計から除外。カンマ区切り" }
+    },
+    "top-langs": {
+      "custom_title": { "placeholder": "既定 Most Used Languages" }
+    },
+    "pin": {
+      "username": { "placeholder": "リポジトリのオーナー" }
+    },
+    "wakatime": {
+      "username": { "label": "WakaTime ユーザー名", "placeholder": "WakaTime ユーザー名" },
+      "custom_title": { "placeholder": "既定 WakaTime Stats" },
+      "hide": { "placeholder": "例: javascript,yaml" },
+      "langs_count": { "hint": "未指定の場合はすべての言語を表示" }
+    }
+  }
+}
