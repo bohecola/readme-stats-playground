@@ -160,14 +160,14 @@ export default function App() {
             ref={formScrollRef}
             className="lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:overscroll-contain lg:[scrollbar-width:thin]"
           >
-            <div className="flex flex-col gap-1 px-4 pb-2 pt-5 sm:flex-row sm:items-start sm:justify-between sm:gap-4 sm:px-6">
-              <p className="text-sm text-muted-foreground">
-                {t(`cards.${endpoint.id}.description`)}
-                <code className="ml-2 rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground/80">
+            <div className="flex flex-col gap-1 px-4 pb-2 pt-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6">
+              <p className="text-xs leading-6 text-muted-foreground">
+                <code className="mr-2 rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground/80">
                   {endpoint.path}
                 </code>
+                {t(`cards.${endpoint.id}.description`)}
               </p>
-              <div className="-mr-2 flex shrink-0 items-center gap-1 self-end sm:-mt-1.5 sm:self-auto">
+              <div className="-mr-2 flex shrink-0 items-center gap-1 self-end sm:self-auto">
                 <span className="text-xs tabular-nums text-muted-foreground">
                   {t("form.setCount", { count: setKeys.size })}
                 </span>

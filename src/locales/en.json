@@ -75,15 +75,15 @@
   "cards": {
     "stats": {
       "name": "Stats",
-      "description": "Overall GitHub stats (stars / commits / PRs / issues)."
+      "description": "Stars, commits, PRs, issues and more."
     },
     "top-langs": {
       "name": "Top Languages",
-      "description": "Most used languages, in several layouts."
+      "description": "Your most used languages, in several layouts."
     },
     "pin": {
       "name": "Pin",
-      "description": "Showcase a single repository."
+      "description": "A single repository with its description, stars and forks."
     },
     "wakatime": {
       "name": "WakaTime",
@@ -91,7 +91,7 @@
     },
     "gist": {
       "name": "Gist",
-      "description": "Showcase a single Gist."
+      "description": "A single Gist with its description and stars."
     }
   },
   "params": {

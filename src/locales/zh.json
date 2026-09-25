@@ -75,23 +75,23 @@
   "cards": {
     "stats": {
       "name": "Stats 统计卡",
-      "description": "GitHub 综合统计卡片（stars / commits / PR / issues）。"
+      "description": "stars、commits、PR、issues 等综合数据"
     },
     "top-langs": {
       "name": "Top Languages 语言卡",
-      "description": "最常用编程语言卡片，支持多种布局。"
+      "description": "最常用的编程语言，支持多种布局"
     },
     "pin": {
       "name": "Pin 仓库卡",
-      "description": "置顶/展示某个仓库的卡片。"
+      "description": "展示单个仓库的简介、stars 和 forks"
     },
     "wakatime": {
       "name": "WakaTime 卡",
-      "description": "WakaTime 编码时长统计卡片。"
+      "description": "来自 WakaTime 的编码时长统计"
     },
     "gist": {
       "name": "Gist 卡",
-      "description": "展示某个 Gist 的卡片。"
+      "description": "展示单个 Gist 的简介和 stars"
     }
   },
   "params": {
