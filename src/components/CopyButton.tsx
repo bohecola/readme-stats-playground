@@ -12,14 +12,14 @@ interface CopyButtonProps {
   className?: string
 }
 
-export function CopyButton({ text, label, disabled, variant, className }: CopyButtonProps) {
-  const { t } = useTranslation()
+/** Clipboard write with a fallback; `copied` flips back after a moment. */
+export function useCopy() {
   const [copied, setCopied] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   useEffect(() => () => clearTimeout(timer.current), [])
 
-  const copy = async () => {
+  const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
     } catch {
@@ -38,12 +38,19 @@ export function CopyButton({ text, label, disabled, variant, className }: CopyBu
     timer.current = setTimeout(() => setCopied(false), 1500)
   }
 
+  return { copied, copy }
+}
+
+export function CopyButton({ text, label, disabled, variant, className }: CopyButtonProps) {
+  const { t } = useTranslation()
+  const { copied, copy } = useCopy()
+
   return (
     <Button
       type="button"
       size="sm"
       variant={variant}
-      onClick={copy}
+      onClick={() => copy(text)}
       disabled={disabled}
       className={cn("h-8 min-w-[76px] gap-1.5", className)}
     >

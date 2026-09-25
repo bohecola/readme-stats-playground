@@ -48,6 +48,7 @@
     "bgTransparent": "Transparent background",
     "refresh": "Refresh (bypass cache)",
     "refreshLabel": "Refresh preview",
+    "shareLink": "Copy share link",
     "openInNewTab": "Open in new tab",
     "missingRequired": "Fill in the required fields first: {{fields}}",
     "missingRequiredShort": "Fill in the required fields first",

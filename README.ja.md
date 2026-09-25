@@ -16,6 +16,7 @@
 - github-readme-stats の全 5 種類のカードに対応：Stats、Top Languages、Pin、WakaTime、Gist
 - すべてのパラメータをフォームで編集。名前・説明・元のパラメータ名を表示し、URL に含まれるものはマークされます
 - ライブプレビューと、URL / Markdown / HTML のワンクリックコピー
+- 共有可能なリンク：アドレスバーは常に現在のカードのパラメータを反映（`?card=stats&username=octocat&theme=dark`）。URL ひとつで設定を渡せます
 - 共通スタイルは全カードで共有。必要ならカードごとに個別設定も可能
 - セルフホストしたインスタンスにも対応。データはすべてブラウザ内に保存されます
 

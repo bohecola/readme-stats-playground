@@ -16,6 +16,7 @@
 - 覆盖 github-readme-stats 全部 5 种卡片：Stats、Top Languages、Pin、WakaTime、Gist
 - 参数即表单：每个参数都有名称、说明和原始参数名，写入 URL 的参数会被标记
 - 实时预览，一键复制 URL / Markdown / HTML
+- 可分享链接：地址栏始终对应当前卡片的参数（`?card=stats&username=octocat&theme=dark`），一条 URL 就能把配置交给别人
 - 通用样式对所有卡片共用，单张卡片也可以单独设置
 - 可指向任意自建实例；所有数据只保存在浏览器本地
 

@@ -1,8 +1,10 @@
 import { type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 import {
+  Check,
   ExternalLink,
   Grid2x2,
+  Link2,
   ImageOff,
   LoaderCircle,
   Moon,
@@ -11,7 +13,7 @@ import {
   TriangleAlert,
 } from "lucide-react"
 
-import { CopyButton } from "@/components/CopyButton"
+import { CopyButton, useCopy } from "@/components/CopyButton"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -143,6 +145,7 @@ export function Preview({ url, markdown, html, missingRequired }: PreviewProps) 
               <ExternalLink />
             )}
           </Button>
+          <ShareLinkButton />
         </div>
       </div>
 
@@ -295,6 +298,24 @@ function useCardImage(src: string) {
     loading: !current || state.status === "loading",
     error: current && state.status === "error",
   }
+}
+
+/** Copies the playground URL, which mirrors the current card's parameters. */
+function ShareLinkButton() {
+  const { t } = useTranslation()
+  const { copied, copy } = useCopy()
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="h-8 w-8 text-muted-foreground"
+      title={t("preview.shareLink")}
+      aria-label={t("preview.shareLink")}
+      onClick={() => copy(window.location.href)}
+    >
+      {copied ? <Check /> : <Link2 />}
+    </Button>
+  )
 }
 
 function PreviewMessage({

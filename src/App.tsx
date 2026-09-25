@@ -11,7 +11,8 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { DEFAULT_BASE_URL, DEFAULT_USERNAME, REPO_URL, UPSTREAM_REPO_URL } from "@/lib/config"
-import { COMMON_PARAMS, ENDPOINTS } from "@/lib/endpoints"
+import { COMMON_PARAMS, ENDPOINTS, type CardId } from "@/lib/endpoints"
+import { parseUrlState, toUrlSearch } from "@/lib/urlState"
 import { useParamText } from "@/lib/paramText"
 import { cn } from "@/lib/utils"
 import {
@@ -26,6 +27,9 @@ const LS_BASE = "rsp:baseUrl"
 const LS_VALUES = "rsp:values"
 const LS_COMMON = "rsp:common"
 const LS_OWN_STYLE = "rsp:ownStyle"
+
+/** A shared link (?card=…&param=…) takes precedence over what's stored. */
+const URL_STATE = parseUrlState(window.location.search)
 
 const COMMON_KEYS = new Set(COMMON_PARAMS.map((p) => p.key))
 const isCommonKey = (key: string) => COMMON_KEYS.has(key)
@@ -77,7 +81,17 @@ function readJson<T>(key: string): T | null {
   }
 }
 
-function loadState(): StoredState {
+function writeStorage(state: StoredState) {
+  try {
+    localStorage.setItem(LS_VALUES, JSON.stringify(state.values))
+    localStorage.setItem(LS_COMMON, JSON.stringify(state.common))
+    localStorage.setItem(LS_OWN_STYLE, JSON.stringify(state.ownStyle))
+  } catch {
+    /* ignore */
+  }
+}
+
+function loadStoredState(): StoredState {
   const values = { ...seedValues(), ...readJson<Record<string, ParamValues>>(LS_VALUES) }
   const common = readJson<ParamValues>(LS_COMMON)
   if (common) {
@@ -98,13 +112,31 @@ function loadState(): StoredState {
   return { values, common: shared, ownStyle }
 }
 
+/** Stored state with a shared link's card layered on top; the link is then kept. */
+function loadState(): StoredState {
+  const state = loadStoredState()
+  if (!URL_STATE) return state
+  const { cardId, values } = URL_STATE
+  const { own, common } = splitCommon(values)
+  // A link that carries style is reproduced as the card's own style; one
+  // without style params just takes the shared style.
+  const styled = Object.keys(common).length > 0
+  const next = {
+    ...state,
+    values: { ...state.values, [cardId]: styled ? { ...own, ...common } : own },
+    ownStyle: { ...state.ownStyle, [cardId]: styled },
+  }
+  writeStorage(next)
+  return next
+}
+
 export default function App() {
   const { t } = useTranslation()
   const paramText = useParamText()
   const [baseUrl, setBaseUrl] = useState(
-    () => localStorage.getItem(LS_BASE) ?? DEFAULT_BASE_URL,
+    () => URL_STATE?.baseUrl ?? localStorage.getItem(LS_BASE) ?? DEFAULT_BASE_URL,
   )
-  const [activeId, setActiveId] = useState(ENDPOINTS[0].id)
+  const [activeId, setActiveId] = useState<CardId>(URL_STATE?.cardId ?? ENDPOINTS[0].id)
   const [state, setState] = useState<StoredState>(loadState)
   const { values: allValues, common, ownStyle } = state
 
@@ -120,13 +152,7 @@ export default function App() {
   const persist = (patch: Partial<StoredState>) => {
     const next = { ...state, ...patch }
     setState(next)
-    try {
-      localStorage.setItem(LS_VALUES, JSON.stringify(next.values))
-      localStorage.setItem(LS_COMMON, JSON.stringify(next.common))
-      localStorage.setItem(LS_OWN_STYLE, JSON.stringify(next.ownStyle))
-    } catch {
-      /* ignore */
-    }
+    writeStorage(next)
   }
 
   const handleChange = (key: string, value: ParamValue) => {
@@ -188,6 +214,14 @@ export default function App() {
     () => buildUrl(baseUrl, endpoint, values),
     [baseUrl, endpoint, values],
   )
+  // Keep the address bar shareable: it always describes the current card.
+  useEffect(() => {
+    const search = toUrlSearch(endpoint, values, baseUrl, DEFAULT_BASE_URL)
+    if (window.location.search !== search) {
+      window.history.replaceState(null, "", search + window.location.hash)
+    }
+  }, [endpoint, values, baseUrl])
+
   const alt = `${endpoint.id} card`
 
   const setKeys = useMemo(() => new Set(built.pairs.map(([key]) => key)), [built])

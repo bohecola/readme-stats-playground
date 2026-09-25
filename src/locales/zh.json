@@ -48,6 +48,7 @@
     "bgTransparent": "透明背景",
     "refresh": "刷新（绕过缓存）",
     "refreshLabel": "刷新预览",
+    "shareLink": "复制分享链接",
     "openInNewTab": "在新标签页打开",
     "missingRequired": "请先填写必填项：{{fields}}",
     "missingRequiredShort": "请先填写必填项",
