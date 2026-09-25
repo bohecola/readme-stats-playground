@@ -137,6 +137,8 @@ export default function App() {
     () => URL_STATE?.baseUrl ?? localStorage.getItem(LS_BASE) ?? DEFAULT_BASE_URL,
   )
   const [activeId, setActiveId] = useState<CardId>(URL_STATE?.cardId ?? ENDPOINTS[0].id)
+  // Lifted so the preview's "set up an instance" prompt can open the editor.
+  const [editingInstance, setEditingInstance] = useState(false)
   const [state, setState] = useState<StoredState>(loadState)
   const { values: allValues, common, ownStyle } = state
 
@@ -323,12 +325,16 @@ export default function App() {
                 const param = endpoint.params.find((p) => p.key === key)
                 return (param && paramText(param, endpoint.id, "label")) ?? key
               })}
+              instanceMissing={baseUrl.trim() === ""}
+              onSetupInstance={() => setEditingInstance(true)}
             />
           </CardContent>
           {/* Set-once setting that shapes both the preview and the copied code above. */}
           <BaseUrlField
             value={baseUrl}
             onChange={updateBase}
+            editing={editingInstance}
+            onEditingChange={setEditingInstance}
             className="rounded-b-xl border-t bg-muted/30 px-4 py-2 sm:px-6"
           />
         </Card>
@@ -375,15 +381,23 @@ const iconButton =
 function BaseUrlField({
   value,
   onChange,
+  editing,
+  onEditingChange: setEditing,
   className,
 }: {
   value: string
   onChange: (v: string) => void
+  editing: boolean
+  onEditingChange: (editing: boolean) => void
   className?: string
 }) {
   const { t } = useTranslation()
-  const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(value)
+  // Opened from outside (the preview's prompt): start from the current value.
+  useEffect(() => {
+    if (editing) setDraft(value)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editing])
   const editRef = useRef<HTMLButtonElement>(null)
 
   const startEdit = () => {
@@ -391,7 +405,7 @@ function BaseUrlField({
     setEditing(true)
   }
   const finish = (next?: string) => {
-    // An empty instance would produce relative URLs; fall back to the default.
+    // Empty falls back to the deployment default (which may itself be empty).
     if (next !== undefined) onChange(next.trim() || DEFAULT_BASE_URL)
     setEditing(false)
   }
@@ -424,10 +438,10 @@ function BaseUrlField({
               if (e.key === "Enter") finishAndRefocus(draft)
               if (e.key === "Escape") finishAndRefocus()
             }}
-            placeholder={DEFAULT_BASE_URL}
+            placeholder={DEFAULT_BASE_URL || t("app.instancePlaceholder")}
             className="h-7 min-w-0 flex-1 rounded-md border border-input bg-background px-2 font-mono text-xs shadow-xs outline-hidden placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
           />
-          {value !== DEFAULT_BASE_URL && (
+          {DEFAULT_BASE_URL !== "" && value !== DEFAULT_BASE_URL && (
             <button
               type="button"
               title={t("app.resetBaseUrl")}
@@ -459,9 +473,13 @@ function BaseUrlField({
           aria-label={`${t("app.editBaseUrl")}: ${value}`}
           className="group -mr-1.5 flex h-7 min-w-0 flex-1 items-center gap-2 rounded-md px-2 text-left transition-colors hover:bg-accent focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
         >
-          <span className="min-w-0 flex-1 truncate font-mono text-foreground/90">
-            {displayHost(value)}
-          </span>
+          {value ? (
+            <span className="min-w-0 flex-1 truncate font-mono text-foreground/90">
+              {displayHost(value)}
+            </span>
+          ) : (
+            <span className="min-w-0 flex-1 truncate text-muted-foreground">{t("app.noInstance")}</span>
+          )}
           <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground group-hover:text-foreground" />
         </button>
       )}

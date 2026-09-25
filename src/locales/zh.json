@@ -1,8 +1,10 @@
 {
   "app": {
     "baseUrl": "部署域名",
-    "baseUrlHint": "卡片由该 github-readme-stats 实例渲染。公共实例经常触发 GitHub 限流，建议换成自己部署的实例。",
+    "baseUrlHint": "卡片由 github-readme-stats 实例渲染。公共实例已不可用（被暂停），请填写你自己部署的实例。",
     "resetBaseUrl": "恢复默认域名",
+    "noInstance": "未设置实例",
+    "instancePlaceholder": "https://your-instance.vercel.app",
     "editBaseUrl": "修改部署域名",
     "saveBaseUrl": "保存",
     "projectRepo": "在 GitHub 上查看源码",
@@ -52,6 +54,10 @@
     "openInNewTab": "在新标签页打开",
     "missingRequired": "请先填写必填项：{{fields}}",
     "missingRequiredShort": "请先填写必填项",
+    "noInstance": "预览需要一个 github-readme-stats 实例。公共实例已不可用，请填写你自己部署的实例地址。",
+    "noInstanceShort": "请先填写 github-readme-stats 实例",
+    "setupInstance": "填写实例地址",
+    "deployGuide": "如何部署自己的实例",
     "listSeparator": "、",
     "loadFailed": "加载失败，请检查部署域名和参数",
     "staleError": "最新参数加载失败，显示的是上一次的结果",

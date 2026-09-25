@@ -11,10 +11,12 @@ import {
   RefreshCw,
   Sun,
   TriangleAlert,
+  Unplug,
 } from "lucide-react"
 
 import { CopyButton, useCopy } from "@/components/CopyButton"
 import { Button } from "@/components/ui/button"
+import { UPSTREAM_DEPLOY_URL } from "@/lib/config"
 import { cn } from "@/lib/utils"
 
 type Backdrop = "dark" | "light" | "checker"
@@ -66,9 +68,20 @@ interface PreviewProps {
   markdown: string
   html: string
   missingRequired: string[]
+  /** No github-readme-stats instance set yet: nothing can render. */
+  instanceMissing: boolean
+  /** Opens the instance editor. */
+  onSetupInstance: () => void
 }
 
-export function Preview({ url, markdown, html, missingRequired }: PreviewProps) {
+export function Preview({
+  url,
+  markdown,
+  html,
+  missingRequired,
+  instanceMissing,
+  onSetupInstance,
+}: PreviewProps) {
   const { t } = useTranslation()
   const [backdrop, setBackdrop] = useState<Backdrop>(() =>
     loadChoice(LS_BACKDROP, ["dark", "light", "checker"], "dark"),
@@ -78,7 +91,7 @@ export function Preview({ url, markdown, html, missingRequired }: PreviewProps) 
   )
   const [nonce, setNonce] = useState(0)
 
-  const ready = missingRequired.length === 0
+  const ready = !instanceMissing && missingRequired.length === 0
   // Cache-buster only affects the preview request, not the URL we display/copy.
   const requested = ready ? `${url}${url.includes("?") ? "&" : "?"}_r=${nonce}` : ""
   const src = useDebounced(requested, PREVIEW_DEBOUNCE_MS)
@@ -156,7 +169,28 @@ export function Preview({ url, markdown, html, missingRequired }: PreviewProps) 
           BACKDROP_CLASS[backdrop],
         )}
       >
-        {!ready ? (
+        {instanceMissing ? (
+          <PreviewMessage backdrop={backdrop} icon={<Unplug className="h-5 w-5" />}>
+            {t("preview.noInstance")}
+            <span className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1">
+              <button
+                type="button"
+                onClick={onSetupInstance}
+                className="font-medium underline underline-offset-4 hover:opacity-80"
+              >
+                {t("preview.setupInstance")}
+              </button>
+              <a
+                href={UPSTREAM_DEPLOY_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-4 hover:opacity-80"
+              >
+                {t("preview.deployGuide")} ↗
+              </a>
+            </span>
+          </PreviewMessage>
+        ) : !ready ? (
           <PreviewMessage backdrop={backdrop} icon={<TriangleAlert className="h-5 w-5" />}>
             {t("preview.missingRequired", {
               fields: missingRequired.join(t("preview.listSeparator")),
@@ -250,7 +284,11 @@ export function Preview({ url, markdown, html, missingRequired }: PreviewProps) 
             <span className="min-w-0">
               <span className="block text-sm font-medium">{t("preview.live")}</span>
               <span className="block truncate text-xs text-muted-foreground">
-                {ready ? t("preview.tapToView") : t("preview.missingRequiredShort")}
+                {ready
+                  ? t("preview.tapToView")
+                  : instanceMissing
+                    ? t("preview.noInstanceShort")
+                    : t("preview.missingRequiredShort")}
               </span>
             </span>
           </button>

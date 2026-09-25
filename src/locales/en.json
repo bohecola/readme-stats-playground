@@ -1,8 +1,10 @@
 {
   "app": {
     "baseUrl": "Instance",
-    "baseUrlHint": "Cards are rendered by this github-readme-stats instance. The public one often hits GitHub rate limits, so consider your own deployment.",
+    "baseUrlHint": "Cards are rendered by a github-readme-stats instance. The public one is unreliable (currently paused), so enter your own deployment.",
     "resetBaseUrl": "Reset to the default instance",
+    "noInstance": "No instance set",
+    "instancePlaceholder": "https://your-instance.vercel.app",
     "editBaseUrl": "Edit instance URL",
     "saveBaseUrl": "Save",
     "projectRepo": "View source on GitHub",
@@ -52,6 +54,10 @@
     "openInNewTab": "Open in new tab",
     "missingRequired": "Fill in the required fields first: {{fields}}",
     "missingRequiredShort": "Fill in the required fields first",
+    "noInstance": "Previews need a github-readme-stats instance. The public one is unavailable, so enter the URL of your own deployment.",
+    "noInstanceShort": "Set a github-readme-stats instance first",
+    "setupInstance": "Enter instance URL",
+    "deployGuide": "How to deploy your own",
     "listSeparator": ", ",
     "loadFailed": "Failed to load. Check the instance URL and parameters.",
     "staleError": "The latest parameters failed to load; showing the previous result",
