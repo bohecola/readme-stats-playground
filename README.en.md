@@ -13,16 +13,11 @@ A visual playground for [github-readme-stats](https://github.com/anuraghazra/git
 
 ## Features
 
-- **All 5 card types**: Stats, Top Languages, Pin, WakaTime and Gist
-- **Complete parameter forms**, each field labelled with its URL key, with hints where useful; params that end up in the URL are marked
-- **Live preview** on dark, light or transparent (checkerboard) backdrops
-- **One-click copy** as URL, Markdown or HTML
-- **Shared common style**: theme, colors and border settings apply to every card at once; any card can opt out and keep its own
-- **Color picker**: HEX / RGB / HSL, alpha, presets and recent colors; visual gradient editor for `bg_color`
-- **Switchable instance**: point it at any self-hosted github-readme-stats deployment, from the preview card's footer
-- **Stored locally**: parameters and settings live in your browser's localStorage; nothing is uploaded
-- **Light / dark theme**, following the system by default
-- **English and Chinese UI**, following the browser language (English otherwise), switchable in the header
+- All 5 github-readme-stats cards: Stats, Top Languages, Pin, WakaTime and Gist
+- Every parameter as a form field, with its name, a hint and the raw URL key; the ones written to the URL are marked
+- Live preview and one-click copy as URL / Markdown / HTML
+- Common style shared across cards, with per-card overrides when you want them
+- Works with any self-hosted instance; everything stays in your browser
 
 ## Getting started
 
