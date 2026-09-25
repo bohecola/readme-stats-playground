@@ -39,6 +39,7 @@ pnpm preview    # 本番ビルドをローカルで確認
 | --- | --- | --- |
 | `VITE_DEFAULT_BASE_URL` | 既定で使う github-readme-stats インスタンス | `https://github-readme-stats.vercel.app` |
 | `VITE_DEFAULT_USERNAME` | 初回アクセス時にあらかじめ入力される GitHub ユーザー名 | 空 |
+| `VITE_SITE_URL` | デプロイ先の公開 URL。設定するとビルド時に canonical リンク、Open Graph 画像、JSON-LD が出力され、検索エンジンや AI クローラーに認識されやすくなります | 空 |
 
 > 公開インスタンスは全員で共有されているため、GitHub API のレート制限に頻繁にかかります。[自前でデプロイ](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own)して `VITE_DEFAULT_BASE_URL` に設定することをおすすめします。
 

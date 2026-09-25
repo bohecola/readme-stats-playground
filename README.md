@@ -39,6 +39,7 @@ Defaults are set with build-time env vars. Copy `.env.example` to `.env.local` (
 | --- | --- | --- |
 | `VITE_DEFAULT_BASE_URL` | github-readme-stats instance to use by default | `https://github-readme-stats.vercel.app` |
 | `VITE_DEFAULT_USERNAME` | GitHub username pre-filled on first visit | empty |
+| `VITE_SITE_URL` | Public URL of the deployment; when set, the build emits the canonical link, Open Graph image and JSON-LD for search engines and AI crawlers | empty |
 
 > The public instance is shared by everyone and frequently hits GitHub API rate limits. Consider [deploying your own](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own) and setting it as `VITE_DEFAULT_BASE_URL`.
 
