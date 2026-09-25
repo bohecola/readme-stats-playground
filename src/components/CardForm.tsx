@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator"
 import { COMMON_PARAMS, type EndpointDef, type ParamDef } from "@/lib/endpoints"
 import type { ParamValue, ParamValues } from "@/lib/buildUrl"
 import type { ParamScope } from "@/lib/paramText"
+import { readStorage, writeStorage } from "@/lib/storage"
 import { cn } from "@/lib/utils"
 
 const LS_STYLE_OPEN = "rsp:styleOpen"
@@ -42,21 +43,11 @@ export function CardForm({
   })
 
   // Common style is long and mostly set-once, so it starts folded; the choice sticks.
-  const [styleOpen, setStyleOpen] = useState(() => {
-    try {
-      return localStorage.getItem(LS_STYLE_OPEN) === "1"
-    } catch {
-      return false
-    }
-  })
+  const [styleOpen, setStyleOpen] = useState(() => readStorage(LS_STYLE_OPEN) === "1")
   const toggleStyle = () => {
     const next = !styleOpen
     setStyleOpen(next)
-    try {
-      localStorage.setItem(LS_STYLE_OPEN, next ? "1" : "0")
-    } catch {
-      // Remembering the fold is optional.
-    }
+    writeStorage(LS_STYLE_OPEN, next ? "1" : "0")
   }
   const styleCount = COMMON_PARAMS.filter((p) => setKeys.has(p.key)).length
 

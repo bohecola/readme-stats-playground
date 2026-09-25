@@ -1,6 +1,3 @@
-import isNil from "lodash/isNil"
-import trim from "lodash/trim"
-
 import { stripHash } from "./color"
 import type { EndpointDef, ParamDef } from "./endpoints"
 import { COMMON_PARAMS } from "./endpoints"
@@ -13,7 +10,7 @@ export type ParamValues = Record<string, ParamValue>
  * `https://` when no scheme was given, so `my-instance.vercel.app` works too.
  */
 export function normalizeBaseUrl(input: string): string {
-  const s = trim(input).replace(/\/+$/, "")
+  const s = input.trim().replace(/\/+$/, "")
   if (!s) return ""
   return /^[a-z][a-z0-9+.-]*:\/\//i.test(s) ? s : `https://${s}`
 }
@@ -24,8 +21,8 @@ export function allParams(endpoint: EndpointDef): ParamDef[] {
 }
 
 function isEmptyValue(v: ParamValue): boolean {
-  if (isNil(v)) return true
-  if (typeof v === "string") return trim(v) === ""
+  if (v == null) return true
+  if (typeof v === "string") return v.trim() === ""
   if (Array.isArray(v)) return v.length === 0
   return false
 }
@@ -53,13 +50,13 @@ function serialize(param: ParamDef, value: ParamValue): string | null {
       return stripHash(String(value))
     }
     case "number": {
-      const text = trim(String(value))
+      const text = String(value).trim()
       if (param.default !== undefined && Number(text) === param.default) return null
       return text
     }
     case "text":
     default:
-      return trim(String(value))
+      return String(value).trim()
   }
 }
 
@@ -90,7 +87,7 @@ export function buildUrl(
     }
   }
 
-  const base = trim(baseUrl).replace(/\/+$/, "")
+  const base = baseUrl.trim().replace(/\/+$/, "")
   const query = pairs
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join("&")

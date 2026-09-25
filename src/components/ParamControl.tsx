@@ -17,7 +17,6 @@ import {
 import { cn } from "@/lib/utils"
 import type { ParamDef } from "@/lib/endpoints"
 import { useParamText, type ParamScope } from "@/lib/paramText"
-import { THEMES } from "@/lib/themes"
 import type { ParamValue } from "@/lib/buildUrl"
 
 interface ParamControlProps {
@@ -125,7 +124,7 @@ export function ParamControl({
             <SelectValue placeholder={t("form.select")} />
           </SelectTrigger>
           <SelectContent position="popper">
-            {(param.key === "theme" ? THEMES : param.options ?? []).map((opt) => (
+            {(param.options ?? []).map((opt) => (
               <SelectItem key={opt} value={opt}>
                 {opt}
               </SelectItem>

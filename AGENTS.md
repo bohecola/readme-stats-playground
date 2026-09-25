@@ -12,7 +12,7 @@ A static single-page app (Vite + React) that builds card URLs for [github-readme
 | --- | --- |
 | `pnpm install` | Node 20+, pnpm 11 (pinned in `package.json`) |
 | `pnpm dev` | dev server at http://localhost:5173 |
-| `pnpm lint` | `tsc --noEmit` — the only static check; must pass on every commit |
+| `pnpm lint` | `tsc --noEmit` for `src/` and `vite.config.ts` — the only static check; must pass on every commit |
 | `pnpm test` | Vitest unit tests for the pure helpers in `src/lib/*.test.ts` (URL building, URL state, colors) |
 | `pnpm build` | type-check + production build into `dist/` (CI runs `lint` and `build`) |
 
@@ -24,6 +24,7 @@ A static single-page app (Vite + React) that builds card URLs for [github-readme
 - **Parameters are declared once** in `src/lib/endpoints.ts` (type, default, range, choices). Their text lives in `src/locales/{en,zh,ja}.json` under `params.<key>`; per-card wording goes under `cardParams.<card>.<key>`. Keep the key set identical across locale files.
 - **URL building** (`src/lib/buildUrl.ts`) omits defaults and empty values; colors are written without `#`.
 - **Both backends stay supported.** Params (or multiselect choices) that only GitHub Stats Extended understands carry `extended: true` / `extendedChoices` in `endpoints.ts` and show an "ext" mark in the UI; github-readme-stats simply ignores them. Audit against the successor's docs (`apps/frontend/src/content/docs/docs/cards/*.md` in its repo) and its `packages/core/src/api/*` handlers.
+- **localStorage goes through `src/lib/storage.ts`** (`readStorage` / `writeStorage` / `readJson`), which never throws; keys are `rsp:*`. Don't call `localStorage` directly.
 - **Common style** (theme, colors, border…) is shared across cards in App state (`common`); a card with `ownStyle[card] === true` keeps its own copy instead.
 - **The page URL mirrors the card**: `?card=<id>&<param>=<value>…&instance=<url>` (`src/lib/urlState.ts`). A link wins over stored state on load and is then persisted.
 - **Tailwind 4 specifics already handled in `src/index.css`**: buttons get `cursor: pointer` back (v4 preflight removed it); the react-colorful overrides must stay *unlayered* because the library injects unlayered styles at runtime; theme tokens are `hsl(var(--x))` values from the `:root` / `.dark` blocks.
