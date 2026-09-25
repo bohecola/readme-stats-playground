@@ -11,7 +11,7 @@
 
 ![README Stats Playground のスクリーンショット](./docs/screenshot.ja.png)
 
-> これはコミュニティ製のツールで、github-readme-stats 公式とは関係ありません。カードは指定した github-readme-stats インスタンスで描画されます。
+> これはコミュニティ製のツールで、いずれのプロジェクトの公式とも関係ありません。カードは指定したインスタンスで描画されます。元の github-readme-stats でも、メンテナンスが続いている API 互換の後継プロジェクト [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) でも構いません。
 
 ## 機能
 
@@ -20,7 +20,7 @@
 - ライブプレビューと、URL / Markdown / HTML のワンクリックコピー
 - 共有可能なリンク：アドレスバーは常に現在のカードのパラメータを反映（`?card=stats&username=octocat&theme=dark`）。URL ひとつで設定を渡せます
 - 共通スタイルは全カードで共有。必要ならカードごとに個別設定も可能
-- 自分の github-readme-stats インスタンスで描画。データはすべてブラウザ内に保存されます
+- github-readme-stats と GitHub Stats Extended のインスタンスに対応（公開・セルフホストどちらも）。データはすべてブラウザ内に保存されます
 
 ## はじめに
 
@@ -43,7 +43,7 @@ pnpm preview    # 本番ビルドをローカルで確認
 | `VITE_DEFAULT_USERNAME` | 初回アクセス時にあらかじめ入力される GitHub ユーザー名 | 空 |
 | `VITE_SITE_URL` | デプロイ先の公開 URL。設定するとビルド時に canonical リンク、Open Graph 画像、JSON-LD が出力され、検索エンジンや AI クローラーに認識されやすくなります | 空 |
 
-> カードの描画には github-readme-stats インスタンスが必要です。公開インスタンス（`github-readme-stats.vercel.app`）は不安定で現在停止中のため、既定では各訪問者が自分のインスタンスを入力します。持っていない場合は[自前でデプロイ](https://github.com/anuraghazra/github-readme-stats#deploy-on-your-own)してください。自分用にこのプレイグラウンドをホストする場合は、`VITE_DEFAULT_BASE_URL` に自分のインスタンスを設定しておくと最初から入力済みになります。
+> カードの描画には github-readme-stats 互換のインスタンスが必要です。github-readme-stats 自体はメンテナンスが終了し、公開インスタンスも停止しています。後継プロジェクト [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) は API 互換で、公開インスタンス `github-stats-extended.vercel.app` を運用しており、プレイグラウンドからワンクリックで利用できます。どちらのプロジェクトのセルフホストインスタンスも使えます。自分用にホストする場合は `VITE_DEFAULT_BASE_URL` に自分のインスタンスを設定しておくと最初から入力済みになります。
 
 ## デプロイ
 

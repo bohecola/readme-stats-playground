@@ -10,7 +10,13 @@ import { Preview } from "@/components/Preview"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { DEFAULT_BASE_URL, DEFAULT_USERNAME, REPO_URL, UPSTREAM_REPO_URL } from "@/lib/config"
+import {
+  DEFAULT_BASE_URL,
+  DEFAULT_USERNAME,
+  REPO_URL,
+  SUGGESTED_INSTANCE_URL,
+  UPSTREAM_REPO_URL,
+} from "@/lib/config"
 import { COMMON_PARAMS, ENDPOINTS, type CardId } from "@/lib/endpoints"
 import { parseUrlState, toUrlSearch } from "@/lib/urlState"
 import { useParamText } from "@/lib/paramText"
@@ -328,6 +334,7 @@ export default function App() {
               })}
               instanceMissing={baseUrl.trim() === ""}
               onSetupInstance={() => setEditingInstance(true)}
+              onUseSuggestedInstance={() => updateBase(SUGGESTED_INSTANCE_URL)}
             />
           </CardContent>
           {/* Set-once setting that shapes both the preview and the copied code above. */}

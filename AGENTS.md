@@ -4,7 +4,7 @@ Guidance for coding agents working in this repository. Humans: see [README.md](.
 
 ## What this is
 
-A static single-page app (Vite + React) that builds [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) card URLs: pick a card, edit its parameters in a form, preview live, copy URL / Markdown / HTML. No backend, no database, no automated UI tests. All source is under `src/`.
+A static single-page app (Vite + React) that builds card URLs for [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) and its API-compatible successor [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) (the original is unmaintained; both must stay supported): pick a card, edit its parameters in a form, preview live, copy URL / Markdown / HTML. No backend, no database, no automated UI tests. All source is under `src/`.
 
 ## Commands
 
