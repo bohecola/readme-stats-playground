@@ -29,6 +29,8 @@
 ```bash
 pnpm install
 pnpm dev        # http://localhost:5173
+pnpm test       # 单元测试（Vitest）
+pnpm lint       # ESLint + 类型检查；`pnpm lint:fix` 自动格式化
 pnpm build      # 类型检查 + 生产构建，产物在 dist/
 pnpm preview    # 本地预览生产构建
 ```
@@ -79,8 +81,9 @@ Vercel 一键部署——过程中会要求填写 `VITE_DEFAULT_BASE_URL`，填�
 
 ```
 src/
-├── App.tsx                  # 页面布局、状态管理
+├── App.tsx                  # 页面布局与状态接线
 ├── components/
+│   ├── BaseUrlField.tsx     # 实例地址的显示与编辑
 │   ├── CardTabs.tsx         # 卡片类型切换
 │   ├── CardForm.tsx         # 按卡片渲染参数表单
 │   ├── ParamControl.tsx     # 按参数类型渲染控件
@@ -90,8 +93,11 @@ src/
 │   ├── HintTip.tsx          # 说明气泡（ⓘ 图标或带虚线下划线的文字）
 │   ├── CopyButton.tsx       # 复制按钮
 │   ├── LanguageToggle.tsx   # 语言切换
+│   ├── Logo.tsx             # 应用 Logo
 │   ├── ThemeToggle.tsx      # 明暗主题切换
 │   └── ui/                  # shadcn/ui 组件（与 registry 保持一致，不手改）
+├── hooks/
+│   └── useCopy.ts           # 复制到剪贴板（带反馈）
 ├── auto-imports.d.ts        # unplugin-auto-import 生成，React hooks 无需 import
 ├── i18n.ts                  # i18next 初始化与语言检测
 ├── locales/                 # 翻译文件（en.json / zh.json / ja.json）
@@ -101,17 +107,20 @@ src/
     ├── paramText.ts         # 参数文案查找（卡片覆盖 → 通用）
     ├── buildUrl.ts          # 拼接卡片 URL（省略默认值与空值）
     ├── urlState.ts          # 页面 URL ⇄ 卡片状态（可分享链接）
+    ├── cardState.ts         # 状态模型、存储、旧格式迁移、分享链接叠加（纯函数，有测试）
+    ├── storage.ts           # 不会抛错的 localStorage 封装
     ├── color.ts             # 颜色格式换算与渐变解析
-    └── themes.ts            # 内置主题列表
+    ├── themes.ts            # 内置主题列表
+    └── *.test.ts            # 上述工具函数的 Vitest 单元测试
 ```
 
 ## 技术栈
 
-[Vite](https://vitejs.dev/) · [React 19](https://react.dev/) · TypeScript · [Tailwind CSS 4](https://tailwindcss.com/) · [shadcn/ui](https://ui.shadcn.com/) · [react-i18next](https://react.i18next.com/) · [react-colorful](https://github.com/omgovich/react-colorful) · [lucide](https://lucide.dev/)
+[Vite](https://vitejs.dev/) · [React 19](https://react.dev/) · TypeScript · [Tailwind CSS 4](https://tailwindcss.com/) · [shadcn/ui](https://ui.shadcn.com/) · [react-i18next](https://react.i18next.com/) · [react-colorful](https://github.com/omgovich/react-colorful) · [lucide](https://lucide.dev/) · [Vitest](https://vitest.dev/) · ESLint ([antfu config](https://github.com/antfu/eslint-config))
 
 ## 参与贡献
 
-欢迎提交 Issue 和 Pull Request。提交前请确保 `pnpm lint` 和 `pnpm build` 通过（CI 会自动检查）。
+欢迎提交 Issue 和 Pull Request。提交前请确保 `pnpm lint`、`pnpm test` 和 `pnpm build` 通过（CI 会自动检查这三项）。ESLint 同时负责格式化，直接运行 `pnpm lint:fix`，不用手动调格式。
 
 项目约定——React hooks 自动导入、`src/components/ui/` 保持 shadcn/ui 原样、参数和文案放在哪里——都写在 [AGENTS.md](./AGENTS.md) 里，对人和编码 agent 同样适用。
 

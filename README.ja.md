@@ -29,6 +29,8 @@ Node.js 20.19 以上（または 22.12 以上）と pnpm 11 が必要です（`c
 ```bash
 pnpm install
 pnpm dev        # http://localhost:5173
+pnpm test       # ユニットテスト（Vitest）
+pnpm lint       # ESLint + 型チェック。`pnpm lint:fix` で整形
 pnpm build      # 型チェック + 本番ビルド（dist/ に出力）
 pnpm preview    # 本番ビルドをローカルで確認
 ```
@@ -79,8 +81,9 @@ Vercel / Netlify / Cloudflare Pages に手動でインポートする場合：�
 
 ```
 src/
-├── App.tsx                  # ページレイアウトと状態管理
+├── App.tsx                  # ページレイアウトと状態の接続
 ├── components/
+│   ├── BaseUrlField.tsx     # インスタンス URL の表示と編集
 │   ├── CardTabs.tsx         # カード種別のタブ
 │   ├── CardForm.tsx         # カードごとのパラメータフォーム
 │   ├── ParamControl.tsx     # パラメータ型ごとのコントロール
@@ -90,8 +93,11 @@ src/
 │   ├── HintTip.tsx          # 説明バブル（情報アイコン、または点線下線付きテキスト）
 │   ├── CopyButton.tsx       # コピーボタン
 │   ├── LanguageToggle.tsx   # 言語切り替え
+│   ├── Logo.tsx             # アプリのロゴ
 │   ├── ThemeToggle.tsx      # ライト / ダーク切り替え
 │   └── ui/                  # shadcn/ui コンポーネント（registry と同一のまま保持）
+├── hooks/
+│   └── useCopy.ts           # クリップボードへのコピー（フィードバック付き）
 ├── auto-imports.d.ts        # unplugin-auto-import が生成。React hooks の import は不要
 ├── i18n.ts                  # i18next の初期化と言語検出
 ├── locales/                 # 翻訳ファイル（en.json / zh.json / ja.json）
@@ -101,17 +107,20 @@ src/
     ├── paramText.ts         # パラメータ文言の解決（カード個別 → 共通）
     ├── buildUrl.ts          # カード URL の組み立て（既定値と空値は省略）
     ├── urlState.ts          # ページ URL ⇄ カードの状態（共有リンク）
+    ├── cardState.ts         # 状態モデル、保存、旧形式の移行、共有リンクの適用（純粋関数、テスト済み）
+    ├── storage.ts           # 例外を投げない localStorage ラッパー
     ├── color.ts             # 色の変換とグラデーションの解析
-    └── themes.ts            # 組み込みテーマ一覧
+    ├── themes.ts            # 組み込みテーマ一覧
+    └── *.test.ts            # 上記ヘルパーの Vitest ユニットテスト
 ```
 
 ## 技術スタック
 
-[Vite](https://vitejs.dev/) · [React 19](https://react.dev/) · TypeScript · [Tailwind CSS 4](https://tailwindcss.com/) · [shadcn/ui](https://ui.shadcn.com/) · [react-i18next](https://react.i18next.com/) · [react-colorful](https://github.com/omgovich/react-colorful) · [lucide](https://lucide.dev/)
+[Vite](https://vitejs.dev/) · [React 19](https://react.dev/) · TypeScript · [Tailwind CSS 4](https://tailwindcss.com/) · [shadcn/ui](https://ui.shadcn.com/) · [react-i18next](https://react.i18next.com/) · [react-colorful](https://github.com/omgovich/react-colorful) · [lucide](https://lucide.dev/) · [Vitest](https://vitest.dev/) · ESLint ([antfu config](https://github.com/antfu/eslint-config))
 
 ## コントリビュート
 
-Issue や Pull Request を歓迎します。送る前に `pnpm lint` と `pnpm build` が通ることを確認してください（CI でも両方チェックされます）。
+Issue や Pull Request を歓迎します。送る前に `pnpm lint`、`pnpm test`、`pnpm build` が通ることを確認してください（CI で 3 つともチェックされます）。ESLint がフォーマッターも兼ねているので、手で整形せず `pnpm lint:fix` を実行してください。
 
 プロジェクトの約束事——React hooks の自動 import、`src/components/ui/` を shadcn/ui のまま保つこと、パラメータと文言の置き場所——は [AGENTS.md](./AGENTS.md) にまとめてあります。人にもコーディングエージェントにも同じく適用されます。
 
