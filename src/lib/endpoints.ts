@@ -16,6 +16,10 @@ export interface ParamDef {
   options?: string[]
   /** Choices for `multiselect` (values are comma-joined in the URL). */
   choices?: string[]
+  /** Extra `multiselect` choices only GitHub Stats Extended understands. */
+  extendedChoices?: string[]
+  /** Only GitHub Stats Extended supports this param; github-readme-stats ignores it. */
+  extended?: boolean
   required?: boolean
   /** `color` only: also accept the `angle,c1,c2,...` gradient syntax. */
   gradient?: boolean
@@ -73,12 +77,25 @@ export const ENDPOINTS: EndpointDef[] = [
           "prs_merged",
           "prs_merged_percentage",
         ],
+        extendedChoices: [
+          "contributions",
+          "all_time_contribs",
+          "prs_authored",
+          "prs_commented",
+          "prs_reviewed",
+          "issues_authored",
+          "issues_commented",
+        ],
       },
       { key: "exclude_repo", type: "text" },
+      { key: "repo", type: "text", extended: true },
+      { key: "owner", type: "text", extended: true },
+      { key: "role", type: "multiselect", choices: ["OWNER", "ORGANIZATION_MEMBER", "COLLABORATOR"], extended: true },
       { key: "show_icons", type: "boolean", default: false },
       { key: "hide_title", type: "boolean", default: false },
       { key: "hide_rank", type: "boolean", default: false },
       { key: "include_all_commits", type: "boolean", default: false },
+      { key: "contribs_include_own_repos", type: "boolean", default: false, extended: true },
       { key: "text_bold", type: "boolean", default: true },
       { key: "disable_animations", type: "boolean", default: false },
       { key: "rank_icon", type: "select", options: ["default", "github", "percentile"], default: "default" },
@@ -106,14 +123,17 @@ export const ENDPOINTS: EndpointDef[] = [
       { key: "stats_format", type: "select", options: ["percentages", "bytes"], default: "percentages" },
       { key: "hide", type: "text" },
       { key: "exclude_repo", type: "text" },
+      { key: "role", type: "multiselect", choices: ["OWNER", "ORGANIZATION_MEMBER", "COLLABORATOR"], extended: true },
       // No default: upstream picks 5 or 6 depending on layout, so always send what's set.
       { key: "langs_count", type: "number", min: 1, max: 20 },
       { key: "hide_title", type: "boolean", default: false },
       { key: "hide_progress", type: "boolean", default: false },
+      { key: "hide_values", type: "boolean", default: false, extended: true },
       { key: "disable_animations", type: "boolean", default: false },
       { key: "card_width", type: "number", default: 300, min: 0, step: 10, unit: "px" },
       { key: "size_weight", type: "number", default: 1, min: 0, step: 0.1 },
       { key: "count_weight", type: "number", default: 0, min: 0, step: 0.1 },
+      { key: "prog_bar_bg_color", type: "color", extended: true },
     ],
   },
   {
@@ -124,6 +144,18 @@ export const ENDPOINTS: EndpointDef[] = [
       { key: "repo", type: "text", required: true },
       { key: "show_owner", type: "boolean", default: false },
       { key: "description_lines_count", type: "number", min: 1, max: 3 },
+      {
+        key: "show",
+        type: "multiselect",
+        choices: ["prs_authored", "prs_commented", "prs_reviewed", "issues_authored", "issues_commented"],
+        extended: true,
+      },
+      { key: "number_format", type: "select", options: ["short", "long"], default: "short", extended: true },
+      { key: "line_height", type: "number", default: 22, min: 1, unit: "px", extended: true },
+      { key: "card_width", type: "number", min: 0, step: 10, unit: "px", extended: true },
+      { key: "show_icons", type: "boolean", default: true, extended: true },
+      { key: "text_bold", type: "boolean", default: false, extended: true },
+      { key: "browser_rendering", type: "boolean", default: false, extended: true },
     ],
   },
   {
@@ -150,6 +182,7 @@ export const ENDPOINTS: EndpointDef[] = [
     params: [
       { key: "id", type: "text", required: true },
       { key: "show_owner", type: "boolean", default: false },
+      { key: "browser_rendering", type: "boolean", default: false, extended: true },
     ],
   },
 ]
