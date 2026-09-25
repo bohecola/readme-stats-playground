@@ -29,8 +29,7 @@ function parse(param: ParamDef, text: string): ParamValue {
       return known.length ? known : undefined
     }
     case "select":
-      // Theme options live in a separate list; other selects declare theirs.
-      return param.options?.length && !param.options.includes(text) ? undefined : text
+      return !param.options || param.options.includes(text) ? text : undefined
     case "number":
       return Number.isFinite(Number(text)) ? text : undefined
     case "color":

@@ -17,10 +17,13 @@ import {
 import { CopyButton, useCopy } from "@/components/CopyButton"
 import { Button } from "@/components/ui/button"
 import { DEPLOY_GUIDE_URL } from "@/lib/config"
+import { readStorage, writeStorage } from "@/lib/storage"
 import { cn } from "@/lib/utils"
 
-type Backdrop = "dark" | "light" | "checker"
-type Format = "markdown" | "html" | "url"
+const BACKDROPS = ["dark", "light", "checker"] as const
+type Backdrop = (typeof BACKDROPS)[number]
+const FORMATS = ["markdown", "html", "url"] as const
+type Format = (typeof FORMATS)[number]
 
 const BACKDROP_CLASS: Record<Backdrop, string> = {
   dark: "bg-zinc-900",
@@ -40,20 +43,8 @@ const PREVIEW_DEBOUNCE_MS = 400
 const RETRY_DELAY_MS = 1500
 
 function loadChoice<T extends string>(key: string, allowed: readonly T[], fallback: T): T {
-  try {
-    const v = localStorage.getItem(key)
-    return allowed.includes(v as T) ? (v as T) : fallback
-  } catch {
-    return fallback
-  }
-}
-
-function saveChoice(key: string, value: string) {
-  try {
-    localStorage.setItem(key, value)
-  } catch {
-    // Remembering UI choices is optional.
-  }
+  const v = readStorage(key)
+  return allowed.includes(v as T) ? (v as T) : fallback
 }
 
 function useDebounced<T>(value: T, ms: number): T {
@@ -88,12 +79,8 @@ export function Preview({
   onUseSuggestedInstance,
 }: PreviewProps) {
   const { t } = useTranslation()
-  const [backdrop, setBackdrop] = useState<Backdrop>(() =>
-    loadChoice(LS_BACKDROP, ["dark", "light", "checker"], "dark"),
-  )
-  const [format, setFormat] = useState<Format>(() =>
-    loadChoice(LS_FORMAT, ["markdown", "html", "url"], "markdown"),
-  )
+  const [backdrop, setBackdrop] = useState<Backdrop>(() => loadChoice(LS_BACKDROP, BACKDROPS, "dark"))
+  const [format, setFormat] = useState<Format>(() => loadChoice(LS_FORMAT, FORMATS, "markdown"))
   const [nonce, setNonce] = useState(0)
 
   const ready = !instanceMissing && missingRequired.length === 0
@@ -128,7 +115,7 @@ export function Preview({
             value={backdrop}
             onChange={(b) => {
               setBackdrop(b)
-              saveChoice(LS_BACKDROP, b)
+              writeStorage(LS_BACKDROP, b)
             }}
             options={[
               { value: "dark", label: t("preview.bgDark"), icon: <Moon className="h-3.5 w-3.5" /> },
@@ -259,13 +246,9 @@ export function Preview({
             value={format}
             onChange={(f) => {
               setFormat(f)
-              saveChoice(LS_FORMAT, f)
+              writeStorage(LS_FORMAT, f)
             }}
-            options={[
-              { value: "markdown", label: "Markdown" },
-              { value: "html", label: "HTML" },
-              { value: "url", label: "URL" },
-            ]}
+            options={FORMATS.map((f) => ({ value: f, label: FORMAT_LABEL[f] }))}
           />
           <CopyButton
             text={output}

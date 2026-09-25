@@ -149,28 +149,36 @@ export default function App() {
     [ownStyleActive, cardValues, common],
   )
 
-  const persist = (patch: Partial<StoredState>) => {
-    const next = { ...state, ...patch }
-    setState(next)
-    storeState(next)
+  // Updates go through the previous state so rapid edits (a held stepper
+  // button fires from one closure) never overwrite each other.
+  const persist = (update: (prev: StoredState) => StoredState) => {
+    setState((prev) => {
+      const next = update(prev)
+      storeState(next) // idempotent, so StrictMode's double call is harmless
+      return next
+    })
   }
 
   const handleChange = (key: string, value: ParamValue) => {
-    if (isCommonKey(key) && !ownStyleActive) {
-      persist({ common: { ...common, [key]: value } })
-    } else {
-      persist({ values: { ...allValues, [activeId]: { ...cardValues, [key]: value } } })
-    }
+    persist((prev) =>
+      isCommonKey(key) && prev.ownStyle[activeId] !== true
+        ? { ...prev, common: { ...prev.common, [key]: value } }
+        : {
+            ...prev,
+            values: { ...prev.values, [activeId]: { ...prev.values[activeId], [key]: value } },
+          },
+    )
   }
 
   // Opting out starts from the shared look; opting back in drops the card's own copy.
   const setOwnStyle = (own: boolean) => {
-    persist({
-      values: {
-        ...allValues,
-        [activeId]: own ? { ...cardValues, ...common } : splitCommon(cardValues).own,
-      },
-      ownStyle: { ...ownStyle, [activeId]: own },
+    persist((prev) => {
+      const card = prev.values[activeId] ?? {}
+      return {
+        ...prev,
+        values: { ...prev.values, [activeId]: own ? { ...card, ...prev.common } : splitCommon(card).own },
+        ownStyle: { ...prev.ownStyle, [activeId]: own },
+      }
     })
   }
 
@@ -187,10 +195,11 @@ export default function App() {
 
   // Back to the card's starting params and the shared style; the shared style itself is kept.
   const resetActive = () => {
-    persist({
-      values: { ...allValues, [activeId]: seedValues()[activeId] ?? {} },
-      ownStyle: { ...ownStyle, [activeId]: false },
-    })
+    persist((prev) => ({
+      ...prev,
+      values: { ...prev.values, [activeId]: seedValues()[activeId] ?? {} },
+      ownStyle: { ...prev.ownStyle, [activeId]: false },
+    }))
   }
 
   // Publish the (responsive) header height so sticky elements can sit below it.
@@ -384,17 +393,14 @@ function BaseUrlField({
 }) {
   const { t } = useTranslation()
   const [draft, setDraft] = useState(value)
-  // Opened from outside (the preview's prompt): start from the current value.
+  // Whether opened by the pencil or by the preview's prompt, editing starts
+  // from the current value; `value` is deliberately read only at that moment.
   useEffect(() => {
     if (editing) setDraft(value)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editing])
+  }, [editing]) // eslint-disable-line react-hooks/exhaustive-deps
   const editRef = useRef<HTMLButtonElement>(null)
 
-  const startEdit = () => {
-    setDraft(value)
-    setEditing(true)
-  }
+  const startEdit = () => setEditing(true)
   const finish = (next?: string) => {
     // Adds https:// when omitted; empty falls back to the deployment default (which may itself be empty).
     if (next !== undefined) onChange(normalizeBaseUrl(next) || DEFAULT_BASE_URL)

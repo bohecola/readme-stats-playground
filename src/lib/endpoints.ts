@@ -1,3 +1,5 @@
+import { THEMES } from "./themes"
+
 export type ParamType =
   | "text"
   | "number"
@@ -43,7 +45,7 @@ export interface EndpointDef {
 
 /** Shared style parameters available on every card. */
 export const COMMON_PARAMS: ParamDef[] = [
-  { key: "theme", type: "select", options: [], default: "default" },
+  { key: "theme", type: "select", options: THEMES, default: "default" },
   { key: "title_color", type: "color" },
   { key: "text_color", type: "color" },
   { key: "icon_color", type: "color" },

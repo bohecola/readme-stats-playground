@@ -2,6 +2,7 @@ import i18n from "i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 import { initReactI18next } from "react-i18next"
 
+import { writeStorage } from "@/lib/storage"
 import en from "@/locales/en.json"
 import ja from "@/locales/ja.json"
 import zh from "@/locales/zh.json"
@@ -61,11 +62,7 @@ export function currentLanguage(lng = i18n.resolvedLanguage ?? i18n.language): L
 
 /** Switch language and remember it as the user's explicit choice. */
 export function setLanguage(lng: Language) {
-  try {
-    localStorage.setItem(LS_LANG, lng)
-  } catch {
-    // Remembering the choice is optional.
-  }
+  writeStorage(LS_LANG, lng)
   return i18n.changeLanguage(lng)
 }
 

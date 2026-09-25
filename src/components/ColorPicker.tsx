@@ -30,6 +30,7 @@ import {
   stripHash,
   toCssBackground,
 } from "@/lib/color"
+import { readJson, readStorage, writeStorage } from "@/lib/storage"
 import { cn } from "@/lib/utils"
 
 /** Default card colors first, then a general-purpose palette. */
@@ -48,14 +49,10 @@ const LS_FORMAT = "rsp:colorFormat"
 const MAX_RECENT = 10
 
 function loadRecent(): string[] {
-  try {
-    const list = JSON.parse(localStorage.getItem(LS_RECENT) ?? "[]")
-    return Array.isArray(list)
-      ? list.filter((c): c is string => typeof c === "string" && isHex(c))
-      : []
-  } catch {
-    return []
-  }
+  const list = readJson<unknown>(LS_RECENT)
+  return Array.isArray(list)
+    ? list.filter((c): c is string => typeof c === "string" && isHex(c))
+    : []
 }
 
 /** Remember colors the user actually applied; shared by every color field. */
@@ -63,23 +60,15 @@ function pushRecent(value: string) {
   const colors = parseGradient(value)?.stops ?? [value]
   const fresh = colors.map(normalizeHex).filter(isHex)
   if (fresh.length === 0) return
-  try {
-    const next = [...new Set([...fresh, ...loadRecent()])].slice(0, MAX_RECENT)
-    localStorage.setItem(LS_RECENT, JSON.stringify(next))
-  } catch {
-    // Storage unavailable (private mode etc.) — recents are a convenience only.
-  }
+  const next = [...new Set([...fresh, ...loadRecent()])].slice(0, MAX_RECENT)
+  writeStorage(LS_RECENT, JSON.stringify(next))
 }
 
 type Format = "hex" | "rgb" | "hsl"
 
 function loadFormat(): Format {
-  try {
-    const f = localStorage.getItem(LS_FORMAT)
-    return f === "rgb" || f === "hsl" ? f : "hex"
-  } catch {
-    return "hex"
-  }
+  const f = readStorage(LS_FORMAT)
+  return f === "rgb" || f === "hsl" ? f : "hex"
 }
 
 interface ColorPickerProps {
