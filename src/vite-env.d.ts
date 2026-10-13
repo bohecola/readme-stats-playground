@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+/// <reference types="unplugin-icons/types/react" />
 
 interface ImportMetaEnv {
   /** Default github-readme-stats instance shown in the base-URL field. */

@@ -2,8 +2,9 @@ import type { ParamValue } from "@/lib/buildUrl"
 import type { StoredState } from "@/lib/cardState"
 import type { CardId } from "@/lib/endpoints"
 
-import { Github, RotateCcw } from "lucide-react"
+import { RotateCcw } from "lucide-react"
 import { Trans, useTranslation } from "react-i18next"
+import GithubIcon from "~icons/simple-icons/github"
 import { BaseUrlField } from "@/components/BaseUrlField"
 import { CardForm } from "@/components/CardForm"
 import { CardTabs } from "@/components/CardTabs"
@@ -170,7 +171,7 @@ export default function App() {
                 title={t("app.projectRepo")}
                 aria-label={t("app.projectRepo")}
               >
-                <Github />
+                <GithubIcon />
               </a>
             </Button>
           </div>
