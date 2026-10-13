@@ -5,22 +5,22 @@
 
 [English](./README.md) | [简体中文](./README.zh-CN.md) | 日本語
 
-[github-readme-stats](https://github.com/anuraghazra/github-readme-stats) と [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) のカードのビジュアルプレイグラウンド。左でパラメータを調整し、右でライブプレビューを確認して、URL / Markdown / HTML をそのまま GitHub プロフィールの README にコピーできます。
+[GitHub Readme Stats](https://github.com/anuraghazra/github-readme-stats) と [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) のカードのビジュアルプレイグラウンド。左でパラメータを調整し、右でライブプレビューを確認して、URL / Markdown / HTML をそのまま GitHub プロフィールの README にコピーできます。
 
 **オンラインで使う：[readme-stats.deore.me](https://readme-stats.deore.me)**
 
 ![README Stats Playground のスクリーンショット](./docs/screenshot.ja.png)
 
-> これはコミュニティ製のツールで、いずれのプロジェクトの公式とも関係ありません。カードは指定したインスタンスで描画されます。元の github-readme-stats でも、メンテナンスが続いている API 互換の後継プロジェクト [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) でも構いません。
+> これはコミュニティ製のツールで、いずれのプロジェクトの公式とも関係ありません。カードは指定したインスタンスで描画されます。元の GitHub Readme Stats でも、メンテナンスが続いている API 互換の後継プロジェクト [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) でも構いません。
 
 ## 機能
 
-- github-readme-stats の全 5 種類のカードに対応：Stats、Top Languages、Pin、WakaTime、Gist
+- GitHub Readme Stats の全 5 種類のカードに対応：Stats、Top Languages、Pin、WakaTime、Gist
 - すべてのパラメータをフォームで編集。名前・説明・元のパラメータ名を表示し、URL に含まれるものはマークされます。GitHub Stats Extended のみ対応のパラメータには ext タグが付きます
 - ライブプレビューと、URL / Markdown / HTML のワンクリックコピー
 - 共有可能なリンク：アドレスバーは常に現在のカードのパラメータを反映（`?card=stats&username=octocat&theme=dark`）。URL ひとつで設定を渡せます
 - 共通スタイルは全カードで共有。必要ならカードごとに個別設定も可能
-- github-readme-stats と GitHub Stats Extended のインスタンスに対応（公開・セルフホストどちらも）。データはすべてブラウザ内に保存されます
+- GitHub Readme Stats と GitHub Stats Extended のインスタンスに対応（公開・セルフホストどちらも）。データはすべてブラウザ内に保存されます
 
 ## はじめに
 
@@ -41,11 +41,11 @@ pnpm preview    # 本番ビルドをローカルで確認
 
 | 変数 | 説明 | 既定値 |
 | --- | --- | --- |
-| `VITE_DEFAULT_BASE_URL` | 訪問者が自分のインスタンスを選ぶまで使うカードインスタンス（github-readme-stats または GitHub Stats Extended） | 空 — 訪問者がインスタンスを選択 |
+| `VITE_DEFAULT_BASE_URL` | 訪問者が自分のインスタンスを選ぶまで使うカードインスタンス（GitHub Readme Stats または GitHub Stats Extended） | 空 — 訪問者がインスタンスを選択 |
 | `VITE_DEFAULT_USERNAME` | 初回アクセス時にあらかじめ入力される GitHub ユーザー名 | 空 |
 | `VITE_SITE_URL` | デプロイ先の公開 URL。設定するとビルド時に canonical リンク、Open Graph 画像、JSON-LD が出力され、検索エンジンや AI クローラーに認識されやすくなります | 空 |
 
-> カードの描画には github-readme-stats 互換のインスタンスが必要です。github-readme-stats 自体はメンテナンスが終了し、公開インスタンスも停止しています。後継プロジェクト [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) は API 互換で、公開インスタンス `github-stats-extended.vercel.app` を運用しており、プレイグラウンドからワンクリックで利用できます。どちらのプロジェクトのセルフホストインスタンスも使えます。自分用にホストする場合は `VITE_DEFAULT_BASE_URL` に自分のインスタンスを設定しておくと最初から入力済みになります。
+> カードの描画には GitHub Readme Stats 互換のインスタンスが必要です。GitHub Readme Stats 自体はメンテナンスが終了し、公開インスタンスも停止しています。後継プロジェクト [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) は API 互換で、公開インスタンス `github-stats-extended.vercel.app` を運用しており、プレイグラウンドからワンクリックで利用できます。どちらのプロジェクトのセルフホストインスタンスも使えます。自分用にホストする場合は `VITE_DEFAULT_BASE_URL` に自分のインスタンスを設定しておくと最初から入力済みになります。
 
 ## デプロイ
 
