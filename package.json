@@ -50,7 +50,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",
     "@eslint-react/eslint-plugin": "^5.24.8",
-    "@iconify-json/simple-icons": "^1.2.100",
+    "@iconify-json/simple-icons": "^1.2.99",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
     "@tailwindcss/vite": "^4.3.3",
