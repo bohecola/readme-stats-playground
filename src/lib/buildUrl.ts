@@ -13,12 +13,17 @@ export function normalizeBaseUrl(input: string): string {
   const s = input.trim().replace(/\/+$/, "")
   if (!s)
     return ""
-  return /^[a-z][a-z0-9+.-]*:\/\//i.test(s) ? s : `https://${s}`
+  return /^[a-z][a-z0-9+.-]*:\/\//i.test(s)
+    ? s
+    : `https://${s}`
 }
 
 /** All params for an endpoint: its own params followed by shared style params. */
 export function allParams(endpoint: EndpointDef): ParamDef[] {
-  return [...endpoint.params, ...COMMON_PARAMS]
+  return [
+    ...endpoint.params,
+    ...COMMON_PARAMS,
+  ]
 }
 
 function isEmptyValue(v: ParamValue): boolean {
@@ -50,7 +55,9 @@ function serialize(param: ParamDef, value: ParamValue): string | null {
     }
     case "multiselect": {
       const arr = (value as string[]).filter(Boolean)
-      return arr.length ? arr.join(",") : null
+      return arr.length
+        ? arr.join(",")
+        : null
     }
     case "color": {
       // Colors (and every gradient stop) are passed without a leading '#'.
@@ -99,7 +106,9 @@ export function buildUrl(
   const query = pairs
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join("&")
-  const url = query ? `${base}${endpoint.path}?${query}` : `${base}${endpoint.path}`
+  const url = query
+    ? `${base}${endpoint.path}?${query}`
+    : `${base}${endpoint.path}`
 
   return { url, pairs, missingRequired }
 }

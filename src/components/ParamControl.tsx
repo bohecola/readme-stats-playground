@@ -60,7 +60,9 @@ export function ParamControl({
     <div className="flex items-center gap-2">
       <Label
         id={labelId}
-        htmlFor={param.type === "multiselect" ? undefined : id}
+        htmlFor={param.type === "multiselect"
+          ? undefined
+          : id}
         className="flex shrink-0 items-center gap-1"
       >
         {label}
@@ -81,7 +83,11 @@ export function ParamControl({
           htmlFor={id}
           className="flex h-9 cursor-pointer items-center justify-between rounded-md border border-input px-3 shadow-xs transition-colors hover:bg-accent/40"
         >
-          <span className="text-sm text-muted-foreground">{checked ? t("form.on") : t("form.off")}</span>
+          <span className="text-sm text-muted-foreground">
+            {checked
+              ? t("form.on")
+              : t("form.off")}
+          </span>
           <Switch id={id} checked={checked} onCheckedChange={c => set(c)} />
         </label>
       </div>
@@ -137,7 +143,10 @@ export function ParamControl({
       {param.type === "multiselect" && (
         <MultiSelect
           labelId={labelId}
-          choices={[...(param.choices ?? []), ...(param.extendedChoices ?? [])]}
+          choices={[
+            ...(param.choices ?? []),
+            ...(param.extendedChoices ?? []),
+          ]}
           extendedChoices={param.extendedChoices}
           value={(value as string[]) ?? []}
           onChange={arr => set(arr)}
@@ -157,7 +166,9 @@ export function ParamControl({
       {param.type === "number" && (
         <NumberInput
           id={id}
-          value={value == null ? "" : String(value)}
+          value={value == null
+            ? ""
+            : String(value)}
           onChange={set}
           placeholder={
             placeholder
@@ -169,7 +180,9 @@ export function ParamControl({
           max={param.max}
           step={param.step}
           unit={param.unit && t(`units.${param.unit}`)}
-          base={typeof param.default === "number" ? param.default : undefined}
+          base={typeof param.default === "number"
+            ? param.default
+            : undefined}
         />
       )}
 
@@ -220,7 +233,9 @@ function MultiSelect({
             type="button"
             aria-pressed={active}
             onClick={() => toggle(choice)}
-            title={extended ? t("form.extendedOnly") : undefined}
+            title={extended
+              ? t("form.extendedOnly")
+              : undefined}
             className={cn(
               "inline-flex items-center gap-1 rounded-md border px-2 py-1 font-mono text-xs transition-colors",
               active
@@ -257,7 +272,9 @@ function ParamKey({
   const { t } = useTranslation()
   return (
     <code
-      title={active ? t("form.paramSet") : undefined}
+      title={active
+        ? t("form.paramSet")
+        : undefined}
       className={cn(
         "flex min-w-0 items-center gap-1.5 font-mono text-[11px] transition-colors",
         active ? "text-foreground" : "text-muted-foreground/80",

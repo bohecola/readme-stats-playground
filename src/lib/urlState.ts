@@ -23,17 +23,30 @@ export interface UrlState {
 function parse(param: ParamDef, text: string): ParamValue {
   switch (param.type) {
     case "boolean":
-      return text === "true" ? true : text === "false" ? false : undefined
+      return text === "true"
+        ? true
+        : text === "false"
+          ? false
+          : undefined
     case "multiselect": {
       const picked = text.split(",").map(s => s.trim())
-      const allowed = [...(param.choices ?? []), ...(param.extendedChoices ?? [])]
-      const known = allowed.length ? picked.filter(s => allowed.includes(s)) : picked
+      const allowed = [
+        ...(param.choices ?? []),
+        ...(param.extendedChoices ?? []),
+      ]
+      const known = allowed.length
+        ? picked.filter(s => allowed.includes(s))
+        : picked
       return known.length ? known : undefined
     }
     case "select":
-      return !param.options || param.options.includes(text) ? text : undefined
+      return !param.options || param.options.includes(text)
+        ? text
+        : undefined
     case "number":
-      return Number.isFinite(Number(text)) ? text : undefined
+      return Number.isFinite(Number(text))
+        ? text
+        : undefined
     case "color":
     case "text":
     default:
@@ -58,7 +71,13 @@ export function parseUrlState(search: string): UrlState | null {
   }
   // An empty `instance=` is deliberate ("no instance" on a deployment that has a default).
   const instance = query.get(INSTANCE_KEY)
-  return { cardId: endpoint.id, values, baseUrl: instance === null ? undefined : normalizeBaseUrl(instance) }
+  return {
+    cardId: endpoint.id,
+    values,
+    baseUrl: instance === null
+      ? undefined
+      : normalizeBaseUrl(instance),
+  }
 }
 
 /** Query string for the current card, serialized exactly like the card URL. */
@@ -68,7 +87,10 @@ export function toUrlSearch(
   baseUrl: string,
   defaultBaseUrl: string,
 ): string {
-  const pairs: [string, string][] = [[CARD_KEY, endpoint.id], ...buildUrl(baseUrl, endpoint, values).pairs]
+  const pairs: [string, string][] = [
+    [CARD_KEY, endpoint.id],
+    ...buildUrl(baseUrl, endpoint, values).pairs,
+  ]
   if (baseUrl !== defaultBaseUrl)
     pairs.push([INSTANCE_KEY, baseUrl])
   return (

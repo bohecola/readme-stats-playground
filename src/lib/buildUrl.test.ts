@@ -32,7 +32,9 @@ describe("buildUrl", () => {
       theme: "default",
     })
     expect(url).toBe(`${BASE}/api?username=octocat`)
-    expect(pairs).toEqual([["username", "octocat"]])
+    expect(pairs).toEqual([
+      ["username", "octocat"],
+    ])
   })
 
   it("serializes every type", () => {

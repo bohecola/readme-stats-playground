@@ -34,7 +34,11 @@ describe("parseUrlState", () => {
     const state = parseUrlState(
       "?card=stats&username=x&show_icons=yes&rank_icon=fancy&card_width=wide&hide=stars,bogus&role=OWNER,nope",
     )
-    expect(state?.values).toEqual({ username: "x", hide: ["stars"], role: ["OWNER"] })
+    expect(state?.values).toEqual({
+      username: "x",
+      hide: ["stars"],
+      role: ["OWNER"],
+    })
   })
 
   it("normalizes the instance and keeps an explicit empty one", () => {
@@ -48,7 +52,10 @@ describe("toUrlSearch", () => {
   it("keeps lists and the instance readable", () => {
     const search = toUrlSearch(
       stats,
-      { username: "octocat", hide: ["stars", "commits"] },
+      {
+        username: "octocat",
+        hide: ["stars", "commits"],
+      },
       "https://my.host",
       DEFAULT,
     )
