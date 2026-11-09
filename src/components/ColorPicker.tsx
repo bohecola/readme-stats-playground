@@ -78,7 +78,12 @@ function pushRecent(value: string) {
   const fresh = colors.map(normalizeHex).filter(isHex)
   if (fresh.length === 0)
     return
-  const next = [...new Set([...fresh, ...loadRecent()])].slice(0, MAX_RECENT)
+  const next = [
+    ...new Set([
+      ...fresh,
+      ...loadRecent(),
+    ]),
+  ].slice(0, MAX_RECENT)
   writeStorage(LS_RECENT, JSON.stringify(next))
 }
 
@@ -86,7 +91,9 @@ type Format = "hex" | "rgb" | "hsl"
 
 function loadFormat(): Format {
   const f = readStorage(LS_FORMAT)
-  return f === "rgb" || f === "hsl" ? f : "hex"
+  return f === "rgb" || f === "hsl"
+    ? f
+    : "hex"
 }
 
 interface ColorPickerProps {
@@ -150,11 +157,15 @@ export function ColorPicker({
       */}
       <input
         id={id}
-        value={value && !isGradient ? `#${value}` : value}
+        value={value && !isGradient
+          ? `#${value}`
+          : value}
         spellCheck={false}
         autoComplete="off"
         placeholder={
-          placeholder ?? (allowGradient ? t("color.followThemeOrGradient") : t("color.followTheme"))
+          placeholder ?? (allowGradient
+            ? t("color.followThemeOrGradient")
+            : t("color.followTheme"))
         }
         onChange={e => onChange(stripHash(e.target.value))}
         className="h-full min-w-0 flex-1 bg-transparent font-mono text-sm outline-hidden placeholder:font-sans placeholder:text-muted-foreground"
@@ -183,17 +194,25 @@ function PickerPanel({
   allowGradient?: boolean
 }) {
   const { t } = useTranslation()
-  const gradient = allowGradient ? parseGradient(value) : null
+  const gradient = allowGradient
+    ? parseGradient(value)
+    : null
   const [activeStop, setActiveStop] = useState(0)
   // Read once per open — the panel unmounts when the popover closes.
   const [recent] = useState(loadRecent)
-  const stopIndex = gradient ? Math.min(activeStop, gradient.stops.length - 1) : 0
+  const stopIndex = gradient
+    ? Math.min(activeStop, gradient.stops.length - 1)
+    : 0
 
-  const current = gradient ? gradient.stops[stopIndex] : normalizeHex(value)
+  const current = gradient
+    ? gradient.stops[stopIndex]
+    : normalizeHex(value)
   const setCurrent = (hex: string) => {
     if (!gradient)
       return onChange(hex)
-    const stops = gradient.stops.map((s, i) => (i === stopIndex ? hex : s))
+    const stops = gradient.stops.map((s, i) => (i === stopIndex
+      ? hex
+      : s))
     onChange(serializeGradient({ ...gradient, stops }))
   }
 
@@ -202,9 +221,14 @@ function PickerPanel({
       onChange(gradient.stops[0] ?? "")
     }
     else if (mode === "gradient" && !gradient) {
-      const base = isHex(value) ? normalizeHex(value) : "2f80ed"
+      const base = isHex(value)
+        ? normalizeHex(value)
+        : "2f80ed"
       setActiveStop(0)
-      onChange(serializeGradient({ angle: 90, stops: [base, "a855f7"] }))
+      onChange(serializeGradient({
+        angle: 90,
+        stops: [base, "a855f7"],
+      }))
     }
   }
 
@@ -226,7 +250,9 @@ function PickerPanel({
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
-                {mode === "solid" ? t("color.solid") : t("color.gradient")}
+                {mode === "solid"
+                  ? t("color.solid")
+                  : t("color.gradient")}
               </button>
             )
           })}
@@ -244,7 +270,9 @@ function PickerPanel({
 
       <HexAlphaColorPicker
         className="color-picker"
-        color={isHex(current) ? `#${expandHex(current)}` : "#000000"}
+        color={isHex(current)
+          ? `#${expandHex(current)}`
+          : "#000000"}
         onChange={(hex) => {
           const rgba = hexToRgba(hex)
           if (rgba)
@@ -283,8 +311,14 @@ function ColorInputs({ value, onCommit }: { value: string, onCommit: (hex: strin
     }
   }
 
-  const setRgb = (patch: Partial<Rgba>) => onCommit(rgbaToHex({ ...base, ...patch }))
-  const setHsl = (patch: Partial<Hsla>) => onCommit(rgbaToHex(hslaToRgba({ ...hsla, ...patch })))
+  const setRgb = (patch: Partial<Rgba>) => onCommit(rgbaToHex({
+    ...base,
+    ...patch,
+  }))
+  const setHsl = (patch: Partial<Hsla>) => onCommit(rgbaToHex(hslaToRgba({
+    ...hsla,
+    ...patch,
+  })))
 
   return (
     <div className="flex items-center gap-1.5">
@@ -338,7 +372,9 @@ function HexInput({
   alpha: number
   onCommit: (hex: string) => void
 }) {
-  const shown = isHex(value) ? expandHex(value).slice(0, 6) : ""
+  const shown = isHex(value)
+    ? expandHex(value).slice(0, 6)
+    : ""
   const [draft, setDraft] = useState(shown)
   // A new value from outside (picker, swatch) replaces what's being typed.
   const [prevShown, setPrevShown] = useState(shown)
@@ -350,7 +386,9 @@ function HexInput({
   return (
     <input
       aria-label="HEX"
-      value={draft ? `#${draft}` : ""}
+      value={draft
+        ? `#${draft}`
+        : ""}
       spellCheck={false}
       maxLength={9}
       onChange={(e) => {
@@ -360,7 +398,9 @@ function HexInput({
         if (!rgba)
           return
         const hasAlpha = next.length === 4 || next.length === 8
-        onCommit(rgbaToHex(hasAlpha ? rgba : { ...rgba, a: alpha }))
+        onCommit(rgbaToHex(hasAlpha
+          ? rgba
+          : { ...rgba, a: alpha }))
       }}
       onBlur={() => setDraft(shown)}
       className={cn(
@@ -387,7 +427,9 @@ function NumberField({
   className?: string
   onCommit: (v: number) => void
 }) {
-  const shown = value == null ? "" : String(Math.round(value))
+  const shown = value == null
+    ? ""
+    : String(Math.round(value))
   const [draft, setDraft] = useState(shown)
   const [prevShown, setPrevShown] = useState(shown)
   if (shown !== prevShown) {
@@ -413,7 +455,9 @@ function NumberField({
           if (e.key !== "ArrowUp" && e.key !== "ArrowDown")
             return
           e.preventDefault()
-          const step = (e.shiftKey ? 10 : 1) * (e.key === "ArrowUp" ? 1 : -1)
+          const step = (e.shiftKey ? 10 : 1) * (e.key === "ArrowUp"
+            ? 1
+            : -1)
           commit(Math.round(value ?? 0) + step)
         }}
         onBlur={() => setDraft(shown)}
@@ -488,7 +532,9 @@ function GradientEditor({
       >
         <div
           className="h-full w-full"
-          style={{ background: toCssBackground(serializeGradient(gradient)) }}
+          style={{
+            background: toCssBackground(serializeGradient(gradient)),
+          }}
         />
       </div>
 
@@ -509,7 +555,11 @@ function GradientEditor({
             >
               <span
                 className="block h-full w-full"
-                style={{ background: isHex(stop) ? `#${stop}` : undefined }}
+                style={{
+                  background: isHex(stop)
+                    ? `#${stop}`
+                    : undefined,
+                }}
               />
             </button>
             {canRemove && (
@@ -517,8 +567,13 @@ function GradientEditor({
                 type="button"
                 aria-label={t("color.removeStop", { n: i + 1 })}
                 onClick={() => {
-                  onChange({ angle, stops: stops.filter((_, j) => j !== i) })
-                  onSelectStop(Math.max(0, activeStop - (i <= activeStop ? 1 : 0)))
+                  onChange({
+                    angle,
+                    stops: stops.filter((_, j) => j !== i),
+                  })
+                  onSelectStop(Math.max(0, activeStop - (i <= activeStop
+                    ? 1
+                    : 0)))
                 }}
                 className="absolute -right-1.5 -top-1.5 hidden h-3.5 w-3.5 items-center justify-center rounded-full bg-foreground text-background group-hover:flex"
               >
@@ -532,7 +587,10 @@ function GradientEditor({
             type="button"
             aria-label={t("color.addStop")}
             onClick={() => {
-              onChange({ angle, stops: [...stops, stops[stops.length - 1]] })
+              onChange({
+                angle,
+                stops: [...stops, stops[stops.length - 1]],
+              })
               onSelectStop(stops.length)
             }}
             className="flex h-6 w-6 items-center justify-center rounded border border-dashed border-input text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -549,7 +607,10 @@ function GradientEditor({
           min={0}
           max={360}
           value={angle}
-          onChange={e => onChange({ angle: Number(e.target.value), stops })}
+          onChange={e => onChange({
+            angle: Number(e.target.value),
+            stops,
+          })}
           className="h-1.5 flex-1 cursor-pointer accent-primary"
         />
         <span className="w-9 text-right font-mono text-xs tabular-nums">

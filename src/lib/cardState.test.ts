@@ -14,15 +14,27 @@ function stateWith(patch: Partial<StoredState>): StoredState {
 
 describe("splitCommon / sameValues", () => {
   it("separates style params from the card's own", () => {
-    expect(splitCommon({ username: "x", theme: "dark", hide: ["stars"], bg_color: "fff" })).toEqual({
-      own: { username: "x", hide: ["stars"] },
+    expect(splitCommon({
+      username: "x",
+      theme: "dark",
+      hide: ["stars"],
+      bg_color: "fff",
+    })).toEqual({
+      own: {
+        username: "x",
+        hide: ["stars"],
+      },
       common: { theme: "dark", bg_color: "fff" },
     })
   })
   it("ignores unset entries when comparing", () => {
     expect(sameValues({ theme: "dark", title_color: "" }, { theme: "dark", bg_color: undefined })).toBe(true)
     expect(sameValues({ theme: "dark" }, { theme: "light" })).toBe(false)
-    expect(sameValues({ hide: ["a", "b"] }, { hide: ["a", "b"] })).toBe(true)
+    expect(sameValues({
+      hide: ["a", "b"],
+    }, {
+      hide: ["a", "b"],
+    })).toBe(true)
   })
 })
 
@@ -32,7 +44,9 @@ describe("fromStored", () => {
   })
 
   it("keeps a modern save as is", () => {
-    const state = fromStored({ stats: { username: "x" } }, { theme: "dark" }, { pin: true })
+    const state = fromStored({
+      stats: { username: "x" },
+    }, { theme: "dark" }, { pin: true })
     expect(state.values.stats).toEqual({ username: "x" })
     expect(state.common).toEqual({ theme: "dark" })
     expect(state.ownStyle).toEqual({ pin: true })
@@ -58,7 +72,10 @@ describe("fromStored", () => {
 
 describe("applyUrlState", () => {
   const stored = stateWith({
-    values: { ...seedValues(), stats: { username: "me", show_icons: true } },
+    values: {
+      ...seedValues(),
+      stats: { username: "me", show_icons: true },
+    },
     common: { theme: "dark" },
   })
 
@@ -68,7 +85,10 @@ describe("applyUrlState", () => {
   })
 
   it("reproduces the link's card exactly", () => {
-    const next = applyUrlState(stored, { cardId: "stats", values: { username: "octocat" } })
+    const next = applyUrlState(stored, {
+      cardId: "stats",
+      values: { username: "octocat" },
+    })
     expect(next.values.stats).toEqual({ username: "octocat" })
     expect(next.ownStyle.stats).toBe(false)
   })

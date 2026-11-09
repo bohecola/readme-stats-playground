@@ -6,8 +6,11 @@ import zh from "./zh.json"
 
 /** Dotted leaf paths of a nested JSON object. */
 function keysOf(obj: unknown, prefix = ""): string[] {
-  if (typeof obj !== "object" || obj === null)
-    return [prefix.slice(0, -1)]
+  if (typeof obj !== "object" || obj === null) {
+    return [
+      prefix.slice(0, -1),
+    ]
+  }
   return Object.entries(obj).flatMap(([k, v]) => keysOf(v, `${prefix}${k}.`))
 }
 

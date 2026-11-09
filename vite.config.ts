@@ -69,12 +69,36 @@ function siteMeta(siteUrl: string | undefined): Plugin {
         "isBasedOn": ["https://github.com/anuraghazra/github-readme-stats", "https://github.com/stats-organization/github-stats-extended"],
       }
       return [
-        { tag: "link", attrs: { rel: "canonical", href: url }, injectTo: "head" },
-        { tag: "meta", attrs: { property: "og:url", content: url }, injectTo: "head" },
-        { tag: "meta", attrs: { property: "og:image", content: `${base}/og.png` }, injectTo: "head" },
-        { tag: "meta", attrs: { property: "og:image:width", content: "1200" }, injectTo: "head" },
-        { tag: "meta", attrs: { property: "og:image:height", content: "630" }, injectTo: "head" },
-        { tag: "meta", attrs: { name: "twitter:image", content: `${base}/og.png` }, injectTo: "head" },
+        {
+          tag: "link",
+          attrs: { rel: "canonical", href: url },
+          injectTo: "head",
+        },
+        {
+          tag: "meta",
+          attrs: { property: "og:url", content: url },
+          injectTo: "head",
+        },
+        {
+          tag: "meta",
+          attrs: { property: "og:image", content: `${base}/og.png` },
+          injectTo: "head",
+        },
+        {
+          tag: "meta",
+          attrs: { property: "og:image:width", content: "1200" },
+          injectTo: "head",
+        },
+        {
+          tag: "meta",
+          attrs: { property: "og:image:height", content: "630" },
+          injectTo: "head",
+        },
+        {
+          tag: "meta",
+          attrs: { name: "twitter:image", content: `${base}/og.png` },
+          injectTo: "head",
+        },
         {
           tag: "script",
           attrs: { type: "application/ld+json" },

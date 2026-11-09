@@ -53,7 +53,12 @@ export default function App() {
   const ownStyleActive = ownStyle[activeId] === true
   // What the card renders with: its own params plus the shared style, unless it opted out.
   const values = useMemo(
-    () => (ownStyleActive ? cardValues : { ...splitCommon(cardValues).own, ...common }),
+    () => (ownStyleActive
+      ? cardValues
+      : {
+          ...splitCommon(cardValues).own,
+          ...common,
+        }),
     [ownStyleActive, cardValues, common],
   )
 
@@ -70,10 +75,16 @@ export default function App() {
   const handleChange = (key: string, value: ParamValue) => {
     persist(prev =>
       isCommonKey(key) && prev.ownStyle[activeId] !== true
-        ? { ...prev, common: { ...prev.common, [key]: value } }
+        ? {
+            ...prev,
+            common: { ...prev.common, [key]: value },
+          }
         : {
             ...prev,
-            values: { ...prev.values, [activeId]: { ...prev.values[activeId], [key]: value } },
+            values: {
+              ...prev.values,
+              [activeId]: { ...prev.values[activeId], [key]: value },
+            },
           },
     )
   }
@@ -84,7 +95,15 @@ export default function App() {
       const card = prev.values[activeId] ?? {}
       return {
         ...prev,
-        values: { ...prev.values, [activeId]: own ? { ...card, ...prev.common } : splitCommon(card).own },
+        values: {
+          ...prev.values,
+          [activeId]: own
+            ? {
+                ...card,
+                ...prev.common,
+              }
+            : splitCommon(card).own,
+        },
         ownStyle: { ...prev.ownStyle, [activeId]: own },
       }
     })
@@ -143,8 +162,18 @@ export default function App() {
   const pristine = useMemo(
     () =>
       !ownStyleActive
-      && buildUrl(baseUrl, endpoint, { ...seedValues()[activeId], ...common }).url === built.url,
-    [baseUrl, endpoint, activeId, built, common, ownStyleActive],
+      && buildUrl(baseUrl, endpoint, {
+        ...seedValues()[activeId],
+        ...common,
+      }).url === built.url,
+    [
+      baseUrl,
+      endpoint,
+      activeId,
+      built,
+      common,
+      ownStyleActive,
+    ],
   )
 
   return (

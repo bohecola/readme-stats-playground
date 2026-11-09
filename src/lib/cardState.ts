@@ -28,7 +28,9 @@ export function splitCommon(values: ParamValues): { own: ParamValues, common: Pa
   const own: ParamValues = {}
   const common: ParamValues = {}
   for (const [key, value] of Object.entries(values)) {
-    ;(isCommonKey(key) ? common : own)[key] = value
+    ;(isCommonKey(key)
+      ? common
+      : own)[key] = value
   }
   return { own, common }
 }
@@ -63,7 +65,10 @@ export function fromStored(
   storedCommon: ParamValues | null,
   storedOwnStyle: Record<string, boolean> | null,
 ): StoredState {
-  const values = { ...seedValues(), ...storedValues }
+  const values = {
+    ...seedValues(),
+    ...storedValues,
+  }
   if (storedCommon)
     return { values, common: storedCommon, ownStyle: storedOwnStyle ?? {} }
 
@@ -98,7 +103,15 @@ export function applyUrlState(state: StoredState, url: UrlState | null): StoredS
   const styled = Object.keys(common).length > 0 && !sameValues(common, state.common)
   return {
     ...state,
-    values: { ...state.values, [cardId]: styled ? { ...own, ...common } : own },
+    values: {
+      ...state.values,
+      [cardId]: styled
+        ? {
+            ...own,
+            ...common,
+          }
+        : own,
+    },
     ownStyle: { ...state.ownStyle, [cardId]: styled },
   }
 }

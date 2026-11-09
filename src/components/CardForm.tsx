@@ -41,7 +41,9 @@ export function CardForm({
     if (!window.matchMedia?.("(pointer: fine)").matches)
       return null
     const first = endpoint.params.find(p => p.required)
-    return first && !values[first.key] ? first.key : null
+    return first && !values[first.key]
+      ? first.key
+      : null
   })
 
   // Common style is long and mostly set-once, so it starts folded; the choice sticks.
@@ -85,13 +87,17 @@ export function CardForm({
         )}
         note={(
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
-            {ownStyle ? t("form.ownStyleNote") : t("form.sharedStyleNote")}
+            {ownStyle
+              ? t("form.ownStyleNote")
+              : t("form.sharedStyleNote")}
             <button
               type="button"
               onClick={() => onOwnStyleChange(!ownStyle)}
               className="font-medium text-foreground underline-offset-4 hover:underline"
             >
-              {ownStyle ? t("form.useSharedStyle") : t("form.customizeStyle")}
+              {ownStyle
+                ? t("form.useSharedStyle")
+                : t("form.customizeStyle")}
             </button>
           </p>
         )}
@@ -133,8 +139,12 @@ function FieldSet({
   // A lone toggle or two would leave a half-empty list, so fold them into the
   // field grid (in declaration order) instead of grouping them separately.
   const inlineToggles = toggles.length <= 2
-  const gridParams = inlineToggles ? params : params.filter(p => p.type !== "boolean")
-  const listToggles = inlineToggles ? [] : toggles
+  const gridParams = inlineToggles
+    ? params
+    : params.filter(p => p.type !== "boolean")
+  const listToggles = inlineToggles
+    ? []
+    : toggles
 
   const heading = (
     <>
@@ -178,7 +188,9 @@ function FieldSet({
               {gridParams.map(param => (
                 <div
                   key={param.key}
-                  className={param.type === "multiselect" ? "sm:col-span-2" : undefined}
+                  className={param.type === "multiselect"
+                    ? "sm:col-span-2"
+                    : undefined}
                 >
                   <ParamControl
                     param={param}

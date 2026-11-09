@@ -45,7 +45,9 @@ const RETRY_DELAY_MS = 1500
 
 function loadChoice<T extends string>(key: string, allowed: readonly T[], fallback: T): T {
   const v = readStorage(key)
-  return allowed.includes(v as T) ? (v as T) : fallback
+  return allowed.includes(v as T)
+    ? (v as T)
+    : fallback
 }
 
 function useDebounced<T>(value: T, ms: number): T {
@@ -86,7 +88,11 @@ export function Preview({
 
   const ready = !instanceMissing && missingRequired.length === 0
   // Cache-buster only affects the preview request, not the URL we display/copy.
-  const requested = ready ? `${url}${url.includes("?") ? "&" : "?"}_r=${nonce}` : ""
+  const requested = ready
+    ? `${url}${url.includes("?")
+      ? "&"
+      : "?"}_r=${nonce}`
+    : ""
   const src = useDebounced(requested, PREVIEW_DEBOUNCE_MS)
   const card = useCardImage(src)
 
@@ -120,9 +126,21 @@ export function Preview({
               writeStorage(LS_BACKDROP, b)
             }}
             options={[
-              { value: "dark", label: t("preview.bgDark"), icon: <Moon className="h-3.5 w-3.5" /> },
-              { value: "light", label: t("preview.bgLight"), icon: <Sun className="h-3.5 w-3.5" /> },
-              { value: "checker", label: t("preview.bgTransparent"), icon: <Grid2x2 className="h-3.5 w-3.5" /> },
+              {
+                value: "dark",
+                label: t("preview.bgDark"),
+                icon: <Moon className="h-3.5 w-3.5" />,
+              },
+              {
+                value: "light",
+                label: t("preview.bgLight"),
+                icon: <Sun className="h-3.5 w-3.5" />,
+              },
+              {
+                value: "checker",
+                label: t("preview.bgTransparent"),
+                icon: <Grid2x2 className="h-3.5 w-3.5" />,
+              },
             ]}
           />
         </div>
@@ -233,7 +251,9 @@ export function Preview({
                       <LoaderCircle
                         className={cn(
                           "h-5 w-5 animate-spin",
-                          backdrop === "dark" ? "text-zinc-500" : "text-zinc-400",
+                          backdrop === "dark"
+                            ? "text-zinc-500"
+                            : "text-zinc-400",
                         )}
                       />
                     )}
@@ -362,7 +382,9 @@ function useCardImage(src: string) {
         }
         setState({ src, status: "error" })
       }
-      img.src = attempt ? `${src}&_retry=${attempt}` : src
+      img.src = attempt
+        ? `${src}&_retry=${attempt}`
+        : src
     }
     load(0)
 
@@ -395,7 +417,9 @@ function ShareLinkButton() {
       aria-label={t("preview.shareLink")}
       onClick={() => copy(window.location.href)}
     >
-      {copied ? <Check /> : <Link2 />}
+      {copied
+        ? <Check />
+        : <Link2 />}
     </Button>
   )
 }
@@ -413,7 +437,9 @@ function PreviewMessage({
     <div
       className={cn(
         "flex flex-col items-center gap-2 text-center text-sm",
-        backdrop === "dark" ? "text-zinc-400" : "text-zinc-500",
+        backdrop === "dark"
+          ? "text-zinc-400"
+          : "text-zinc-500",
       )}
     >
       {icon}

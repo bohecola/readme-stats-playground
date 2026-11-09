@@ -57,7 +57,9 @@ i18n.on("languageChanged", syncHtmlLang)
 /** Normalizes whatever i18next resolved (e.g. "zh-CN") to a shipped language. */
 export function currentLanguage(lng = i18n.resolvedLanguage ?? i18n.language): Language {
   const base = lng?.split("-")[0] ?? ""
-  return (LANGUAGES as readonly string[]).includes(base) ? (base as Language) : "en"
+  return (LANGUAGES as readonly string[]).includes(base)
+    ? (base as Language)
+    : "en"
 }
 
 /** Switch language and remember it as the user's explicit choice. */

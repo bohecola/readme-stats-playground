@@ -39,7 +39,9 @@ export function NumberInput({
   const { t } = useTranslation()
   const decimals = (String(step).split(".")[1] ?? "").length
   const clamp = (n: number) => Math.min(max ?? Infinity, Math.max(min ?? -Infinity, n))
-  const parsed = value.trim() === "" ? NaN : Number(value)
+  const parsed = value.trim() === ""
+    ? NaN
+    : Number(value)
 
   // Held buttons fire from timers, so read the latestRef value through a ref.
   const latestRef = useRef(value)
@@ -48,7 +50,9 @@ export function NumberInput({
   const nudge = (direction: 1 | -1, multiplier = 1) => {
     const text = latestRef.current
     const current
-      = text.trim() === "" || Number.isNaN(Number(text)) ? (base ?? min ?? 0) : Number(text)
+      = text.trim() === "" || Number.isNaN(Number(text))
+        ? (base ?? min ?? 0)
+        : Number(text)
     const next = clamp(current + direction * step * multiplier)
     onChange(String(Number(next.toFixed(decimals))))
   }
@@ -90,7 +94,9 @@ export function NumberInput({
           if (e.key !== "ArrowUp" && e.key !== "ArrowDown")
             return
           e.preventDefault()
-          nudge(e.key === "ArrowUp" ? 1 : -1, e.shiftKey ? 10 : 1)
+          nudge(e.key === "ArrowUp"
+            ? 1
+            : -1, e.shiftKey ? 10 : 1)
         }}
         onBlur={() => {
           // Pull out-of-range typing back into bounds once the user is done.

@@ -26,8 +26,12 @@ export function CopyButton({ text, label, disabled, variant, className }: CopyBu
       disabled={disabled}
       className={cn("h-8 min-w-[76px] gap-1.5", className)}
     >
-      {copied ? <Check /> : <Copy />}
-      {copied ? t("preview.copied") : (label ?? t("preview.copy"))}
+      {copied
+        ? <Check />
+        : <Copy />}
+      {copied
+        ? t("preview.copied")
+        : (label ?? t("preview.copy"))}
     </Button>
   )
 }

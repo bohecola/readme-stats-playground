@@ -15,7 +15,14 @@ import {
 
 describe("hex", () => {
   it("accepts 3/4/6/8 digits with or without #", () => {
-    for (const ok of ["fff", "#fff", "ffff", "ff8800", "#FF8800", "ff880080"]) expect(isHex(ok)).toBe(true)
+    for (const ok of [
+      "fff",
+      "#fff",
+      "ffff",
+      "ff8800",
+      "#FF8800",
+      "ff880080",
+    ]) expect(isHex(ok)).toBe(true)
     for (const bad of ["", "ff", "fffff", "ggg", "#ff880"]) expect(isHex(bad)).toBe(false)
   })
   it("expands shorthand", () => {
@@ -48,12 +55,18 @@ describe("hsl", () => {
 
 describe("gradient", () => {
   it("parses the card's angle,c1,c2 syntax and normalizes stops", () => {
-    expect(parseGradient("90, #2F80ED, a855f7")).toEqual({ angle: 90, stops: ["2f80ed", "a855f7"] })
+    expect(parseGradient("90, #2F80ED, a855f7")).toEqual({
+      angle: 90,
+      stops: ["2f80ed", "a855f7"],
+    })
     expect(parseGradient("2f80ed")).toBeNull()
     expect(parseGradient("abc,def,123")).toBeNull()
   })
   it("serializes back", () => {
-    expect(serializeGradient({ angle: 45, stops: ["fff", "000"] })).toBe("45,fff,000")
+    expect(serializeGradient({
+      angle: 45,
+      stops: ["fff", "000"],
+    })).toBe("45,fff,000")
   })
   it("strips # from a color or every stop", () => {
     expect(stripHash("#ff8800")).toBe("ff8800")
